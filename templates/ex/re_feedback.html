@@ -1,0 +1,509 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} 反馈列表 {% endblock %}
+{% block left-siderbar-re %}
+    <li {% if request.path|slice:':14' == '/ex/re_problem' %}
+        class="active" {% endif %}>
+        <a class="sidenav-item-link" href="{% url 'ex:re_problem' re_project_id %}">
+            <span class="nav-text">{{ re_project.project_name.project_name }} -- 问题列表</span>
+        </a>
+    </li>
+    <li {% if request.path|slice:':15' == '/ex/re_feedback' %}
+        class="active" {% endif %}>
+        <a class="sidenav-item-link" href="{% url 'ex:re_feedback' re_problem.id %}">
+            <span class="nav-text">{{ re_problem.re_problem.problem_title }} -- 反馈列表</span>
+        </a>
+    </li>
+{% endblock %}
+{% block content-wrapper %}
+    <div class="content-wrapper">
+        <div class="content">
+            <div class="breadcrumb-wrapper">
+
+            </div>
+            <!-- First Row  -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card card-default">
+                        <div class="card-header ard-header-border-bottom d-flex justify-content-between">
+                            <h2>{{ re_project.project_name.project_name }}--{{ re_problem.re_problem.problem_title }}--反馈列表</h2>
+                            {% if switch == 'open' %}
+                                <button type="button" class="btn btn-success btn-pill" data-toggle="modal"
+                                        data-target="#Modal_add_feedback">
+                                    新增整改反馈
+                                </button>
+                                <!-- Long Modal -->
+                                <div class="modal fade" id="Modal_add_feedback" tabindex="-1" role="dialog"
+                                     aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <form class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLongTitle">整改反馈</h5>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+
+                                            <div class="modal-body">
+                                                <div class="form-group">
+                                                    <label for="exampleFormControlInput1">整改部门</label>
+                                                    <input type="text" class="form-control" id="re_department"
+                                                           placeholder="请输入具体整改部门">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="exampleFormControlInput1">整改责任人</label>
+                                                    <input type="text" class="form-control" id="re_person"
+                                                           placeholder="请输入具体责任人">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="exampleFormControlTextarea1">整改措施及进展</label>
+                                                    <textarea class="form-control" id="re_improve" rows="5"></textarea>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="exampleFormControlInput1">预计整改完成时间</label>
+                                                    <input type="date" class="form-control" id="re_date"
+                                                           value="{{ today|date:'Y-m-d' }}">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="text-dark mb-2 mt-4 font-weight-medium d-inline-block mr-3"
+                                                           for="">整改完成情况</label>
+                                                    <ul class="list-unstyled list-inline">
+                                                        <li class="d-inline-block mr-3">
+                                                            <label class="control control-radio">整改中
+                                                                <input type="radio" name="re_situation"
+                                                                       id="re_situation"
+                                                                       checked="checked" value="pr"/>
+                                                                <div class="control-indicator"></div>
+                                                            </label>
+                                                        </li>
+                                                        <li class="d-inline-block mr-3">
+                                                            <label class="control control-radio">整改完成
+                                                                <input type="radio" name="re_situation"
+                                                                       id="re_situation"
+                                                                       value="co"/>
+                                                                <div class="control-indicator"></div>
+                                                            </label>
+                                                        </li>
+                                                        <li class="d-inline-block mr-3">
+                                                            <label class="control control-radio">无法整改
+                                                                <input type="radio" name="re_situation"
+                                                                       id="re_situation"
+                                                                       value="un">
+                                                                <div class="control-indicator"></div>
+                                                            </label>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="text-dark mb-2 mt-4 font-weight-medium d-inline-block mr-3"
+                                                           for="">是否问责</label>
+                                                    <ul class="list-unstyled list-inline">
+                                                        <li class="d-inline-block mr-3">
+                                                            <label class="control control-radio">否
+                                                                <input type="radio" name="accountability_is"
+                                                                       id="accountability_is" checked="checked"
+                                                                       value="n"/>
+                                                                <div class="control-indicator"></div>
+                                                            </label>
+                                                        </li>
+                                                        <li class="d-inline-block mr-3">
+                                                            <label class="control control-radio">是
+                                                                <input type="radio" name="accountability_is"
+                                                                       id="accountability_is" value="y"/>
+                                                                <div class="control-indicator"></div>
+                                                            </label>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="exampleFormControlTextarea1">问责详情</label>
+                                                    <textarea class="form-control" id="accountability_content"
+                                                              rows="2"></textarea>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="text-dark mb-2 mt-4 font-weight-medium d-inline-block mr-3"
+                                                           for="">是否公示</label>
+                                                    <ul class="list-unstyled list-inline">
+                                                        <li class="d-inline-block mr-3">
+                                                            <label class="control control-radio">否
+                                                                <input type="radio" name="announcement_is"
+                                                                       id="announcement_is" checked="checked"
+                                                                       value="n"/>
+                                                                <div class="control-indicator"></div>
+                                                            </label>
+                                                        </li>
+                                                        <li class="d-inline-block mr-3">
+                                                            <label class="control control-radio">是
+                                                                <input type="radio" name="announcement_is"
+                                                                       id="announcement_is" value="y"/>
+                                                                <div class="control-indicator"></div>
+                                                            </label>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="exampleFormControlTextarea1">备注</label>
+                                                    <textarea class="form-control" id="remarks" rows="2"></textarea>
+                                                </div>
+
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-primary btn-pill"
+                                                        id="add_re_feedback1">提交
+                                                </button>
+                                                <button type="button" class="btn btn-danger btn-pill"
+                                                        data-dismiss="modal">
+                                                    关闭
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                </div>
+                            {% endif %}
+
+
+                        </div>
+
+                        <div class="card-body">
+
+                            <p class="mb-3">整改状态：{{ re_problem.get_re_situation_display }}  |  被审计单位：{{ re_problem.re_problem.audit_company.audit_company }} |
+                                被审计人：{{ re_problem.re_problem.audit_company.audit_preson }}   </br>
+                                问题内容：{{ re_problem.re_problem.problem_content }}</p>
+
+
+                            <table id="responsive-data-table" class="table dt-responsive nowrap"
+                                   style="width:100%">
+                                <thead>
+                                <tr>
+                                    <th>序号</th>
+                                    <th>改进措施</th>
+                                    <th>责任部门</th>
+                                    <th>责任人</th>
+                                    <th>预计时间</th>
+                                    <th>是否问责</th>
+                                    <th>问责情况</th>
+                                    <th>是否公告</th>
+                                    <th>备注</th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+
+                                <tbody>
+                                {% for re_feedback in re_feedback_list %}
+                                    <tr class="re_feedback_list">
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ re_feedback.re_improve }}</td>
+                                        <td>{{ re_feedback.re_department }}</td>
+                                        <td>{{ re_feedback.re_person }}</td>
+                                        <td>{{ re_feedback.re_date|date:'Y-m-d' }}</td>
+                                        <td>{{ re_feedback.get_accountability_is_display }}</td>
+                                        <td>{{ re_feedback.accountability_content }}</td>
+                                        <td>{{ re_feedback.get_announcement_is_display }}</td>
+                                        <td>{{ re_feedback.remarks }} </td>
+                                        <td>
+                                            {% if switch == 'open' %}
+                                                <button type="button"
+                                                        class="mb-1 btn btn-pill btn-sm btn-outline-secondary feedback_del"
+                                                        feedback_id_1="{{ re_feedback.id }}">
+                                                    删除
+                                                </button>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn btn-success btn-pill btn-sm"
+                                                    data-toggle="modal" data-target="#exampleModalLong{{ re_feedback.id }}">
+                                                附件({{ re_feedback.file_num }})
+                                            </button>
+                                            <!-- Long Modal -->
+                                            <div class="modal fade" id="exampleModalLong{{ re_feedback.id }}" tabindex="-1" role="dialog"
+                                                 aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLongTitle">附件列表</h5>
+                                                            <button type="button" class="close" data-dismiss="modal"
+                                                                    aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                        {% if switch == 'open' %}
+                                                            <input type="file" id="re_feedback_file{{ re_feedback.id }}" name="re_feedback_file{{ re_feedback.id }}">
+                                                            <input type="submit" class="mb-1 btn  disabled btn-primary re_feedback_file_up" re_feedback_id="{{ re_feedback.id }}"
+                                                                   >
+                                                        {% endif %}
+                                                            <table class="table table-hover ">
+                                                                <p class="text-primary"><font size="4">整改附件列表</font>
+                                                                </p>
+                                                                <thead>
+                                                                <tr>
+                                                                    <th scope="col">序号</th>
+                                                                    <th scope="col">文件名称</th>
+                                                                    <th scope="col">上传人</th>
+                                                                    <th></th>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                {% for file in re_feedback_file_list %}
+                                                                    {% if file.re_feedback_id == re_feedback.id %}
+                                                                        <tr class="re_feedback_file_list">
+                                                                            <td scope="row">{{ forloop.counter }}</td>
+                                                                            <td><a href="
+                                                                                    {{ MEDIA_URL }}{{ file.re_file }}">{{ file.re_file.name|slice:"20:" }}</a>
+                                                                            </td>
+                                                                            <th>{% if file.username.first_name  %}{{ file.username.first_name }}{% else %}{{ file.re_feedback.re_project_name.re_problem.audit_company }}{% endif %}</th>
+                                                                            {% if switch == 'open' %}
+                                                                                <td>
+                                                                                    <button type="button"
+                                                                                            class="mb-1 btn btn-pill btn-sm btn-outline-secondary re_feedback_file_del"
+                                                                                            re_feedback_file_1="{{ file.id }}">
+                                                                                        删除
+                                                                                    </button>
+                                                                                </td>
+                                                                            {% endif %}
+                                                                        </tr>
+                                                                    {% endif %}
+                                                                {% endfor %}
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                        <div class="modal-footer">
+
+
+                                                            <button type="button" class="btn btn-danger btn-pill"
+                                                                    data-dismiss="modal">关闭
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    </div>
+    </div>
+
+{% endblock %}
+
+{% block myjs %}
+    <pre class="mt-4">
+    <script src="{% static 'assets/plugins/data-tables/jquery.datatables.min.js' %}"></script>
+    <script src="{% static 'assets/plugins/data-tables/datatables.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'assets/plugins/data-tables/datatables.responsive.min.js' %}"></script>
+    <link href="{% static 'assets/plugins/data-tables/datatables.bootstrap4.min.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/plugins/data-tables/responsive.datatables.min.css' %}" rel="stylesheet">
+{#    <link href=""https://unpkg.com/sleek-dashboard/dist/assets/css/sleek.min.css">#}
+    </pre>
+    <script>
+        jQuery(document).ready(function () {
+            jQuery('#responsive-data-table').DataTable({
+                "aLengthMenu": [[20, 30, 50, 75, -1], [20, 30, 50, 75, "All"]],
+                "pageLength": 30,
+                "dom": '<"row justify-content-between top-information"lf>rt<"row justify-content-between bottom-information"ip><"clear">'
+            });
+        });
+
+    </script>
+    <script>
+        $(function () {
+            $('#add_re_feedback1').click(function () {
+                if (window.confirm('你确定提交吗？')) {
+                    var re_department = $('#re_department').val();
+                    var re_person = $('#re_person').val();
+                    var re_improve = $('#re_improve').val();
+                    var re_date = $('#re_date').val();
+                    var re_situation = $('input[name=\'re_situation\']:checked').val();
+                    var accountability_is = $('input[name=\'accountability_is\']:checked').val();
+                    var accountability_content = $('#accountability_content').val();
+                    var announcement_is = $('input[name=\'announcement_is\']:checked').val();
+                    var remarks = $('#remarks').val();
+                    $.ajax({
+                        type: 'POST',
+                        url: '{% url 'ex:add_feedback' %}',
+                        data: {
+                            "re_department": re_department,
+                            "re_person": re_person,
+                            "re_improve": re_improve,
+                            "re_date": re_date,
+                            "re_situation": re_situation,
+                            "accountability_is": accountability_is,
+                            "accountability_content": accountability_content,
+                            "announcement_is": announcement_is,
+                            "remarks": remarks,
+                            're_problem_id': '{{ re_problem_id }}',
+                            "csrfmiddlewaretoken": '{{ csrf_token }}'
+                        },
+                        success: function (callback) {
+                            if (callback.status == 'ok') {
+                                {#windows.location.reload();#}
+                                toastr.success(callback.msg);
+                                {#alert(callback.msg);#}
+                                window.location.href = '{% url 'ex:re_feedback' re_problem.id %}';
+                                {#window.location.reload()#}
+                                {# 拿到点击对象的祖先节点 当中有类名是des的祖先节点 #}
+                                {#obj.parents('.module1_5').remove()#}
+                                {#$('#notice_info_box').remove()#}
+                            } else {
+                                toastr.success(callback.msg);
+                                {#alert(callback.msg);#}
+                            }
+                        }
+                    });
+                    {# 如果你不想让submit有提交的动作,那么就需要在事件函数的最后返回false,阻止提交动作的发生 #}
+                    return false;
+                } else {
+                    {#//alert("取消"); return false; }#}
+                    alert("取消")
+                }
+            })
+            $('.feedback_del').click(function () {
+                if (window.confirm('你确定删除吗？')) {
+                    //alert("确定"); return true; }
+                    {# 如果拿的是非表单类元素的值,用text(),如果是表单类元素用val() #}
+                    var feedback_id = $(this).attr('feedback_id_1');
+                    var obj = $(this);
+                    $.ajax({
+                        type: 'GET',
+                        url: '{% url 'ex:del_feedback' %}',
+                        data: {
+                            "feedback_id": feedback_id,
+
+                        },
+                        success: function (callback) {
+                            if (callback.status == 'ok') {
+                                toastr.success(callback.msg);
+                                {#alert(callback.msg);#}
+                                {#window.location.href = '{% url 'plans:plans_list' %}';#}
+                                {#window.location.reload()#}
+                                {# 拿到点击对象的祖先节点 当中有类名是des的祖先节点 #}
+                                {#obj.parents('.module1_5').remove()#}
+                                {#$('#notice_info_box').remove()#}
+                                obj.parents('.re_feedback_list').remove()
+                                {#obj.parents('.notice_del_body').reload()#}
+                            } else {
+                                {#toastr.success(callback.msg);#}
+
+                                alert(callback.msg);
+                            }
+                        }
+                    });
+
+                    {# 如果你不想让submit有提交的动作,那么就需要在事件函数的最后返回false,阻止提交动作的发生 #}
+                    {#return false;#}
+                } else {
+                    {#//alert("取消"); return false; }#}
+                    alert("取消")
+                }
+
+            })
+            $('.re_feedback_file_up').click(function () {
+                if (window.confirm('你确定新增吗？')) {
+                    //alert("确定"); return true; }
+                    {# 如果拿的是非表单类元素的值,用text(),如果是表单类元素用val() #}
+                    var formdata = new FormData();
+                    var re_feedback_id = $(this).attr('re_feedback_id');
+                    var re_feedback_file1="#"+"re_feedback_file"+re_feedback_id
+                    var re_feedback_file = $(re_feedback_file1)[0].files[0];
+                    formdata.append('re_feedback_file', re_feedback_file);
+                    formdata.append('re_feedback_id', re_feedback_id);
+                    formdata.append('csrfmiddlewaretoken', '{{ csrf_token }}'),
+                        $.ajax({
+                            type: 'POST',
+                            url: '{% url 'ex:re_feedback_file' %}',
+                            {#dataType: 'json',#}
+                            data: formdata,
+                            contentType: false,
+                            {#不设置内容类型    #}
+                            processData: false,
+                            success: function (callback) {
+                                if (callback.status == 'ok') {
+                                    {#alert(callback.msg);#}
+                                    {#window.location.href = '{% url 'plans:plans_list' %}';#}
+                                    {#window.location.reload()#}
+                                    {# 拿到点击对象的祖先节点 当中有类名是des的祖先节点 #}
+                                    {#obj.parents('.module1_5').remove()#}
+                                    {#$('#notice_info_box').remove(),#}
+                                    window.location.reload();
+                                    toastr.success(callback.msg);
+                                } else {
+                                    toastr.success(callback.msg);
+                                    {#alert(callback.msg);#}
+                                }
+                            }
+                        });
+
+                    {# 如果你不想让submit有提交的动作,那么就需要在事件函数的最后返回false,阻止提交动作的发生 #}
+                    {#return false;#}
+                } else {
+                    {#//alert("取消"); return false; }#}
+                    alert("取消")
+                }
+
+            })
+            $('.re_feedback_file_del').click(function () {
+                if (window.confirm('你确定删除吗？')) {
+                    //alert("确定"); return true; }
+                    {# 如果拿的是非表单类元素的值,用text(),如果是表单类元素用val() #}
+                    var re_feedback_file_id = $(this).attr('re_feedback_file_1');
+                    var obj = $(this);
+                    $.ajax({
+                        type: 'GET',
+                        url: '{% url 'ex:re_feedback_file_del' %}',
+                        data: {
+                            "re_feedback_file_id": re_feedback_file_id,
+
+                        },
+                        success: function (callback) {
+                            if (callback.status == 'ok') {
+                                toastr.success(callback.msg);
+                                {#alert(callback.msg);#}
+                                {#window.location.href = '{% url 'plans:plans_list' %}';#}
+                                {#window.location.reload()#}
+                                {# 拿到点击对象的祖先节点 当中有类名是des的祖先节点 #}
+                                {#obj.parents('.module1_5').remove()#}
+                                {#$('#notice_info_box').remove()#}
+                                obj.parents('.re_feedback_file_list').remove()
+                                {#obj.parents('.notice_del_body').reload()#}
+                            } else {
+                                {#toastr.success(callback.msg);#}
+
+                                alert(callback.msg);
+                            }
+                        }
+                    });
+
+                    {# 如果你不想让submit有提交的动作,那么就需要在事件函数的最后返回false,阻止提交动作的发生 #}
+                    {#return false;#}
+                } else {
+                    {#//alert("取消"); return false; }#}
+                    alert("取消")
+                }
+
+            })
+
+
+        })
+
+
+    </script>
+
+{% endblock %}

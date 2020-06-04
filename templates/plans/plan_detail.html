@@ -1,0 +1,282 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %} 审计计划详细信息{% endblock %}
+{% block content-wrapper %}
+    <div class="content-wrapper">
+        <div class="content">
+            <div class="bg-white border rounded">
+                <div class="row  ">
+                    <div class="col-lg-9 col-xl-8">
+                        <div class="profile-content-left py-5">
+                            <div class="card card-default">
+                                <div class="card-header card-header-border-bottom d-flex justify-content-between">
+                                    <h2>审计计划列表</h2>
+
+
+                                </div>
+                                <div>
+
+                                </div>
+
+                                <div class="card-body">
+                                    <div class="hoverable-data-table">
+                                        <table id="hoverable-data-table" class="table table-hover nowrap"
+                                               style="width:100%">
+                                            <thead>
+                                            <tr>
+                                                <th class="text-center" cope="col">序号</th>
+                                                <th class="text-center" cope="col">年度</th>
+                                                <th class="text-center" cope="col">项目名称</th>
+                                                <th class="text-center" cope="col">计划类型</th>
+                                                <th class="text-center" cope="col">项目类别</th>
+                                                <th class="text-center" cope="col">项目阶段</th>
+                                                <th class="text-center" cope="col">项目依据</th>
+                                            </tr>
+                                            </thead>
+
+                                            <tbody>
+                                            <tr>
+
+                                                <td class="text-center" scope="row">1</td>
+                                                <td class="text-center">{{ plan.project_year }}</td>
+                                                <td class="text-center">{{ plan.project_name }}</td>
+                                                <td class="text-center">{{ plan.plan_type }}</td>
+                                                <td class="text-center">{{ plan.project_type }}</td>
+                                                <td class="text-center">{{ plan.get_project_status_display }}</td>
+                                                <td class="text-center">{{ plan.project_basis|slice:":8" }}...</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-xl-4">
+                        <div class="profile-content-right pt-5 pb-3 px-3 px-xl-5">
+                            <div class="card card-default">
+                                <div class="card-header card-header-border-bottom">
+                                    <h2>项目信息</h2>
+
+                                </div>
+                                <div class="card-body">
+                                    {% if plan.project_status == 'pl' %}
+                                    <form method="post" action="{% url 'plans:plan_fix' %}"
+                                          enctype="multipart/form-data"
+                                          onSubmit="javascript:return window.confirm('确认提交新项目吗？')">
+                                        {% csrf_token %}
+                                        {% endif %}
+                                        <div class="form-row">
+                                            <div class="col-md-12 mb-3">
+                                                <label for="validationServer01">项目名称</label>
+                                                <input type="text" class="form-control " id="validationServer01"
+                                                       placeholder="必须填写" value="{{ plan.project_name }}"
+                                                       name="project_name" required>
+                                            </div>
+                                            <div class="col-md-12 mb-3">
+                                                <label for="validationServer02">计划类型</label>
+                                                <input type="text" class="form-control" id="validationServer02"
+                                                       placeholder="如：年度计划、临时计划" name="plan_type"
+                                                       value="{{ plan.plan_type }}" required>
+                                                {#                                                <div class="valid-feedback">#}
+                                                {#                                                    Looks good!#}
+                                                {#                                                </div>#}
+                                            </div>
+                                            <div class="col-md-12 mb-3">
+                                                <label for="validationServerUsername">项目类型</label>
+                                                <input type="text" class="form-control" id="validationServerUsername"
+                                                       placeholder="必须填写      如：常规审计、专项审计"
+                                                       aria-describedby="inputGroupPrepend3" name="project_type"
+                                                       value="{{ plan.project_type }}"
+                                                       required>
+                                            </div>
+
+                                            <div class="col-md-12 mb-3">
+                                                <label for="validationServerUsername">项目年度</label>
+                                                <input type="text" class="form-control" id="validationServerUsername"
+                                                       placeholder="必须填写" aria-describedby="inputGroupPrepend3"
+                                                       name="project_year" value="{{ plan.project_year }}"
+                                                       required>
+                                            </div>
+                                            <div class="col-md-12 mb-3">
+                                                <label for="validationServerUsername">项目依据</label>
+                                                <textarea type="text" class="form-control" id="validationServerUsername"
+                                                       placeholder="......" aria-describedby="inputGroupPrepend3"
+                                                       name="project_basis" value=""
+                                                          required>{{ plan.project_basis }}</textarea>
+
+                                            </div>
+
+                                            <div class="col-md-12 mb-3">
+                                                <label for="validationServerUsername">项目阶段1</label>
+                                                <input type="text" class="form-control" id="validationServerUsername"
+                                                       placeholder="" value="{{ plan.get_project_status_display }}"
+                                                       readonly name="project_status"
+                                                       aria-describedby="inputGroupPrepend3"
+                                                       required>
+                                            </div>
+                                            <div class="col-md-12 mb-3" hidden>
+                                                <label for="validationServerUsername">项目编号</label>
+                                                <input type="text" class="form-control" id="validationServerUsername"
+                                                       placeholder="..." value="{{ plan.id }}" readonly name="plan_id"
+                                                       aria-describedby="inputGroupPrepend3"
+                                                       required>
+                                            </div>
+                                        </div>
+                                            <div class="col-md-12 mb-3">
+                                                <label class="text-dark mb-2 mt-4 font-weight-medium d-inline-block mr-3" for="">是否聘用外审</label>
+												<ul class="list-unstyled list-inline">
+													<li class="d-inline-block mr-3">
+														<label class="control control-radio">否
+															<input type="radio" name="project_exaudit" {% if plan.project_exaudit == False %} checked="checked" {% endif %} value="False"/>
+															<div class="control-indicator"></div>
+														</label>
+													</li>
+													<li class="d-inline-block mr-3">
+														<label class="control control-radio">是
+															<input type="radio" name="project_exaudit" {% if plan.project_exaudit == True %} checked="checked" {% endif %} value="True"/>
+															<div class="control-indicator"></div>
+														</label>
+													</li>
+					                            </ul>
+                                            </div>
+                                            <div class="col-md-12 mb-3">
+                                                <label for="validationServerUsername">外审单位名称</label>
+                                                <input type="text" class="form-control" id="validationServerUsername"
+                                                       placeholder="如有请填写外审单位"
+                                                       aria-describedby="inputGroupPrepend3" name="project_exauditname" {%  if plan.project_exauditname %}  value="{{ plan.project_exauditname }}" {% endif %}
+                                                       required>
+                                            </div>
+                                {% if plan.project_status == 'pl' %}
+                                        <button class="mb-1 btn btn-block btn-primary" type="submit">提交</button>
+
+                                    </form>
+                                {% endif %}
+                                    {% if plan.project_status == 'pl' %}
+                                    <div class="form-footer pt-4 pt-5 mt-4 border-top">
+{#										<form>#}
+                                            <button type="submit" class="mb-1 btn btn-square btn-outline-success" id="plan_start1">
+											<i class="mdi mdi-checkbox-marked-outline mr-1" ></i> 启动项目</button>
+{#										</form>#}
+                                    </div>
+
+                                    <div class="form-footer pt-4 pt-5 mt-4 border-top">
+{#										<form method="post" action="{% url 'plans:plan_del' %}"#}
+{#                                          enctype="multipart/form-data"#}
+{#                                          onSubmit="javascript:return window.confirm('确定删除项目吗，请慎重考虑？')">#}
+{#                                            {% csrf_token %}#}
+                                            <div class="col-md-12 mb-3">
+                                                <label hidden for="validationServer01">项目状态</label>
+                                                <input  hidden type="text" class="form-control " id="status_1"
+                                                       placeholder="必须填写" value="False"
+                                                       name="status" required>
+                                            </div>
+                                            <div class="col-md-12 mb-3">
+                                                <label hidden for="validationServer01">项目名称</label>
+                                                <input  hidden type="text" class="form-control " id="plan_id1"
+                                                       placeholder="必须填写" value="{{ plan.id }}"
+                                                       name="plan_id" required>
+                                            </div>
+                                            <botton type="submit" class="mb-1 btn btn-square btn-outline-warning" id="deletebtn1">
+                                            <i class="mdi mdi-alert-outline mr-1"></i> 删除项目</botton>
+{#										</form>#}
+                                    </div>
+                                    {% endif %}
+                                </div>
+
+                                <div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+{% endblock %}
+
+{% block myjs %}
+    <script>
+        $(function () {
+            $('#deletebtn1').click(function () {
+                if (window.confirm('你确定要删除吗？')) {
+                    //alert("确定"); return true; }
+                    {# 如果拿的是非表单类元素的值,用text(),如果是表单类元素用val() #}
+                    var plan_id = $('#plan_id1').val();
+                    var status = $('#status_1').val();
+                    $.ajax({
+                        type: 'POST',
+                        url: '{% url 'plans:plan_del' %}',
+                        data: {
+                            "plan_id": plan_id,
+                            "status": status,
+                            "csrfmiddlewaretoken": '{{ csrf_token }}'
+                        },
+                        success: function (callback) {
+                            if (callback.status == 'ok') {
+                                {#toastr.success(callback.msg);#}
+                                alert(callback.msg);
+                                window.location.href = '{% url 'plans:plans_list' %}';
+                                 {#window.location.reload()#}
+                                {# 拿到点击对象的祖先节点 当中有类名是des的祖先节点 #}
+                                {#obj.parents('.module1_5').remove()#}
+                            } else {
+                                alert(callback.msg);
+                            }
+                        }
+                    });
+
+                    {# 如果你不想让submit有提交的动作,那么就需要在事件函数的最后返回false,阻止提交动作的发生 #}
+                    {#return false;#}
+                } else {
+                    {#//alert("取消"); return false; }#}
+                    alert("取消")
+                }
+
+            })
+            $('#plan_start1').click(function () {
+                if (window.confirm('你确定要启动吗？')) {
+                    //alert("确定"); return true; }
+                    {# 如果拿的是非表单类元素的值,用text(),如果是表单类元素用val() #}
+                    var plan_id = '{{ plan.id }}';
+                    $.ajax({
+                        type: 'POST',
+                        url: '{% url 'plans:plan_start' %}',
+                        data: {
+                            "plan_id": plan_id,
+                            "csrfmiddlewaretoken": '{{ csrf_token }}',
+                        },
+                        success: function (callback) {
+                            if (callback.status == 'ok') {
+                                {#toastr.success(callback.msg);#}
+                                alert(callback.msg);
+                                window.location.href = '{% url 'plans:ex_list' %}';
+                                 {#window.location.reload()#}
+                                {# 拿到点击对象的祖先节点 当中有类名是des的祖先节点 #}
+                                {#obj.parents('.module1_5').remove()#}
+                            } else {
+                                alert(callback.msg);
+                            }
+                        }
+                    });
+
+                    {# 如果你不想让submit有提交的动作,那么就需要在事件函数的最后返回false,阻止提交动作的发生 #}
+                    {#return false;#}
+                } else {
+                    {#//alert("取消"); return false; }#}
+                    alert("取消")
+                }
+
+            })
+        })
+    </script>
+
+{% endblock %}
+
+{#<a href="javascript:if(confirm('确实要删除该内容吗?'))location='http://www.baidu.com'">弹出窗口</a>#}

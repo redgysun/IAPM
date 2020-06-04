@@ -1,0 +1,252 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %} 审计计划列表{% endblock %}
+{% block content-wrapper %}
+    <div class="content-wrapper">
+        <div class="content">
+            <div class="bg-white border rounded">
+                <div class="row  ">
+                    <div class="col-lg-9 col-xl-8">
+                        <div class="profile-content-left py-5">
+                            <div class="card card-default">
+                                <div class="card-header card-header-border-bottom d-flex justify-content-between">
+                                    <h2>审计计划列表</h2>
+
+                                    <div class="dropdown d-inline-block mb-1">
+                                        <button class="btn btn-outline-success dropdown-toggle" type="button"
+                                                id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                                aria-expanded="false" data-display="static">
+                                            计划年度
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                            <a class="dropdown-item" href="{% url 'plans:plans_list' %}">未启动项目列表</a>
+                                            {% for year in all_years %}
+                                                <a class="dropdown-item"
+                                                   href="{% url 'plans:plans_list' %}?switch='1'&year={{ year }}">{{ year }}</a>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+
+                                </div>
+
+                                <div class="card-body">
+                                    <div class="hoverable-data-table">
+                                        <table id="hoverable-data-table" class="table table-hover nowrap"
+                                               style="width:100%">
+                                            <thead>
+                                            <tr>
+                                                <th class="text-center" cope="col">序号</th>
+                                                <th class="text-center" cope="col">年度</th>
+                                                <th class="text-center" cope="col">项目名称</th>
+                                                <th class="text-center" cope="col">计划类型</th>
+                                                <th class="text-center" cope="col">项目类别</th>
+                                                <th class="text-center" cope="col">项目阶段</th>
+                                                <th class="text-center" cope="col">项目依据</th>
+                                            </tr>
+                                            </thead>
+
+                                            <tbody>
+                                            {% for plan in plans_list %}
+                                            <tr>
+
+                                                <td class="text-center" scope="row">{{ forloop.counter }}</td>
+                                                <td class="text-center">{{ plan.project_year }}</td>
+                                                <th class="text-center"><a href="{% url 'plans:plan_detail' plan.id %}">{{ plan.project_name }}</a></th>
+                                                <td class="text-center">{{ plan.plan_type }}</td>
+                                                <td class="text-center">{{ plan.project_type }}</td>
+                                                <td class="text-center">{{ plan.get_project_status_display }}</td>
+                                                <td class="text-center">{{ plan.project_basis|slice:":8" }}...</td>
+                                            </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div>
+                                <nav aria-label="Page navigation example">
+                                    <ul class="pagination pagination-seperated pagination-seperated-rounded justify-content-end">
+                                        {% if pages.has_previous %}
+                                            <li class="page-item">
+                                                <a class="page-link"
+                                                   href="{% url 'plans:plans_list' %}?pagenum={{ pages.previous_page_number }}&switch={{ switch }}&year={{ year }}&keyword={{ keyword }}"
+                                                   aria-label="Previous">
+                                                    <span aria-hidden="true" class="mdi mdi-chevron-left mr-1"></span>
+                                                    Prev
+                                                    <span class="sr-only">前一页</span>
+                                                </a>
+                                            </li>
+                                        {% endif %}
+
+                                        {% for num in pages.paginator.page_range %}
+                                            <li class="page-item {% if num == pages.number %} active {% endif %}">
+                                                <a class="page-link"
+                                                   href="{% url 'plans:plans_list' %}?pagenum={{ num }}&switch={{ switch }}&year={{ year }}&keyword={{ keyword }}">1</a>
+                                            </li>
+                                        {% endfor %}
+
+                                        {% if pages.has_next %}
+                                            <li class="page-item">
+                                                <a class="page-link"
+                                                   href="{% url 'plans:plans_list' %}?pagenum={{ pages.next_page_number }}&switch={{ switch }}&year={{ year }}&keyword={{ keyword }}"
+                                                   aria-label="Next">
+                                                    NEXT
+                                                    <span aria-hidden="true" class="mdi mdi-chevron-right ml-1"></span>
+                                                    <span class="sr-only">下一页</span>
+                                                </a>
+                                            </li>
+                                        {% endif %}
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-xl-4">
+                        <div class="profile-content-right pt-5 pb-3 px-3 px-xl-5">
+                            <div class="card card-default">
+                                <div class="card-header card-header-border-bottom">
+                                    <h2>新增项目信息</h2>
+
+                                </div>
+                                <div class="card-body">
+                                    <form method="post" action="{% url 'plans:plans_add' %}" enctype="multipart/form-data" onSubmit="javascript:return window.confirm('确认提交新项目吗？')">
+                                        {% csrf_token %}
+                                        <div class="form-row">
+                                            <div class="col-md-12 mb-3">
+                                                <label for="validationServer01">项目名称</label>
+                                                <input type="text" class="form-control " id="validationServer01"
+                                                       placeholder="必须填写" value="" name="project_name" required>
+                                            </div>
+                                            <div class="col-md-12 mb-3">
+                                                <label for="validationServer02">计划类型</label>
+                                                <input type="text" class="form-control" id="validationServer02"
+                                                       placeholder="如：年度计划、临时计划" name="plan_type" required>
+                                                {#                                                <div class="valid-feedback">#}
+                                                {#                                                    Looks good!#}
+                                                {#                                                </div>#}
+                                            </div>
+                                            <div class="col-md-12 mb-3">
+                                                <label for="validationServerUsername">项目类型</label>
+                                                <input type="text" class="form-control" id="validationServerUsername"
+                                                       placeholder="必须填写      如：常规审计、专项审计"
+                                                       aria-describedby="inputGroupPrepend3" name="project_type"
+                                                       required>
+                                            </div>
+
+                                            <div class="col-md-12 mb-3">
+                                                <label for="validationServerUsername">项目年度</label>
+                                                <input type="text" class="form-control" id="validationServerUsername"
+                                                       placeholder="必须填写" aria-describedby="inputGroupPrepend3" name="project_year" value="{{ this_year }}"
+                                                       required>
+                                            </div>
+                                            <div class="col-md-12 mb-3">
+                                                <label for="validationServerUsername">项目依据</label>
+                                                <textarea type="text" class="form-control" id="validationServerUsername"
+                                                       placeholder="......" aria-describedby="inputGroupPrepend3" name="project_basis"
+                                                          required></textarea>
+                                            </div>
+                                            <div class="col-md-12 mb-3">
+                                                <label for="validationServerUsername">项目阶段</label>
+                                                <input type="text" class="form-control" id="validationServerUsername"
+                                                       placeholder="..." value="准备" readonly
+                                                       aria-describedby="inputGroupPrepend3"
+                                                       required>
+                                            </div>
+                                            <div class="col-md-12 mb-3" hidden>
+                                                <label for="validationServerUsername">项目阶段1</label>
+                                                <input type="text" class="form-control" id="validationServerUsername"
+                                                       placeholder="..." value="pl" readonly name="project_status"
+                                                       aria-describedby="inputGroupPrepend3"
+                                                       required>
+                                            </div>
+                                            <div class="col-md-12 mb-3" hidden>
+                                                <label for="validationServerUsername">项目阶段1</label>
+                                                <input type="text" class="form-control" id="validationServerUsername"
+                                                       placeholder="..." value="{{ request.user.company_name_id }}" readonly name="company_id"
+                                                       aria-describedby="inputGroupPrepend3"
+                                                       required>
+                                            </div>
+                                            <div class="col-md-12 mb-3">
+                                                <label class="text-dark mb-2 mt-4 font-weight-medium d-inline-block mr-3" for="">是否聘用外审</label>
+												<ul class="list-unstyled list-inline">
+													<li class="d-inline-block mr-3">
+														<label class="control control-radio">否
+															<input type="radio" name="project_exaudit" checked="checked" value="False"/>
+															<div class="control-indicator"></div>
+														</label>
+													</li>
+													<li class="d-inline-block mr-3">
+														<label class="control control-radio">是
+															<input type="radio" name="project_exaudit" value="True"/>
+															<div class="control-indicator"></div>
+														</label>
+													</li>
+					                            </ul>
+                                            </div>
+                                            <div class="col-md-12 mb-3">
+                                                <label for="validationServerUsername">外审单位名称</label>
+                                                <input type="text" class="form-control" id="validationServerUsername"
+                                                       placeholder="如有请填写外审单位"
+                                                       aria-describedby="inputGroupPrepend3" name="project_exauditname"
+                                                       required>
+                                            </div>
+                                        <button class="mb-1 btn btn-block btn-primary" type="submit">提交</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+{% endblock %}
+{% block search_form %}
+    <div class="search-form d-none d-lg-inline-block">
+        <form method="get" action="{% url 'plans:plans_list' %}" >
+            <div class="input-group">
+            <button type="submit"  id="search-btn11" class="btn btn-flat">
+                <i class="mdi mdi-magnify"></i>
+            </button>
+            <input type="text"  id="search-input11" class="form-control" placeholder="请输入项目名称"
+                   autofocus autocomplete="off" name="keyword"/>
+                <input hidden type="text"  id="search-input11" class="form-control" placeholder="请输入项目名称"
+                   autofocus autocomplete="off" name="switch" value="1"/>
+        </div>
+        </form>
+        <div id="search-results-container">
+            <ul id="search-results"></ul>
+        </div>
+    </div>
+{% endblock %}
+{% block myjs %}
+    <script>
+        $(function () {
+            $('#search-btn11').click(function () {
+                var key_word = $('#search-input11').val();
+                var url ='';
+
+                url =  +"?swtich='1'&keyword=" + key_word
+
+                window.location.href = url
+
+            })
+        })
+    </script>
+{% endblock %}
+{#            var url = '';#}
+{##}
+{#            if(search_type == 'org'){#}
+{#                url = '{% url 'orgs:org_list' %}'#}
+{#            }else if(search_type == 'course'){#}
+{#                url = '{% url 'courses:course_list' %}'#}
+{#            }else {#}
+{#                url = '{% url 'orgs:teacher_list' %}'#}
+{#            }#}

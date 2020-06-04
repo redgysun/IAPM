@@ -1,0 +1,418 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}通知列表{% endblock %}
+{% block content-wrapper %}
+    <div class="content-wrapper">
+        <div class="content">
+            <div class="bg-white border rounded">
+                <div class="row no-gutters">
+                    <div class="col-lg-9 col-xl-9">
+                        <div class="profile-content-left py-5">
+                            <div class="card card-default">
+                                <div class="card-header card-header-border-bottom">
+                                    <h2>通知列表</h2>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="nav nav-tabs nav-style-border pl-0 justify-content-between justify-content-xl-start"
+                                        id="myTab" role="tablist">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" id="home2-tab" data-toggle="tab"
+                                               href="#notice_audit" role="tab" aria-controls="home2"
+                                               aria-selected="true">审计通知书</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="profile2-tab" data-toggle="tab"
+                                               href="#notice_report" role="tab" aria-controls="profile2"
+                                               aria-selected="false">报告编号</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="contact2-tab" data-toggle="tab" href="#notice_nomal"
+                                               role="tab" aria-controls="contact2" aria-selected="false">日常通知</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content" id="myTabContent3">
+                                        <div class="tab-pane pt-3 fade show active" id="notice_audit" role="tabpanel"
+                                             aria-labelledby="home2-tab">
+                                            <table id="audit-data-table" class="table dt-responsive nowrap"
+                                                   style="width:100%">
+                                                <thead>
+                                                <tr>
+                                                    <th>序号</th>
+                                                    <th>通知书名称</th>
+                                                    <th>通知书编号</th>
+                                                    <th>项目名称</th>
+                                                    <th>年度</th>
+                                                </tr>
+                                                </thead>
+
+                                                <tbody>
+                                                {% for audit_notice in audit_notice_list %}
+                                                <tr>
+                                                    <td>{{ forloop.counter }}</td>
+                                                    <td><a href="{% url 'plans:start_detail' audit_notice.project_name_id %}">{{ audit_notice.notice_name }}</a> </td>
+                                                    <td>{{ audit_notice.notice_NO }}</td>
+                                                    <td>{{ audit_notice.project_name.project_name }}</td>
+                                                    <td>{{ audit_notice.year }} </td>
+                                                </tr>
+                                                {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="tab-pane pt-3 fade" id="notice_report" role="tabpanel"
+                                             aria-labelledby="profile2-tab">
+                                            <table id="report-data-table" class="table dt-responsive nowrap"
+                                                   style="width:100%">
+                                                                                               <thead>
+                                                <tr>
+                                                    <th>序号</th>
+                                                    <th>报告名称</th>
+                                                    <th>报告编号</th>
+                                                    <th>项目名称</th>
+                                                    <th>年度</th>
+                                                </tr>
+                                                </thead>
+
+                                                <tbody>
+                                                {% for report_notice in report_notice_list %}
+                                                <tr>
+                                                    <td>{{ forloop.counter }}</td>
+                                                    <td><a href="{% url 'ex:report_detail' report_notice.project_name_id %}">{{ report_notice.notice_name }}</a> </td>
+                                                    <td>{{ report_notice.notice_NO }}</td>
+                                                    <td>{{ report_notice.project_name.project_name }}</td>
+                                                    <td>{{ report_notice.year }} </td>
+                                                </tr>
+                                                {% endfor %}
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="tab-pane pt-3 fade" id="notice_nomal" role="tabpanel"
+                                             aria-labelledby="contact2-tab">
+                                            <table id="nomal-data-table" class="table dt-responsive nowrap"
+                                                   style="width:100%">
+                                                <thead>
+                                                <tr>
+                                                    <th>序号</th>
+                                                    <th>通知书名称</th>
+                                                    <th>通知书编号</th>
+                                                    <th>年度</th>
+                                                    <th>附件数</th>
+
+                                                </tr>
+                                                </thead>
+
+                                                <tbody>
+                                                {% for normal_notice in normal_notice_list %}
+                                                <tr>
+                                                    <td>{{ forloop.counter }}</td>
+                                                    <td><a href="{% url 'plans:all_notice_file' normal_notice.id %}">{{ normal_notice.notice_name }}</a> </td>
+                                                    <td>{{ normal_notice.notice_NO }}</td>
+                                                    <td>{{ normal_notice.year }} </td>
+                                                    <td>{{ normal_notice.file_num.count }} </td>
+                                                </tr>
+                                                {% endfor %}
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-xl-3">
+                        <div class="profile-content-right pt-5 pb-3 px-3 px-xl-5">
+                            {#                            <div class="card card-default">#}
+                            <span class="text-primary">修改日常通知</span>
+                            <div class="card-header card-header-border-bottom" id="notice_info_box">
+
+
+                                <label for="firstName">通知书名称</label>
+                                <input type="text" class="form-control" id="notice_name"
+                                       name="notice_name" value="{{ notice_info.notice_name }}">
+                                <label for="firstName">通知书编号</label>
+                                <input type="text" class="form-control" id="notice_NO"
+                                       name="notice_NO" value="{{ notice_info.notice_NO }}">
+                                {% if now_year == notice_info.year %}
+                                <div class="d-flex justify-content-end mt-5">
+                                    <button type="submit" class="btn btn-primary mb-2 btn-pill"
+                                            id="notice_info_sumbit">提 交
+                                    </button>
+                                </div>
+                                {% endif %}
+
+                                <div class="card-body">
+                                    <div class="modal fade" id="exampleModalForm" tabindex="-1" role="dialog"
+                                         aria-labelledby="exampleModalFormTitle" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalFormTitle">通知书及附件</h5>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+
+                                                    <input type="file"
+                                                           id="notice_file1"
+                                                           name="notice_file1">
+                                                    <input type="submit" class="mb-1 btn  disabled btn-primary"
+                                                           id="notice_file_up">
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-danger btn-pill"
+                                                            data-dismiss="modal">关闭
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% if notice_info.year == now_year %}
+                                <div class="card-body justify-content-between ">
+                                    <div class="card-header card-header-border-bottom d-flex justify-content-between">
+                                        <button type="button" class="mb-1 btn btn-pill btn-block btn-outline-info"
+                                                data-toggle="modal"
+                                                data-target="#exampleModalForm">
+                                            上传通知附件
+                                        </button>
+                                    </div>
+                                    <table class="table table-hover ">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">序号</th>
+                                            <th scope="col">文件名称</th>
+                                            <th scope="col"></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for file in notice_file_list %}
+                                            <tr class="notice_del_body">
+                                                <td scope="row">{{ forloop.counter }}</td>
+                                                <td><a href="
+
+
+
+
+                                                        {{ MEDIA_URL }}{{ file.notice_file }}">{{ file.notice_file.name|slice:"21:" }}</a>
+                                                </td>
+                                                {% if now_year == file.year  %}
+                                                    <td>
+                                                        <button type="button"
+                                                                class="mb-1 btn btn-pill btn-sm btn-outline-secondary notice_del"
+                                                                notice_id="{{ file.id }}"
+                                                                notice_company="{{ file.company_id_id }}"
+                                                                notice_name_id="{{ file.notice_name_id }}"
+                                                                notice_file="{{ file.notice_file }}">删除
+                                                        </button>
+                                                    </td>
+                                                {% endif %}
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            {% endif %}
+                            {#                            </div>#}
+                            <div class="contact-info pt-4">
+                            </div>
+
+
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+{% endblock %}
+
+{% block myjs %}
+    <pre class="mt-4">
+    <script src="{% static 'assets/plugins/data-tables/jquery.datatables.min.js' %}"></script>
+    <script src="{% static 'assets/plugins/data-tables/datatables.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'assets/plugins/data-tables/datatables.responsive.min.js' %}"></script>
+    <link href="{% static 'assets/plugins/data-tables/datatables.bootstrap4.min.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/plugins/data-tables/responsive.datatables.min.css' %}" rel="stylesheet">
+{#    <link href=""https://unpkg.com/sleek-dashboard/dist/assets/css/sleek.min.css">#}
+    </pre>
+    <script>
+        jQuery(document).ready(function () {
+            jQuery('#audit-data-table').DataTable({
+                "aLengthMenu": [[20, 30, 50, 75, -1], [20, 30, 50, 75, "All"]],
+                "pageLength": 20,
+                "dom": '<"row justify-content-between top-information"lf>rt<"row justify-content-between bottom-information"ip><"clear">'
+            });
+        });
+        jQuery(document).ready(function () {
+            jQuery('#report-data-table').DataTable({
+                "aLengthMenu": [[20, 30, 50, 75, -1], [20, 30, 50, 75, "All"]],
+                "pageLength": 20,
+                "dom": '<"row justify-content-between top-information"lf>rt<"row justify-content-between bottom-information"ip><"clear">'
+            });
+        });
+        jQuery(document).ready(function () {
+            jQuery('#nomal-data-table').DataTable({
+                "aLengthMenu": [[20, 30, 50, 75, -1], [20, 30, 50, 75, "All"]],
+                "pageLength": 20,
+                "dom": '<"row justify-content-between top-information"lf>rt<"row justify-content-between bottom-information"ip><"clear">'
+            });
+        });
+    </script>
+
+    <script>
+        $(function () {
+            {#提交notice#}
+            $('#notice_info_sumbit').click(function () {
+                if (window.confirm('你确定提交吗？')) {
+                    //alert("确定"); return true; }
+                    {# 如果拿的是非表单类元素的值,用text(),如果是表单类元素用val() #}
+                    var notice_name = $('#notice_name').val();
+                    var notice_NO = $('#notice_NO').val();
+                    $.ajax({
+                        type: 'POST',
+                        url: '{% url 'plans:fix_normal_notice' %}',
+                        data: {
+                            "notice_name": notice_name,
+                            "notice_NO": notice_NO,
+                            "notice_id": '{{ notice_info.id }}',
+                            "csrfmiddlewaretoken": '{{ csrf_token }}'
+                        },
+                        success: function (callback) {
+                            if (callback.status == 'ok') {
+                                toastr.success(callback.msg);
+                                {#alert(callback.msg);#}
+                                {#window.location.href = '{% url 'plans:plans_list' %}';#}
+                                {#window.location.reload()#}
+                                {# 拿到点击对象的祖先节点 当中有类名是des的祖先节点 #}
+                                {#obj.parents('.module1_5').remove()#}
+                                {#$('#notice_info_box').remove()#}
+                                windows.location.reload()
+                            } else {
+                                toastr.success(callback.msg);
+                                {#alert(callback.msg);#}
+                            }
+                        }
+                    });
+
+                    {# 如果你不想让submit有提交的动作,那么就需要在事件函数的最后返回false,阻止提交动作的发生 #}
+                    {#return false;#}
+                } else {
+                    {#//alert("取消"); return false; }#}
+                    alert("取消")
+                }
+
+            })
+            {#提交noticefile#}
+            $('#notice_file_up').click(function () {
+                if (window.confirm('你确定新增吗？')) {
+                    //alert("确定"); return true; }
+                    {# 如果拿的是非表单类元素的值,用text(),如果是表单类元素用val() #}
+                    var formdata = new FormData();
+                    var notice_file1 = $('#notice_file1')[0].files[0];
+                    {#let files = $('#notice_file1').filebox('files');#}
+                    {#let fd = new FormData();#}
+                    {#var notice_file1=document.getElementById('notice_file1').files[0]#}
+                    formdata.append('notice_file1', notice_file1);
+                    formdata.append('notice_id', '{{ notice_info.id }}');
+                    formdata.append('csrfmiddlewaretoken', '{{ csrf_token }}'),
+                        $.ajax({
+                            type: 'POST',
+                            url: '{% url 'plans:normal_notice_file' %}',
+                            {#dataType: 'json',#}
+                            data: formdata,
+                            {#cache: false,#}
+                            {#    {#}
+                            {#    "notice_file": notice_file,#}
+                            {#    "notice_id": {{ notice_info.id }},#}
+                            {#    "project_id":{{ project_id }},#}
+                            {#    "csrfmiddlewaretoken": '{{ csrf_token }}',#}
+                            {##}
+                            {#,#}
+                            {#不处理数据 enctype="multipart/form-data" #}
+                            contentType: false,
+                            {#不设置内容类型    #}
+                            processData: false,
+                            success: function (callback) {
+                                if (callback.status == 'ok') {
+
+                                    {#alert(callback.msg);#}
+                                    {#window.location.href = '{% url 'plans:plans_list' %}';#}
+                                    {#window.location.reload()#}
+                                    {# 拿到点击对象的祖先节点 当中有类名是des的祖先节点 #}
+                                    {#obj.parents('.module1_5').remove()#}
+                                    {#$('#notice_info_box').remove(),#}
+                                    window.location.reload();
+                                    toastr.success(callback.msg);
+                                } else {
+                                    toastr.success(callback.msg);
+                                    {#alert(callback.msg);#}
+                                }
+                            }
+                        });
+
+                    {# 如果你不想让submit有提交的动作,那么就需要在事件函数的最后返回false,阻止提交动作的发生 #}
+                    {#return false;#}
+                } else {
+                    {#//alert("取消"); return false; }#}
+                    alert("取消")
+                }
+
+            })
+            {#删除noticedel#}
+            $('.notice_del').click(function () {
+                if (window.confirm('你确定提交吗？')) {
+                    //alert("确定"); return true; }
+                    {# 如果拿的是非表单类元素的值,用text(),如果是表单类元素用val() #}
+                    var notice_id = $(this).attr('notice_id');
+                    var notice_company = $(this).attr('notice_company');
+                    var notice_name = $(this).attr('notice_name_id');
+                    var notice_file = $(this).attr('notice_file');
+                    var obj = $(this);
+                    $.ajax({
+                        type: 'GET',
+                        url: '{% url 'plans:normal_notice_file_del' %}',
+                        data: {
+                            "notice_id": notice_id,
+                            "notice_company": notice_company,
+                            "notice_name": notice_name,
+                            "notice_file": notice_file
+                        },
+                        success: function (callback) {
+                            if (callback.status == 'ok') {
+                                toastr.success(callback.msg);
+                                {#alert(callback.msg);#}
+                                {#window.location.href = '{% url 'plans:plans_list' %}';#}
+                                {#window.location.reload()#}
+                                {# 拿到点击对象的祖先节点 当中有类名是des的祖先节点 #}
+                                {#obj.parents('.module1_5').remove()#}
+                                {#$('#notice_info_box').remove()#}
+                                obj.parents('.notice_del_body').remove()
+                                {#obj.parents('.notice_del_body').reload()#}
+                            } else {
+                                {#toastr.success(callback.msg);#}
+                                alert(callback.msg);
+                            }
+                        }
+                    });
+
+                    {# 如果你不想让submit有提交的动作,那么就需要在事件函数的最后返回false,阻止提交动作的发生 #}
+                    {#return false;#}
+                } else {
+                    {#//alert("取消"); return false; }#}
+                    alert("取消")
+                }
+
+            })
+        })
+
+    </script>
+
+{% endblock %}

@@ -1,0 +1,1241 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block left-sidebar %}
+    <li class="has-sub {% if request.path|slice:':10' == '/plans/ex_' %}active  {% endif %} expand">
+        <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
+           data-target="#dashboard"
+           aria-expanded="false" aria-controls="dashboard">
+            <i class="mdi mdi-dribbble"></i>
+            <span class="nav-text">返回上一级</span> <b class="caret"></b>
+        </a>
+        <ul class="collapse {% if request.path|slice:':14' == '/plans/ex_list' %} show {% endif %}" id="dashboard"
+            data-parent="#sidebar-menu">
+            <div class="sub-menu">
+
+                <li {% if request.path|slice:':14' == '/plans/ex_list' %}
+                    class="active" {% endif %}>
+                    <a class="sidenav-item-link" href="{% url 'plans:ex_list' %}">
+                        <span class="nav-text">项目列表</span>
+                    </a>
+                </li>
+
+            </div>
+        </ul>
+    </li>
+    <li class="has-sub {% if request.path|slice:':9' == '/plans/st' %}active  {% endif %} expand">
+        <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
+           data-target="#dashboard1"
+           aria-expanded="false" aria-controls="dashboard">
+            <i class="mdi mdi-docker"></i>
+            <span class="nav-text">前期准备</span> <b class="caret"></b>
+        </a>
+        <ul class="collapse {% if request.path|slice:':9' == '/plans/st' %}show  {% endif %}" id="dashboard1"
+            data-parent="#sidebar-menu">
+            <div class="sub-menu">
+
+                <li {% if request.path|slice:':19' == '/plans/start_detail' %}
+                    class="active" {% endif %}>
+                    <a class="sidenav-item-link" href="{% url 'plans:start_detail' project_id %}">
+                        <span class="nav-text">通知及方案</span>
+                    </a>
+                </li>
+
+            </div>
+        </ul>
+    </li>
+    <li class="has-sub {% if request.path|slice:':6' == '/ex/sc' or request.path|slice:':6' == '/ex/pr' %}active  {% endif %} expand">
+        <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
+           data-target="#dashboard2"
+           aria-expanded="false" aria-controls="dashboard">
+            <i class="mdi mdi-pinwheel-outline"></i>
+            <span class="nav-text">实施阶段</span> <b class="caret"></b>
+        </a>
+        <ul class="collapse {% if request.path|slice:':6' == '/ex/sc' or request.path|slice:':6' == '/ex/pr' %}show  {% endif %}"
+            id="dashboard2" data-parent="#sidebar-menu">
+            <div class="sub-menu">
+
+                <li {% if request.path|slice:':17' == '/ex/schedule_list' %}
+                    class="active" {% endif %}>
+                    <a class="sidenav-item-link" href="{% url 'ex:schedule_list' project_id %}">
+                        <span class="nav-text">项目记录</span>
+                    </a>
+                </li>
+                <li {% if request.path|slice:':16' == '/ex/problem_list' %}
+                    class="active" {% endif %}>
+                    <a class="sidenav-item-link" href="{% url 'ex:problem_list' project_id %}">
+                        <span class="nav-text">问题列表</span>
+                    </a>
+                </li>
+
+            </div>
+        </ul>
+    </li>
+    <li class="has-sub {% if request.path|slice:':6' == '/ex/re' %}active  {% endif %} expand">
+        <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
+           data-target="#dashboard3"
+           aria-expanded="false" aria-controls="dashboard">
+            <i class="mdi mdi-barley"></i>
+            <span class="nav-text">报告阶段</span> <b class="caret"></b>
+        </a>
+        <ul class="collapse{% if request.path|slice:':6' == '/ex/re' %} show  {% endif %}" id="dashboard3"
+            data-parent="#sidebar-menu">
+            <div class="sub-menu">
+
+                <li {% if request.path|slice:':17' == '/ex/report_detail' %}
+                    class="active" {% endif %}>
+                    <a class="sidenav-item-link" href="{% url 'ex:report_detail' project_id %}">
+                        <span class="nav-text">项目记录</span>
+                    </a>
+                </li>
+
+
+            </div>
+        </ul>
+    </li>
+
+{% endblock %}
+{% block content-wrapper %}
+    <div class="content-wrapper">
+        <div class="content">
+            <div class="bg-white border rounded">
+                <div class="row no-gutters">
+                    <div class="col-lg-3 col-xl-3">
+                        <div class="profile-content-left pt-5 pb-3 px-3 px-xl-5">
+                            {#                            <div class="card card-default">#}
+                            <div class="card-header card-header-border-bottom" id="notice_info_box">
+                                {#                                    <form method="post" action="{% url 'users:user_fixinfo' %}"#}
+                                {#                                          enctype="multipart/form-data"#}
+                                {#                                          onSubmit="javascript:return window.confirm('确认提交吗？')">#}
+                                {#                                        {% csrf_token %}#}
+                                <label for="firstName">通知书名称</label>
+                                <input type="text" class="form-control" id="notice_name"
+                                       name="notice_name" value="{{ notice_info.notice_name }}">
+                                <label for="firstName">通知书编号</label>
+                                <input type="text" class="form-control" id="notice_NO"
+                                       name="notice_NO" value="{{ notice_info.notice_NO }}">
+                                {% if switch == 'open' and member.audit_role == 'lvl1' %}
+                                    <div class="d-flex justify-content-end mt-5">
+                                        <button type="submit" class="btn btn-primary mb-2 btn-pill"
+                                                id="notice_info_sumbit">提 交
+                                        </button>
+                                    </div>
+                                {% endif %}
+                                {#                                    </form>#}
+
+                                {#                                            <form method="post" action="{% url 'users:user_fixinfo' %}" enctype="multipart/form-data" onSubmit="javascript:return window.confirm('确认提交吗？')">#}
+                                {#                                            <label for="coverImage"#}
+                                {#                                                   class=" col-form-label">用户头像</label>#}
+                                {#                                             <div class="custom-file">#}
+                                {#                                                    <form id="jsAvatarForm" enctype="multipart/form-data"#}
+                                {#                                                          method="post"#}
+                                {#                                                          action="{% url 'users:user_changeimage' %}">#}
+                                {#                                                        {% csrf_token %}#}
+                                {#                                                        <input type="file" class="mb-1 btn btn-sm btn-outline-secondary" id="coverImage"#}
+                                {#                                                               name="image">#}
+                                {#                                                        <input type="submit" class="mb-1 btn  disabled btn-primary">#}
+                                {#                                                        </form>#}
+                                {##}
+                                {#                                            </div>#}
+                                {#                                            </form>#}
+                                <div class="card-body">
+                                    <div class="modal fade" id="exampleModalForm" tabindex="-1" role="dialog"
+                                         aria-labelledby="exampleModalFormTitle" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalFormTitle">通知书及附件</h5>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    {#                                                        <form id="jsAvatarForm" enctype="multipart/form-data"#}
+                                                    {#                                                          method="post"#}
+                                                    {#                                                          action="{% url 'plans:notice_file' %}"#}
+                                                    {#                                                          enctype="multipart/form-data">#}
+                                                    {#                                                        {% csrf_token %}#}
+                                                    <input type="file"
+                                                           id="notice_file1"
+                                                           name="notice_file1">
+                                                    <input type="submit" class="mb-1 btn  disabled btn-primary"
+                                                           id="notice_file_up">
+                                                    {#                                                        </form>#}
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-danger btn-pill"
+                                                            data-dismiss="modal">关闭
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% if notice_info %}
+                                <div class="card-body justify-content-between ">
+                                    <div class="card-header card-header-border-bottom d-flex justify-content-between">
+                                        {% if switch == 'open' and member.audit_role == 'lvl1' %}
+                                            <button type="button" class="mb-1 btn btn-pill btn-block btn-outline-info"
+                                                    data-toggle="modal"
+                                                    data-target="#exampleModalForm">
+                                                上传通知附件
+                                            </button>
+                                        {% endif %}
+                                    </div>
+                                    <table class="table table-hover ">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">序号</th>
+                                            <th scope="col">文件名称</th>
+                                            <th scope="col"></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for file in notice_file %}
+                                            <tr class="notice_del_body">
+                                                <td scope="row">{{ forloop.counter }}</td>
+                                                <td><a href="
+
+
+
+
+                                                        {{ MEDIA_URL }}{{ file.notice_file }}">{{ file.notice_file.name|slice:"21:" }}</a>
+                                                </td>
+                                                {% if switch == 'open' and member.audit_role == 'lvl1' %}
+                                                    <td>
+                                                        <button type="button"
+                                                                class="mb-1 btn btn-pill btn-sm btn-outline-secondary notice_del"
+                                                                notice_id="{{ file.id }}"
+                                                                notice_company="{{ file.company_id_id }}"
+                                                                notice_name_id="{{ file.notice_name_id }}"
+                                                                notice_file="{{ file.notice_file }}">删除
+                                                        </button>
+                                                    </td>
+                                                {% endif %}
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            {% endif %}
+                            {#                            </div>#}
+                            <div class="contact-info pt-4">
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div class="col-lg-5 col-xl-6">
+                        <div class="profile-content-right py-5">
+                            <ul class="nav nav-tabs px-3 px-xl-5 nav-style-border" id="myTab" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="settings-tab" data-toggle="tab" href="#settings"
+                                       role="tab" aria-controls="settings"
+                                       aria-selected="false">{{ project_name.project_name }}--审计方案{% if project_name.project_exaudit == True %}--外审：{{ project_name.project_exauditname }}{% endif %}</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content px-3 px-xl-5" id="myTabContent_notice">
+                                <div class="tab-pane fade show active" id="settings" role="tabpanel"
+                                     aria-labelledby="settings-tab">
+                                    {#                                    <form method="post" action="{% url 'users:user_fixinfo' %}"#}
+                                    {#                                          enctype="multipart/form-data"#}
+                                    {#                                          onSubmit="javascript:return window.confirm('确认提交吗？')">#}
+                                    {#                                        {% csrf_token %}#}
+                                    <div class="row mb-2">
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label for="firstName">方案名称</label>
+                                                <input type="text" class="form-control" id="start_name"
+                                                       name="start_name" value="{{ start_detail.start_name }}">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group mb-4">
+                                        <label for="userName">审计目标</label>
+                                        <textarea type="text" class="form-control" id="start_target" name="start_target"
+                                                  value="">{{ start_detail.start_target }}</textarea>
+
+                                    </div>
+
+                                    <div class="form-group mb-4">
+                                        <label for="date">审计范围</label>
+                                        <textarea type="date" class="form-control" id="start_range"
+                                                  name="start_range"
+                                                  value="">{{ start_detail.start_range }}</textarea>
+                                    </div>
+
+                                    <div class="form-group mb-4">
+                                        <label for="user_pq">审计依据</label>
+                                        <textarea type="text" class="form-control" id="start_basis" name="start_basis"
+                                                  value="">{{ start_detail.start_basis }}</textarea>
+                                    </div>
+                                    <div class="form-group mb-4">
+                                        <label for="user_pq">审计内容</label>
+                                        <textarea type="text" class="form-control" id="start_content"
+                                                  name="start_content"
+                                                  value="">{{ start_detail.start_content }}</textarea>
+                                    </div>
+                                    <div class="form-group mb-4">
+                                        <label for="user_pq">审计程序</label>
+                                        <textarea type="text" class="form-control" id="start_progress"
+                                                  name="start_progress"
+                                                  value="">{{ start_detail.start_progress }}</textarea>
+                                    </div>
+                                    <div class="form-group mb-4">
+                                        <label for="user_pq">计划开展时间</label>
+                                        <input type="date" class="form-control" id="start_date" name="start_date"
+                                               value="{{ start_detail.start_date|date:'Y-m-d' }}">
+                                    </div>
+                                    <div class="form-group mb-4">
+                                        <label for="user_pq">编制人</label>
+                                        <input type="text" class="form-control" id="start_date" name="start_date"
+                                               value="{% if start_detail.start_username_id == 1 %} {{ project_name.project_exauditname }} {% else %}{{ start_detail.start_username.first_name }} {% endif %}" readonly>
+                                    </div>
+                                    {% if switch == 'open' and member.audit_role == 'lvl1' %}
+                                        <div class="d-flex justify-content-end mt-5">
+                                            <button type="submit" class="btn btn-primary mb-2 btn-pill"
+                                                    id="start_submit">提
+                                                交
+                                            </button>
+                                        </div>
+                                    {% endif %}
+                                    {#                                    </form>#}
+                                    <hr class="w-100">
+                                    <div class="card-body">
+                                        <div class="card-header card-header-border-bottom d-flex justify-content-between">
+                                            {% if switch == 'open' and member.audit_role == 'lvl1' %}
+                                                <button type="button"
+                                                        class="mb-1 btn btn-pill btn-block  btn-outline-danger"
+                                                        data-toggle="modal"
+                                                        data-target="#exampleModalForm1">
+                                                    上传方案附件
+                                                </button>
+                                            {% endif %}
+                                        </div>
+                                        <table class="table table-hover ">
+                                            <thead>
+                                            <tr>
+                                                <th scope="col">序号</th>
+                                                <th scope="col">文件名称</th>
+                                                <th scope="col"></th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for file in start_file %}
+                                                <tr class="start_file_list">
+                                                    <td scope="row">{{ forloop.counter }}</td>
+                                                    <td><a href="
+
+
+
+
+                                                            {{ MEDIA_URL }}{{ file.start_file }}">{{ file.start_file.name|slice:"19:" }}</a>
+                                                    </td>
+                                                    {% if switch == 'open' and member.audit_role == 'lvl1' %}
+                                                        <td>
+                                                            <button type="button"
+                                                                    class="mb-1 btn btn-pill btn-sm btn-outline-secondary start_file_del"
+                                                                    start_file_1="{{ file.id }}">
+                                                                删除
+                                                            </button>
+                                                        </td>
+                                                    {% endif %}
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="modal fade" id="exampleModalForm1" tabindex="-1" role="dialog"
+                                         aria-labelledby="exampleModalFormTitle" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalFormTitle">方案附件</h5>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    {#                                                    <form id="jsAvatarForm" enctype="multipart/form-data"#}
+                                                    {#                                                          method="post"#}
+                                                    {#                                                          action="{% url 'users:user_changeimage' %}"#}
+                                                    {#                                                          enctype="multipart/form-data">#}
+                                                    {#                                                        {% csrf_token %}#}
+                                                    <input type="file"
+                                                           id="start_file" name="start_file">
+                                                    <input type="submit" class="mb-1 btn  disabled btn-primary"
+                                                           id="start_file_submit" name="start_file_submit">
+                                                    {#                                                    </form>#}
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-danger btn-pill"
+                                                            data-dismiss="modal">关闭
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-lg-4 col-xl-3">
+                        <div class="profile-content-right pt-5 pb-3 px-3 px-xl-5">
+                            <div class="card-body">
+                                <div class="card-header card-header-border-bottom d-flex justify-content-between">
+                                    {% if switch == 'open' and member.audit_role == 'lvl1' %}
+                                        <button type="button" class="mb-1 btn btn-pill btn-block  btn-outline-primary"
+                                                data-toggle="modal"
+                                                data-target="#exampleModalForm2">
+                                            新增被审计单位
+                                        </button>
+                                    {% endif %}
+                                </div>
+                                <table class="table table-hover ">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">序号</th>
+                                        <th scope="col">被审单位</th>
+                                        <th scope="col">被审人</th>
+                                        <th scope="col"></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for company in audit_company %}
+                                        <tr class="audit_company_list">
+                                            <td scope="row">{{ forloop.counter }}</td>
+                                            <td>{{ company.audit_company }}</td>
+                                            <td>{{ company.audit_person }}</td>
+                                            {% if switch == 'open' and member.audit_role == 'lvl1' %}
+                                                <td>
+                                                    <button type="button"
+                                                            class="mb-1 btn btn-pill btn-sm btn-outline-secondary audit_company_del"
+                                                            audit_company_id="{{ company.id }}"
+                                                            audit_company_person="{{ company.audit_person }}">删除
+                                                    </button>
+                                                </td>
+                                            {% endif %}
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                                <div class="modal fade" id="exampleModalForm2" tabindex="-1" role="dialog"
+                                     aria-labelledby="exampleModalFormTitle" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalFormTitle">新增被审计单位</h5>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+
+                                            </div>
+                                            <div class="modal-body">
+                                                <form>
+                                                    <div class="form-group">
+                                                        <label for="exampleInputEmail1">被审计单位名称（自动填充后，<font color="#dc143c">请全选后再删除</font> ）</label>
+                                                        <div class="input-group">
+                                                        <input type="text" class="form-control" id="audit_company"
+                                                               name="audit_company"
+                                                               aria-describedby="emailHelp" placeholder="被审计单位名称">
+                                                            <div class="input-group-append">
+                                                        <button type="submit" class="btn btn-outline-warning"
+                                                            id="audit_company_clean" name="audit_company_clean">清空
+                                                    </button>
+                                                            </div>
+                                                    </div>
+
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="exampleInputPassword1">被审计人</label>
+                                                        <input type="text" class="form-control"
+                                                               id="audit_company_person" name="audit_company_person"
+                                                               placeholder="被审计人姓名">
+                                                    </div>
+                                                    <button type="submit" class="btn btn-primary"
+                                                            id="audit_company_sumbit" name="audit_company_sumbit">增加
+                                                    </button>
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-danger btn-pill"
+                                                        data-dismiss="modal">关闭
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr class="w-100">
+                            <div class="contact-info pt-4">
+                                <div class="card-body">
+                                    <div class="card-header card-header-border-bottom d-flex justify-content-between">
+                                        {% if switch == 'open' and member.audit_role == 'lvl1' %}
+                                            <button type="button"
+                                                    class="mb-1 btn btn-pill btn-block  btn-outline-success"
+                                                    data-toggle="modal"
+                                                    data-target="#exampleModalForm4">
+                                                新增审计人员
+                                            </button>
+                                        {% endif %}
+                                    </div>
+                                    <table class="table table-hover ">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">序号</th>
+                                            <th scope="col">姓名</th>
+                                            <th scope="col">角色</th>
+                                            <th scope="col"></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for members in project_member %}
+                                            <tr class="audit_member_list">
+                                                <td scope="row">{{ forloop.counter }}</td>
+                                                <td>{{ members.username.first_name }}</td>
+                                                <td>{{ members.get_audit_role_display }}</td>
+                                                {% if switch == 'open' and member.audit_role == 'lvl1' %}
+                                                    <td>
+                                                        <button type="button"
+                                                                class="mb-1 btn btn-pill btn-sm btn-outline-secondary audit_member_del"
+                                                                audit_member="{{ members.id }}">删除
+                                                        </button>
+                                                    </td>
+                                                {% endif %}
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                    <div class="modal fade" id="exampleModalForm4" tabindex="-1" role="dialog"
+                                         aria-labelledby="exampleModalFormTitle" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalFormTitle">新增审计人员</h5>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form>
+                                                        <p class="text-dark font-weight-medium mb-3">人员名称</p>
+                                                        <div class="card card-default">
+                                                            {% for member in except_members %}
+                                                                <label class="control outlined control-checkbox checkbox-primary">{{ member.first_name }}
+                                                                    <input type="radio" name="audit_member"
+                                                                           id="audit_member" value="{{ member.id }}"/>
+                                                                    <div class="control-indicator"></div>
+                                                                </label>
+                                                            {% endfor %}
+                                                        </div>
+                                                        <label class="text-dark mb-2 mt-4 font-weight-medium d-inline-block mr-3"
+                                                               for="">人员角色</label>
+                                                        <ul class="list-unstyled list-inline">
+                                                            <li class="d-inline-block mr-3">
+                                                                <label class="control control-radio">组员
+                                                                    <input type="radio" value="lvl2"
+                                                                           checked="checked" name="audit_role"
+                                                                           id="audit_role"/>
+                                                                    <div class="control-indicator"></div>
+                                                                </label>
+                                                            </li>
+                                                            <li class="d-inline-block mr-3">
+                                                                <label class="control control-radio">主审
+                                                                    <input type="radio" value="lvl1" name="audit_role"
+                                                                           id="audit_role"/>
+                                                                    <div class="control-indicator"></div>
+                                                                </label>
+                                                            </li>
+
+                                                            <li class="d-inline-block mr-3">
+                                                                <label class="control control-radio">其他
+                                                                    <input type="radio" value="lvl3" name="audit_role"
+                                                                           id="audit_role"/>
+                                                                    <div class="control-indicator"></div>
+                                                                </label>
+                                                            </li>
+                                                        </ul>
+                                                    </form>
+                                                    <button type="submit" class="btn btn-primary"
+                                                            id="audit_member_sumbit" name="audit_member_sumbit">增加
+                                                    </button>
+                                                </div>
+
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-danger btn-pill"
+                                                            data-dismiss="modal">关闭
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr class="w-100">
+                            {% if switch == 'open' and member.audit_role == 'lvl1' %}
+                                <div class="contact-info pt-4">
+                                    <botton type="submit" class="mb-1 btn btn-square btn-outline-warning"
+                                            id="deletebtn2">
+                                        <i class="mdi mdi-alert-outline mr-1"></i> 删除项目
+                                    </botton>
+                                </div>
+                            {% endif %}
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+{% endblock %}
+
+{% block myjs %}
+    <script>
+        $(function () {
+            {#提交notice#}
+            $('#notice_info_sumbit').click(function () {
+                if (window.confirm('你确定提交吗？')) {
+                    //alert("确定"); return true; }
+                    {# 如果拿的是非表单类元素的值,用text(),如果是表单类元素用val() #}
+                    var notice_name = $('#notice_name').val();
+                    var notice_NO = $('#notice_NO').val();
+                    $.ajax({
+                        type: 'POST',
+                        url: '{% url 'plans:notice_info' %}',
+                        data: {
+                            "notice_name": notice_name,
+                            "notice_NO": notice_NO,
+                            'project_id': '{{ project_id }}',
+                            "csrfmiddlewaretoken": '{{ csrf_token }}'
+                        },
+                        success: function (callback) {
+                            if (callback.status == 'ok') {
+                                toastr.success(callback.msg);
+                                {#alert(callback.msg);#}
+                                {#window.location.href = '{% url 'plans:plans_list' %}';#}
+                                {#window.location.reload()#}
+                                {# 拿到点击对象的祖先节点 当中有类名是des的祖先节点 #}
+                                {#obj.parents('.module1_5').remove()#}
+                                {#$('#notice_info_box').remove()#}
+                                windows.location.reload()
+                            } else {
+                                toastr.success(callback.msg);
+                                {#alert(callback.msg);#}
+                            }
+                        }
+                    });
+
+                    {# 如果你不想让submit有提交的动作,那么就需要在事件函数的最后返回false,阻止提交动作的发生 #}
+                    {#return false;#}
+                } else {
+                    {#//alert("取消"); return false; }#}
+                    alert("取消")
+                }
+
+            })
+            {#提交noticefile#}
+            $('#notice_file_up').click(function () {
+                if (window.confirm('你确定新增吗？')) {
+                    //alert("确定"); return true; }
+                    {# 如果拿的是非表单类元素的值,用text(),如果是表单类元素用val() #}
+                    var formdata = new FormData();
+                    var notice_file1 = $('#notice_file1')[0].files[0];
+                    {#let files = $('#notice_file1').filebox('files');#}
+                    {#let fd = new FormData();#}
+                    {#var notice_file1=document.getElementById('notice_file1').files[0]#}
+                    formdata.append('notice_file1', notice_file1);
+                    formdata.append('notice_id', '{{ notice_info.id }}');
+                    formdata.append('csrfmiddlewaretoken', '{{ csrf_token }}'),
+                        $.ajax({
+                            type: 'POST',
+                            url: '{% url 'plans:notice_file' %}',
+                            {#dataType: 'json',#}
+                            data: formdata,
+                            {#cache: false,#}
+                            {#    {#}
+                            {#    "notice_file": notice_file,#}
+                            {#    "notice_id": {{ notice_info.id }},#}
+                            {#    "project_id":{{ project_id }},#}
+                            {#    "csrfmiddlewaretoken": '{{ csrf_token }}',#}
+                            {##}
+                            {#,#}
+                            {#不处理数据 enctype="multipart/form-data" #}
+                            contentType: false,
+                            {#不设置内容类型    #}
+                            processData: false,
+                            success: function (callback) {
+                                if (callback.status == 'ok') {
+
+                                    {#alert(callback.msg);#}
+                                    {#window.location.href = '{% url 'plans:plans_list' %}';#}
+                                    {#window.location.reload()#}
+                                    {# 拿到点击对象的祖先节点 当中有类名是des的祖先节点 #}
+                                    {#obj.parents('.module1_5').remove()#}
+                                    {#$('#notice_info_box').remove(),#}
+                                    window.location.reload();
+                                    toastr.success(callback.msg);
+                                } else {
+                                    toastr.success(callback.msg);
+                                    {#alert(callback.msg);#}
+                                }
+                            }
+                        });
+
+                    {# 如果你不想让submit有提交的动作,那么就需要在事件函数的最后返回false,阻止提交动作的发生 #}
+                    {#return false;#}
+                } else {
+                    {#//alert("取消"); return false; }#}
+                    alert("取消")
+                }
+
+            })
+            {#删除noticedel#}
+            $('.notice_del').click(function () {
+                if (window.confirm('你确定提交吗？')) {
+                    //alert("确定"); return true; }
+                    {# 如果拿的是非表单类元素的值,用text(),如果是表单类元素用val() #}
+                    var notice_id = $(this).attr('notice_id');
+                    var notice_company = $(this).attr('notice_company');
+                    var notice_name = $(this).attr('notice_name_id');
+                    var notice_file = $(this).attr('notice_file');
+                    var obj = $(this);
+                    $.ajax({
+                        type: 'GET',
+                        url: '{% url 'plans:notice_del' %}',
+                        data: {
+                            "notice_id": notice_id,
+                            "notice_company": notice_company,
+                            "notice_name": notice_name,
+                            "notice_file": notice_file
+                        },
+                        success: function (callback) {
+                            if (callback.status == 'ok') {
+                                toastr.success(callback.msg);
+                                {#alert(callback.msg);#}
+                                {#window.location.href = '{% url 'plans:plans_list' %}';#}
+                                {#window.location.reload()#}
+                                {# 拿到点击对象的祖先节点 当中有类名是des的祖先节点 #}
+                                {#obj.parents('.module1_5').remove()#}
+                                {#$('#notice_info_box').remove()#}
+                                obj.parents('.notice_del_body').remove()
+                                {#obj.parents('.notice_del_body').reload()#}
+                            } else {
+                                {#toastr.success(callback.msg);#}
+                                alert(callback.msg);
+                            }
+                        }
+                    });
+
+                    {# 如果你不想让submit有提交的动作,那么就需要在事件函数的最后返回false,阻止提交动作的发生 #}
+                    {#return false;#}
+                } else {
+                    {#//alert("取消"); return false; }#}
+                    alert("取消")
+                }
+
+            })
+            {#更新审计方案    #}
+            $('#start_submit').click(function () {
+                if (window.confirm('你确定提交吗？')) {
+                    //alert("确定"); return true; }
+                    {# 如果拿的是非表单类元素的值,用text(),如果是表单类元素用val() #}
+                    var start_name = $('#start_name').val();
+                    var start_target = $('#start_target').val();
+                    var start_range = $('#start_range').val();
+                    var start_basis = $('#start_basis').val();
+                    var start_content = $('#start_content').val();
+                    var start_progress = $('#start_progress').val();
+                    var start_date = $('#start_date').val();
+                    $.ajax({
+                        type: 'POST',
+                        url: '{% url 'plans:start_info' %}',
+                        dataType: 'json',
+                        data: {
+                            "start_name": start_name,
+                            "start_target": start_target,
+                            "start_range": start_range,
+                            "start_basis": start_basis,
+                            "start_content": start_content,
+                            "start_progress": start_progress,
+                            "start_date": start_date,
+                            "project_id": '{{ project_id }}',
+                            "csrfmiddlewaretoken": '{{ csrf_token }}'
+                        },
+                        success: function (callback) {
+                            if (callback.status == 'ok') {
+                                console.log(data)
+                                toastr.success(callback.msg);
+                                {#alert(callback.msg);#}
+                                {#window.location.href = '{% url 'plans:plans_list' %}';#}
+                                window.location.reload()
+                                {# 拿到点击对象的祖先节点 当中有类名是des的祖先节点 #}
+                                {#obj.parents('.module1_5').remove()#}
+                                {#$('#notice_info_box').remove()#}
+                                {#$('#notice_info_box').location.reload()#}
+                            } else {
+                                toastr.success(callback.msg);
+                                {#alert(callback.msg);#}
+                            }
+                        }
+                    });
+
+                    {# 如果你不想让submit有提交的动作,那么就需要在事件函数的最后返回false,阻止提交动作的发生 #}
+                    {#return false;#}
+                } else {
+                    {#//alert("取消"); return false; }#}
+                    alert("取消")
+                }
+
+            })
+            {#提交startfile#}
+            $('#start_file_submit').click(function () {
+                if (window.confirm('你确定新增吗？')) {
+                    //alert("确定"); return true; }
+                    {# 如果拿的是非表单类元素的值,用text(),如果是表单类元素用val() #}
+                    var formdata = new FormData();
+                    var start_file = $('#start_file')[0].files[0];
+                    formdata.append('start_file', start_file);
+                    formdata.append('project_id', '{{ project_id }}');
+                    formdata.append('csrfmiddlewaretoken', '{{ csrf_token }}'),
+                        $.ajax({
+                            type: 'POST',
+                            url: '{% url 'plans:start_file' %}',
+                            {#dataType: 'json',#}
+                            data: formdata,
+                            contentType: false,
+                            {#不设置内容类型    #}
+                            processData: false,
+                            success: function (callback) {
+                                if (callback.status == 'ok') {
+                                    {#alert(callback.msg);#}
+                                    {#window.location.href = '{% url 'plans:plans_list' %}';#}
+                                    {#window.location.reload()#}
+                                    {# 拿到点击对象的祖先节点 当中有类名是des的祖先节点 #}
+                                    {#obj.parents('.module1_5').remove()#}
+                                    {#$('#notice_info_box').remove(),#}
+                                    window.location.reload();
+                                    toastr.success(callback.msg);
+                                } else {
+                                    toastr.success(callback.msg);
+                                    {#alert(callback.msg);#}
+                                }
+                            }
+                        });
+
+                    {# 如果你不想让submit有提交的动作,那么就需要在事件函数的最后返回false,阻止提交动作的发生 #}
+                    {#return false;#}
+                } else {
+                    {#//alert("取消"); return false; }#}
+                    alert("取消")
+                }
+
+            })
+            {#删除startfile#}
+            $('.start_file_del').click(function () {
+                if (window.confirm('你确定删除吗？')) {
+                    //alert("确定"); return true; }
+                    {# 如果拿的是非表单类元素的值,用text(),如果是表单类元素用val() #}
+                    var start_file = $(this).attr('start_file_1');
+                    var obj = $(this);
+                    $.ajax({
+                        type: 'GET',
+                        url: '{% url 'plans:start_file_del' %}',
+                        data: {
+                            "start_file": start_file,
+                            "project_id": '{{ project_id }}',
+                        },
+                        success: function (callback) {
+                            if (callback.status == 'ok') {
+                                toastr.success(callback.msg);
+                                {#alert(callback.msg);#}
+                                {#window.location.href = '{% url 'plans:plans_list' %}';#}
+                                {#window.location.reload()#}
+                                {# 拿到点击对象的祖先节点 当中有类名是des的祖先节点 #}
+                                {#obj.parents('.module1_5').remove()#}
+                                {#$('#notice_info_box').remove()#}
+                                obj.parents('.start_file_list').remove()
+                                {#obj.parents('.notice_del_body').reload()#}
+                            } else {
+                                {#toastr.success(callback.msg);#}
+
+                                alert(callback.msg);
+                            }
+                        }
+                    });
+
+                    {# 如果你不想让submit有提交的动作,那么就需要在事件函数的最后返回false,阻止提交动作的发生 #}
+                    {#return false;#}
+                } else {
+                    {#//alert("取消"); return false; }#}
+                    alert("取消")
+                }
+
+            })
+            {#提交auditcompany#}
+            $('#audit_company_sumbit').click(function () {
+                if (window.confirm('你确定提交吗？')) {
+                    //alert("确定"); return true; }
+                    {# 如果拿的是非表单类元素的值,用text(),如果是表单类元素用val() #}
+                    var audit_company = $('#audit_company').val();
+                    var audit_company_person = $('#audit_company_person').val();
+                    $.ajax({
+                        type: 'POST',
+                        url: '{% url 'plans:audit_company_info' %}',
+                        data: {
+                            "audit_company": audit_company,
+                            "audit_company_person": audit_company_person,
+                            'project_id': '{{ project_id }}',
+                            "csrfmiddlewaretoken": '{{ csrf_token }}'
+                        },
+                        success: function (callback) {
+                            if (callback.status == 'ok') {
+                                toastr.success(callback.msg);
+                                {#alert(callback.msg);#}
+                                {#window.location.href = '{% url 'plans:plans_list' %}';#}
+                                {#window.location.reload()#}
+                                {# 拿到点击对象的祖先节点 当中有类名是des的祖先节点 #}
+                                {#obj.parents('.module1_5').remove()#}
+                                {#$('#notice_info_box').remove()#}
+                                window.location.reload()
+                            } else {
+                                toastr.success(callback.msg);
+                                {#alert(callback.msg);#}
+                            }
+                        }
+                    });
+
+                    {# 如果你不想让submit有提交的动作,那么就需要在事件函数的最后返回false,阻止提交动作的发生 #}
+                    {#return false;#}
+                } else {
+                    {#//alert("取消"); return false; }#}
+                    alert("取消")
+                }
+
+            })
+            {#删除auditcompany#}
+            $('.audit_company_del').click(function () {
+                if (window.confirm('你确定删除吗？')) {
+                    //alert("确定"); return true; }
+                    {# 如果拿的是非表单类元素的值,用text(),如果是表单类元素用val() #}
+                    var audit_company_id = $(this).attr('audit_company_id');
+                    var audit_company_person = $(this).attr('audit_company_person');
+                    var obj = $(this);
+                    $.ajax({
+                        type: 'GET',
+                        url: '{% url 'plans:audit_company_del' %}',
+                        data: {
+                            "audit_company_id": audit_company_id,
+                            "audit_company_person": audit_company_person,
+                            "project_id": '{{ project_id }}',
+                        },
+                        success: function (callback) {
+                            if (callback.status == 'ok') {
+                                toastr.success(callback.msg);
+                                {#alert(callback.msg);#}
+                                {#window.location.href = '{% url 'plans:plans_list' %}';#}
+                                {#window.location.reload()#}
+                                {# 拿到点击对象的祖先节点 当中有类名是des的祖先节点 #}
+                                {#obj.parents('.module1_5').remove()#}
+                                {#$('#notice_info_box').remove()#}
+                                obj.parents('.audit_company_list').remove()
+                                {#obj.parents('.notice_del_body').reload()#}
+                            } else {
+                                {#toastr.success(callback.msg);#}
+
+                                alert(callback.msg);
+                            }
+                        }
+                    });
+
+                    {# 如果你不想让submit有提交的动作,那么就需要在事件函数的最后返回false,阻止提交动作的发生 #}
+                    {#return false;#}
+                } else {
+                    {#//alert("取消"); return false; }#}
+                    alert("取消")
+                }
+
+            })
+            {#提交auditmember#}
+            $('#audit_member_sumbit').click(function () {
+                if (window.confirm('你确定提交吗？')) {
+                    //alert("确定"); return true; }
+                    {# 如果拿的是非表单类元素的值,用text(),如果是表单类元素用val() #}
+                    var audit_member = $('#audit_member').val();
+                    var audit_role = $('input[name=\'audit_role\']:checked').val();
+                    $.ajax({
+                        type: 'POST',
+                        url: '{% url 'plans:audit_member' %}',
+                        data: {
+                            "audit_member": audit_member,
+                            "audit_role": audit_role,
+                            'project_id': '{{ project_id }}',
+                            "csrfmiddlewaretoken": '{{ csrf_token }}'
+                        },
+                        success: function (callback) {
+                            if (callback.status == 'ok') {
+                                toastr.success(callback.msg);
+                                {#alert(callback.msg);#}
+                                {#window.location.href = '{% url 'plans:plans_list' %}';#}
+                                {#window.location.reload()#}
+                                {# 拿到点击对象的祖先节点 当中有类名是des的祖先节点 #}
+                                {#obj.parents('.module1_5').remove()#}
+                                {#$('#notice_info_box').remove()#}
+                                window.location.reload()
+                            } else {
+                                toastr.success(callback.msg);
+                                {#alert(callback.msg);#}
+                                {#console.log(data)#}
+                            }
+                        }
+                    });
+
+                    {# 如果你不想让submit有提交的动作,那么就需要在事件函数的最后返回false,阻止提交动作的发生 #}
+                    {#return false;#}
+                } else {
+                    {#//alert("取消"); return false; }#}
+                    alert("取消")
+                }
+
+            })
+            {#删除auditmember#}
+            $('.audit_member_del').click(function () {
+                if (window.confirm('你确定删除吗？')) {
+                    //alert("确定"); return true; }
+                    {# 如果拿的是非表单类元素的值,用text(),如果是表单类元素用val() #}
+                    var audit_member = $(this).attr('audit_member');
+                    {#var audit_company_person = $(this).attr('audit_company_person');#}
+                    var obj = $(this);
+                    $.ajax({
+                        type: 'GET',
+                        url: '{% url 'plans:audit_member_del' %}',
+                        data: {
+                            "audit_member": audit_member,
+                            {#"audit_company_person": audit_company_person,#}
+                            "project_id": '{{ project_id }}',
+                        },
+                        success: function (callback) {
+                            if (callback.status == 'ok') {
+                                toastr.success(callback.msg);
+                                {#alert(callback.msg);#}
+                                {#window.location.href = '{% url 'plans:plans_list' %}';#}
+                                window.location.reload()
+                                {# 拿到点击对象的祖先节点 当中有类名是des的祖先节点 #}
+                                {#obj.parents('.module1_5').remove()#}
+                                {#$('#notice_info_box').remove()#}
+                                {#obj.parents('.audit_member_list').remove()#}
+                                {#obj.parents('.notice_del_body').reload()#}
+                            } else {
+                                {#toastr.success(callback.msg);#}
+
+                                alert(callback.msg);
+                            }
+                        }
+                    });
+
+                    {# 如果你不想让submit有提交的动作,那么就需要在事件函数的最后返回false,阻止提交动作的发生 #}
+                    {#return false;#}
+                } else {
+                    {#//alert("取消"); return false; }#}
+                    alert("取消")
+                }
+
+            })
+            {#删除项目#}
+            $('#deletebtn2').click(function () {
+                if (window.confirm('你确定要删除吗？')) {
+                    //alert("确定"); return true; }
+                    {# 如果拿的是非表单类元素的值,用text(),如果是表单类元素用val() #}
+                    var plan_id = '{{ project_id }}';
+                    var status = 'False';
+                    $.ajax({
+                        type: 'POST',
+                        url: '{% url 'plans:plan_del' %}',
+                        data: {
+                            "plan_id": plan_id,
+                            "status": status,
+                            "csrfmiddlewaretoken": '{{ csrf_token }}'
+                        },
+                        success: function (callback) {
+                            if (callback.status == 'ok') {
+                                {#toastr.success(callback.msg);#}
+                                alert(callback.msg);
+                                window.location.href = '{% url 'plans:plans_list' %}';
+                                {#window.location.reload()#}
+                                {# 拿到点击对象的祖先节点 当中有类名是des的祖先节点 #}
+                                {#obj.parents('.module1_5').remove()#}
+                            } else {
+                                alert(callback.msg);
+                            }
+                        }
+                    });
+
+                    {# 如果你不想让submit有提交的动作,那么就需要在事件函数的最后返回false,阻止提交动作的发生 #}
+                    {#return false;#}
+                } else {
+                    {#//alert("取消"); return false; }#}
+                    alert("取消")
+                }
+
+            })
+            $('#audit_company_clean').click(function () {
+                $("#audit_company").val('');
+                return false;
+
+            })
+
+        })
+
+    </script>
+   <script>
+        //-------注册地自动补全开始----------------------------------
+        var audit_company = $("#audit_company");
+        //创建自动完成的下拉列表，用于显示服务器返回的数据，插入在输入框后面，然后调整位置
+        var autocomplete = $('<ul class="autocomplete"></ul>').hide().appendTo("#searchBox");
+        //清空下拉列表的内容并且隐藏下拉列表
+        var clear = function () {
+            autocomplete.empty().hide();
+        };
+        //注册事件，当输入框失去焦点的时候清空下拉列表并隐藏
+        audit_company.blur(function () {
+            setTimeout(clear, 500);
+        });
+        //下拉列表中高亮的项目的索引，当显示下拉列表项的时候，移动鼠标或者键盘的下键就会移动高亮的项目
+        var selectedItem = null;
+        var timeoutId = null;
+        //设置下拉项的高亮背景
+        var setSelectedItem = function (item) {
+            selectedItem = item;
+            //按上下键是循环显示的，小于0就设置成最大值，大于最大值就设置成0
+            if (selectedItem < 0) {
+                selectedItem = autocomplete.find("li").length - 1;
+            } else if (selectedItem > autocomplete.find("li").length - 1) {
+                selectedItem = 0;
+            }
+            //首先移除其他列表项的高亮背景，然后再高亮当前索引的背景
+            autocomplete.find("li").removeClass("highlight")
+                .eq(selectedItem).addClass("highlight");
+        };
+        var ajax_request = function () {
+//        ajax服务端通信
+            $.ajax({
+                url: "{% url 'plans:auto_company' %}",
+                {#contentType:"application/x-www-form-urlencoded:charset=UTF-8",#}
+                type: "GET",
+                {#dataType:"json",#}
+                data: {"auto_company": $("#audit_company").val()},
+                "project_id": '{{ project_id }}',
+                success: function (callback) {
+                    if (callback.status == 'ok') {
+                             toastr.success(callback.msg);
+                            $("#audit_company").val(callback.msg);
+                    } else {
+                        var autocompany1 = callback.msg;
+                        var autocompany2 = autocompany1.slice(2);
+                        var autocompany3 = autocompany2.slice(0, -2);
+                        var autocompany = autocompany3.replace(/'/g, "");
+                        {#var autocompany=autocompany4.split(",")#}
+                        toastr.success(autocompany);
+                        {#$("#audit_company").autocomplete({#}
+                        {#source: autocompany#}
+                        //};
+                    }
+
+
+                    {#var autocompany=["大壳宝","大壳美","大壳棒棒哒","厉害了我的壳"];#}
+                    //如果有数据
+                    if (autocompany.length > 0) {
+                        $.each(autocompany, function (index, term) {
+                            //创建li标签，添加到下拉列表中
+                            $('<li></li>').text(term).appendTo(autocomplete)
+                                .addClass("clickable")
+                                .hover(function () {
+                                    $(this).siblings().removeClass("highlight");
+                                    $(this).addClass("highlight");
+                                    selectedItem = index;
+                                }, function () {
+                                    $(this).removeClass("highlight");
+                                    selectedItem = -1;
+                                }).click(function () {
+                                //鼠标单击下拉列表的这一项的话，就将这一项的值添加到输入框中
+                                audit_company.val(term);
+                                //清空并隐藏下拉列表
+                                autocomplete.empty().hide();
+                            });
+                        });//事件注册完毕
+                        //设置下拉列表的位置，然后显示下拉列表
+                        var ypos = audit_company.height() + 4;
+                        var xpos = audit_company.position().left;
+                        autocomplete.css('width', audit_company.css('width'));
+                        autocomplete.css({
+                            'position': 'absolute',
+                            'left': xpos + 'px',
+                            'top': ypos + 'px',
+                            "z-index": "100"
+                        });
+                        setSelectedItem(0);
+                        //显示下拉列表
+                        autocomplete.show();
+                    }
+                }
+            });
+        };
+        //对输入框进行事件注册
+        audit_company.keyup(function (e) {
+            //字母数字、退格、空格
+            if (e.keyCode > 40 || e.keyCode == 8 || e.keyCode == 32) {
+                //首先删除下拉列表中的信息
+                autocomplete.empty().hide();
+                clearTimeout(timeoutId);
+                timeoutId = setTimeout(ajax_request, 100);
+            } else if (e.keyCode == 38) {
+                //上
+                //selectedItem=-1代表鼠标离开
+                if (selectedItem == -1) {
+                    setSelectedItem(autocomplete.find("li").length - 1);
+                } else {
+                    //索引减1
+                    setSelectedItem(selectedItem - 1);
+                }
+                e.preventDefault();
+            } else if (e.keyCode == 40) {
+                //下
+                if (selectedItem == -1) {
+                    setSelectedItem(0);
+                } else {
+                    setSelectedItem(selectedItem + 1);
+                }
+                e.preventDefault();
+            }
+        }).keypress(function (e) {
+            //enter回车键
+            if (e.keyCode == 13) {
+                //列表为空或者鼠标离开导致当前没有索引值
+                if (autocomplete.find("li").length == 0 || selectedItem == -1) {
+                    return;
+                }
+                audit_company.val(autocomplete.find("li").eq(selectedItem).text());
+                autocomplete.empty().hide();
+                e.preventDefault();
+            }
+        }).keydown(function (e) {
+            //esc后退
+            if (e.keyCode == 27) {
+                autocomplete.empty().hide();
+                e.preventDefault();
+            }
+        });
+        //------注册地自动补全结束----------------------------
+    </script>
+{% endblock %}

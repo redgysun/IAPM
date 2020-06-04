@@ -1,0 +1,346 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} 整改追踪列表 {% endblock %}
+{% block left-siderbar-re %}
+    <li {% if request.path|slice:':14' == '/ex/re_problem' %}
+        class="active" {% endif %}>
+        <a class="sidenav-item-link" href="{% url 'ex:re_problem' re_project_id %}">
+            <span class="nav-text">{{ re_project.project_name.project_name }} -- 问题列表</span>
+        </a>
+    </li>
+{% endblock %}
+{% block content-wrapper %}
+    <div class="content-wrapper">
+        <div class="content">
+            <div class="breadcrumb-wrapper">
+
+            </div>
+            <!-- First Row  -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card card-default">
+                        <div class="card-header card-header-border-bottom d-flex justify-content-between">
+                            <h2>{{ re_project.project_name.project_name }}--整改问题列表</h2>
+                            {% if switch == 'open' %}
+                                <button type="button" class="mb-1 btn btn-sm btn-danger" id="re_finish">
+                                    <i class=" mdi mdi-reminder   mr-1"></i> 整改结束
+                                </button>
+                            {% endif %}
+                        </div>
+                        <div class="card-body">
+                            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="icon-home-tab" data-toggle="tab" href="#icon-pr"
+                                       role="tab" aria-controls="icon-home" aria-selected="true">
+                                        <i class="mdi mdi-lighthouse-on mr-2"></i>
+                                        整改中（{{ re_pr_problem_list.count }}）</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="icon-profile-tab" data-toggle="tab" href="#icon-co"
+                                       role="tab" aria-controls="icon-profile"
+                                       aria-selected="false">
+                                        <i class="mdi mdi-hand-okay mr-2"></i> 整改完成（{{ re_co_problem_list.count }}）</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="icon-contact-tab" data-toggle="tab" href="#icon-un"
+                                       role="tab" aria-controls="icon-contact"
+                                       aria-selected="false">
+                                        <i class="mdi mdi-halloween mr-2"></i> 无法整改（{{ re_un_problem_list.count }}）</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="icon-contact-tab" data-toggle="tab" href="#icon-cod"
+                                       role="tab" aria-controls="icon-contact"
+                                       aria-selected="false">
+                                        <i class="mdi mdi-react mr-2"></i> 问题编码</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content" id="myTabContent2">
+                                <div class="tab-pane pt-3 fade show active" id="icon-pr" role="tabpanel"
+                                     aria-labelledby="icon-home-tab">
+
+                                    <table id="responsive-data-table" class="table dt-responsive nowrap"
+                                           style="width:100%">
+                                        <thead>
+                                        <tr>
+                                            <th>序号</th>
+                                            <th>问题名称</th>
+                                            <th>问题内容</th>
+                                            <th>改进措施</th>
+                                            <th>负责部门</th>
+                                            <th>责任人</th>
+                                            <th>预计时间</th>
+                                            <th>是否问责</th>
+                                            <th>问责情况</th>
+                                            <th>是否公告</th>
+                                            <th>备注</th>
+                                        </tr>
+                                        </thead>
+
+                                        <tbody>
+                                        {% for re_pr_problem in re_pr_problem_list %}
+                                            <tr>
+                                                <td>{{ forloop.counter }}</td>
+                                                <td>
+                                                    <a href="{% url 'ex:re_feedback' re_pr_problem.id %}"
+                                                       target="_Blank">{{ re_pr_problem.re_problem.problem_title }}</a>
+                                                </td>
+                                                <td>{{ re_pr_problem.re_problem.problem_content }}</td>
+                                                <td>{{ re_pr_problem.re_improve }}</td>
+                                                <td>{{ re_pr_problem.re_problem.audit_company.audit_company }} </br>
+                                                    {% if  re_pr_problem.re_department %}
+                                                        {{ re_pr_problem.re_department }}  {% endif %}</td>
+                                                <td>{{ re_pr_problem.re_person }}</td>
+                                                <td>{% if re_pr_problem.warn > 0 %}<font color="red"
+                                                                                         class="mdi mdi-cow "> {% endif %}{{ re_pr_problem.re_date|date:'Y-m-d' }}
+                                                    {% if re_pr_problem.warn > 0 %}</font>{% endif %}</td>
+                                                <td>{{ re_pr_problem.get_accountability_is_display }}</td>
+                                                <td>{{ re_pr_problem.accountability_content }}</td>
+                                                <td>{{ re_pr_problem.get_announcement_is_display }}</td>
+                                                <td>反馈{{ re_pr_problem.feedback_nm }}条 {% if re_un_problem %} </br>
+                                                    {{ re_pr_problem.remarks }} {% endif %} </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+
+                                    </table>
+
+                                </div>
+                                <div class="tab-pane pt-3 fade" id="icon-co" role="tabpanel"
+                                     aria-labelledby="icon-profile-tab">
+                                    <table id="responsive-data-table1" class="table dt-responsive nowrap"
+                                           style="width:100%">
+                                        <thead>
+                                        <tr>
+                                            <th>序号</th>
+                                            <th>问题名称</th>
+                                            <th>问题内容</th>
+                                            <th>改进措施</th>
+                                            <th>负责部门</th>
+                                            <th>责任人</th>
+                                            <th>预计时间</th>
+                                            <th>是否问责</th>
+                                            <th>问责情况</th>
+                                            <th>是否公告</th>
+                                            <th>备注</th>
+                                        </tr>
+                                        </thead>
+
+                                        <tbody>
+                                        {% for re_co_problem in re_co_problem_list %}
+                                            <tr>
+                                                <td>{{ forloop.counter }}</td>
+                                                <td>
+                                                    <a href="{% url 'ex:re_feedback' re_co_problem.id %}"
+                                                       target="_Blank">{{ re_co_problem.re_problem.problem_title }}</a>
+                                                </td>
+                                                <td>{{ re_co_problem.re_problem.problem_content }}</td>
+                                                <td>{{ re_co_problem.re_improve }}</td>
+                                                <td>{{ re_co_problem.re_problem.audit_company.audit_company }} </br>
+                                                    {% if  re_co_problem.re_department %}
+                                                        {{ re_co_problem.re_department }} {% endif %}</td>
+                                                <td>{{ re_co_problem.re_person }}</td>
+                                                <td>{{ re_co_problem.re_date|date:'Y-m-d' }}</td>
+                                                <td>{{ re_co_problem.get_accountability_is_display }}</td>
+                                                <td>{{ re_co_problem.accountability_content }}</td>
+                                                <td>{{ re_co_problem.get_announcement_is_display }}</td>
+                                                <td>反馈{{ re_co_problem.feedback_nm }}条 {% if re_co_problem %} </br>
+                                                    {{ re_co_problem.remarks }} {% endif %}</td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+
+                                    </table>
+                                </div>
+                                <div class="tab-pane pt-3 fade" id="icon-un" role="tabpanel"
+                                     aria-labelledby="icon-contact-tab">
+                                    <table id="responsive-data-table2" class="table dt-responsive nowrap"
+                                           style="width:100%">
+                                        <thead>
+                                        <tr>
+                                            <th>序号</th>
+                                            <th>问题名称</th>
+                                            <th>问题内容</th>
+                                            <th>改进措施</th>
+                                            <th>负责部门</th>
+                                            <th>责任人</th>
+                                            <th>预计时间</th>
+                                            <th>是否问责</th>
+                                            <th>问责情况</th>
+                                            <th>是否公告</th>
+                                            <th>备注</th>
+                                        </tr>
+                                        </thead>
+
+                                        <tbody>
+                                        {% for re_un_problem in re_un_problem_list %}
+                                            <tr>
+                                                <td>{{ forloop.counter }}</td>
+                                                <td>
+                                                    <a href="{% url 'ex:re_feedback' re_un_problem.id %}"
+                                                       target="_Blank">{{ re_un_problem.re_problem.problem_title }}</a>
+                                                </td>
+                                                <td>{{ re_un_problem.re_problem.problem_content }}</td>
+                                                <td>{{ re_un_problem.re_improve }}</td>
+                                                <td>{{ re_un_problem.re_problem.audit_company.audit_company }} </br>
+                                                    {% if  re_un_problem.re_department %}
+                                                        {{ re_un_problem.re_department }} {% endif %}</td>
+                                                <td>{{ re_un_problem.re_person }}</td>
+                                                <td>{{ re_un_problem.re_date|date:'Y-m-d' }}</td>
+                                                <td>{{ re_un_problem.get_accountability_is_display }}</td>
+                                                <td>{{ re_un_problem.accountability_content }}</td>
+                                                <td>{{ re_un_problem.get_announcement_is_display }}</td>
+                                                <td>反馈{{ re_un_problem.feedback_nm }}条 {% if re_un_problem %} </br>
+                                                    {{ re_un_problem.remarks }}{% endif %}</td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+
+                                    </table>
+                                </div>
+                                <div class="tab-pane pt-3 fade" id="icon-cod" role="tabpanel"
+                                     aria-labelledby="icon-contact-tab">
+                                    <table id="responsive-data-table3" class="table dt-responsive nowrap"
+                                           style="width:100%">
+                                        <thead>
+                                        <tr>
+                                            <th>序号</th>
+                                            <th>问题名称</th>
+                                            <th>整改状态</th>
+                                            <th>问题内容</th>
+                                            <th>被审计公司</th>
+                                            <th>被审计人</th>
+                                            <th>编码</th>
+                                        </tr>
+                                        </thead>
+
+                                        <tbody>
+                                        {% for re_problem in re_problem_list %}
+                                            <tr>
+                                                <td>{{ forloop.counter }}</td>
+                                                <td>
+                                                    {{ re_problem.re_problem.problem_title }}
+                                                </td>
+                                                <td>
+                                                    {{ re_problem.get_re_situation_display }}
+                                                </td>
+                                                <td>{{ re_problem.re_problem.problem_content }}</td>
+                                                <td>{{ re_problem.re_problem.audit_company.audit_company }}</td>
+                                                <td>{{ re_problem.re_problem.audit_company.audit_person }} </td>
+                                                <td>{{ re_problem.coding }}</td>
+
+                                            </tr>
+                                        {% endfor %}
+
+
+                                        </tbody>
+
+                                    </table>
+{#                                    <button  type="button" class="mb-1 btn btn-outline-warning" id="re_problem_exportxl">#}
+{#                                        导出excel#}
+{#                                    </button>#}
+                                {% if re_problem_list %}
+                                <a href="{% url 'ex:re_problem_exportxl' re_project_id %}">导出excel</a>
+                                {% endif %}
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block myjs %}
+    <pre class="mt-4">
+    <script src="{% static 'assets/plugins/data-tables/jquery.datatables.min.js' %}"></script>
+    <script src="{% static 'assets/plugins/data-tables/datatables.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'assets/plugins/data-tables/datatables.responsive.min.js' %}"></script>
+    <link href="{% static 'assets/plugins/data-tables/datatables.bootstrap4.min.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/plugins/data-tables/responsive.datatables.min.css' %}" rel="stylesheet">
+{#    <link href=""https://unpkg.com/sleek-dashboard/dist/assets/css/sleek.min.css">#}
+    </pre>
+    <script>
+        jQuery(document).ready(function () {
+            jQuery('#responsive-data-table').DataTable({
+                "aLengthMenu": [[20, 30, 50, 75, -1], [20, 30, 50, 75, "All"]],
+                "pageLength": 30,
+                "dom": '<"row justify-content-between top-information"lf>rt<"row justify-content-between bottom-information"ip><"clear">'
+            });
+        });
+
+        jQuery(document).ready(function () {
+            jQuery('#responsive-data-table1').DataTable({
+                "aLengthMenu": [[20, 30, 50, 75, -1], [20, 30, 50, 75, "All"]],
+                "pageLength": 30,
+                "dom": '<"row justify-content-between top-information"lf>rt<"row justify-content-between bottom-information"ip><"clear">'
+            });
+        });
+        jQuery(document).ready(function () {
+            jQuery('#responsive-data-table2').DataTable({
+                "aLengthMenu": [[20, 30, 50, 75, -1], [20, 30, 50, 75, "All"]],
+                "pageLength": 30,
+                "dom": '<"row justify-content-between top-information"lf>rt<"row justify-content-between bottom-information"ip><"clear">'
+            });
+        });
+        jQuery(document).ready(function () {
+            jQuery('#responsive-data-table3').DataTable({
+                "aLengthMenu": [[20, 30, 50, 75, -1], [20, 30, 50, 75, "All"]],
+                "pageLength": 30,
+                "dom": '<"row justify-content-between top-information"lf>rt<"row justify-content-between bottom-information"ip><"clear">'
+            });
+        });
+    </script>
+
+    <script>
+        $(function () {
+            $('#re_finish').click(function () {
+                if (window.confirm('你确定结束吗？')) {
+                    //alert("确定"); return true; }
+                    {# 如果拿的是非表单类元素的值,用text(),如果是表单类元素用val() #}
+
+                    $.ajax({
+                        type: 'GET',
+                        url: '{% url 'ex:re_finish_project' %}',
+                        data: {
+                            "re_project_id": {{ re_project_id }},
+
+                        },
+                        success: function (callback) {
+                            if (callback.status == 'ok') {
+                                toastr.success(callback.msg);
+                                {#alert(callback.msg);#}
+                                {#window.location.href = '{{ MEDIA_URL }}'+c;#}
+                                window.location.reload()
+                                {# 拿到点击对象的祖先节点 当中有类名是des的祖先节点 #}
+                                {#obj.parents('.module1_5').remove()#}
+                                {#$('#notice_info_box').remove()#}
+                                {#obj.parents('.re_feedback_file_list').remove()#}
+                                {#obj.parents('.notice_del_body').reload()#}
+                            } else {
+                                {#toastr.success(callback.msg);#}
+
+                                alert(callback.msg);
+                            }
+                        }
+                    });
+
+                    {# 如果你不想让submit有提交的动作,那么就需要在事件函数的最后返回false,阻止提交动作的发生 #}
+                    {#return false;#}
+                } else {
+                    {#//alert("取消"); return false; }#}
+                    alert("取消")
+                }
+
+            });
+
+        })
+
+
+    </script>
+
+{% endblock %}

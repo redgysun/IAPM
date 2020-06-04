@@ -1,0 +1,717 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}审计报告阶段{% endblock %}
+{% block left-sidebar %}
+    <li class="has-sub {% if request.path|slice:':10' == '/plans/ex_' %}active  {% endif %} expand">
+                            <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
+                               data-target="#dashboard"
+                               aria-expanded="false" aria-controls="dashboard">
+                                <i class="mdi mdi-dribbble"></i>
+                                <span class="nav-text">返回上一级</span> <b class="caret"></b>
+                            </a>
+                            <ul class="collapse {% if request.path|slice:':14' == '/plans/ex_list' %} show {% endif %}" id="dashboard" data-parent="#sidebar-menu">
+                                <div class="sub-menu">
+
+                                    <li {% if request.path|slice:':14' == '/plans/ex_list' %}
+                                        class="active" {% endif %}>
+                                        <a class="sidenav-item-link" href="{% url 'plans:ex_list' %}">
+                                            <span class="nav-text">项目列表</span>
+                                        </a>
+                                    </li>
+
+                                </div>
+                            </ul>
+                        </li>
+    <li class="has-sub {% if request.path|slice:':9' == '/plans/st' %}active  {% endif %} expand">
+                            <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
+                               data-target="#dashboard1"
+                               aria-expanded="false" aria-controls="dashboard">
+                                <i class="mdi mdi-docker"></i>
+                                <span class="nav-text">前期准备</span> <b class="caret"></b>
+                            </a>
+                            <ul class="collapse {% if request.path|slice:':9' == '/plans/st' %}show  {% endif %}" id="dashboard1" data-parent="#sidebar-menu">
+                                <div class="sub-menu">
+
+                                    <li {% if request.path|slice:':19' == '/plans/start_detail' %}
+                                        class="active" {% endif %}>
+                                        <a class="sidenav-item-link" href="{% url 'plans:start_detail' project_id %}">
+                                            <span class="nav-text">通知及方案</span>
+                                        </a>
+                                    </li>
+
+                                </div>
+                            </ul>
+                        </li>
+    <li class="has-sub {% if request.path|slice:':6' == '/ex/sc' or request.path|slice:':6' == '/ex/pr' %}active  {% endif %} expand">
+                            <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
+                               data-target="#dashboard2"
+                               aria-expanded="false" aria-controls="dashboard">
+                                <i class="mdi mdi-pinwheel-outline"></i>
+                                <span class="nav-text">实施阶段</span> <b class="caret"></b>
+                            </a>
+                            <ul class="collapse {% if request.path|slice:':6' == '/ex/sc' or request.path|slice:':6' == '/ex/pr' %}show  {% endif %}" id="dashboard2" data-parent="#sidebar-menu">
+                                <div class="sub-menu">
+
+                                    <li {% if request.path|slice:':17' == '/ex/schedule_list' %}
+                                        class="active" {% endif %}>
+                                        <a class="sidenav-item-link" href="{% url 'ex:schedule_list' project_id %}">
+                                            <span class="nav-text">项目记录</span>
+                                        </a>
+                                    </li>
+                                    <li {% if request.path|slice:':16' == '/ex/problem_list' %}
+                                        class="active" {% endif %}>
+                                        <a class="sidenav-item-link" href="{% url 'ex:problem_list' project_id %}">
+                                            <span class="nav-text">问题列表</span>
+                                        </a>
+                                    </li>
+
+                                </div>
+                            </ul>
+                        </li>
+    <li class="has-sub {% if request.path|slice:':6' == '/ex/re'  %}active  {% endif %} expand">
+                            <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
+                               data-target="#dashboard3"
+                               aria-expanded="false" aria-controls="dashboard">
+                                <i class="mdi mdi-barley"></i>
+                                <span class="nav-text">报告阶段</span> <b class="caret"></b>
+                            </a>
+                            <ul class="collapse{% if request.path|slice:':6' == '/ex/re'  %} show  {% endif %}" id="dashboard3" data-parent="#sidebar-menu">
+                                <div class="sub-menu">
+
+                                    <li {% if request.path|slice:':17' == '/ex/report_detail' %}
+                                        class="active" {% endif %}>
+                                        <a class="sidenav-item-link" href="{% url 'ex:report_detail' project_id %}">
+                                            <span class="nav-text">项目记录</span>
+                                        </a>
+                                    </li>
+
+
+                                </div>
+                            </ul>
+                        </li>
+
+{% endblock %}
+{% block content-wrapper %}
+    <div class="content-wrapper">
+        <div class="content">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="card card-default">
+                    <div class="card-body">
+                    {% if switch == 'open' and member.audit_role == 'lvl1' %}
+                        <div class="card-header card-header-border-bottom d-flex justify-content-lg-end">
+                            <button type="button" class="mb-1 btn btn-pill btn-warning" id="clean_doubts">
+                                <i class="mr-1 fa fa-warning mdi mdi-eraser-variant"></i> 一键确认疑点</button>
+                            <button type="button" class="mb-1 btn btn-pill btn-danger " id="off_project">
+                                <i class="mr-1 fa fa-ban mdi mdi-power"></i> 项目结束</button>
+                        </div>
+                    {% endif %}
+                        <div class="card-header card-header-border-bottom">
+                            <h2>征求意见</h2>
+                        </div>
+                    {% if switch == 'open' and member.audit_role == 'lvl1' %}
+                        <button type="button"
+                                class="mb-1 btn btn-pill btn-block  btn-outline-danger"
+                                data-toggle="modal"
+                                data-target="#exampleModalForm1">
+                            上传附件
+                        </button>
+
+                        <div class="card-body">
+                            <div class="modal fade" id="exampleModalForm1" tabindex="-1" role="dialog"
+                                 aria-labelledby="exampleModalFormTitle1" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalFormTitle1">问题附件</h5>
+                                            <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            {#                                                        <form id="jsAvatarForm" enctype="multipart/form-data"#}
+                                            {#                                                          method="post"#}
+                                            {#                                                          action="{% url 'plans:notice_file' %}"#}
+                                            {#                                                          enctype="multipart/form-data">#}
+                                            {#                                                        {% csrf_token %}#}
+                                            <label class="text-dark mb-2 mt-4 font-weight-medium d-inline-block mr-3"
+                                                   for="">类型</label>
+                                            <ul class="list-unstyled list-inline">
+                                                <li class="d-inline-block mr-3">
+                                                    <label class="control control-radio">征求
+                                                        <input type="radio" name="feedback_type" id="feedback_type" checked="checked" value="se"/>
+                                                        <div class="control-indicator"></div>
+                                                    </label>
+                                                </li>
+                                                <li class="d-inline-block mr-3">
+                                                    <label class="control control-radio">反馈
+                                                        <input type="radio" name="feedback_type" id="feedback_type" value="fe"/>
+                                                        <div class="control-indicator"></div>
+                                                    </label>
+                                                </li>
+                                            </ul>
+                                            <input type="file"
+                                                   id="feedback_file1"
+                                                   name="feedback_file1">
+                                            <input type="submit" class="mb-1 btn  disabled btn-primary"
+                                                   id="feedback_file_up">
+                                            {#                                                        </form>#}
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-danger btn-pill"
+                                                    data-dismiss="modal">关闭
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                        <table class="table table-hover ">
+                            <thead>
+                            <tr>
+                                <th scope="col">序号</th>
+                                <th scope="col">文件名称</th>
+                                <th scope="col">类型</th>
+                                <th scope="col">上传时间</th>
+                                <th scope="col">上传人</th>
+                                <th scope="col"></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for file in feedback_file_list %}
+                                <tr class="feedback_file_list">
+                                    <td scope="row">{{ forloop.counter }}</td>
+                                    <td><a href="
+
+
+                                            {{ MEDIA_URL }}{{ file.feedback_file }}">{{ file.feedback_file.name|slice:"23:" }}</a>
+                                    </td>
+                                    <th>{{ file.get_feedback_type_display }}</th>
+                                    <td>{{ file.add_time|date:'Y-m-d' }}</td>
+                                    <td>{% if file.username.first_name  %}{{ file.username.first_name }}{% else %}{{ file.project_name.project_exauditname }}{% endif %}</td>
+                                    {% if switch == 'open' and member.audit_role == 'lvl1' %}
+                                        <td>
+                                            <button type="button"
+                                                    class="mb-1 btn btn-pill btn-sm btn-outline-secondary feedback_file_del"
+                                                    feedback_file_1="{{ file.id }}">
+                                                删除
+                                            </button>
+                                        </td>
+                                    {% endif %}
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="card card-default">
+                        <div class="card-header card-header-border-bottom">
+                            <h2>审计报告</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="card-header card-header-border-bottom" id="notice_info_box">
+
+                                <label for="firstName">审计报告名称</label>
+                                <input type="text" class="form-control" id="notice_name"
+                                       name="notice_name" value="{{ notice_info.notice_name }}">
+                                <label for="firstName">审计报告编号</label>
+                                <input type="text" class="form-control" id="notice_NO"
+                                       name="notice_NO" value="{{ notice_info.notice_NO }}">
+                                {% if switch == 'open' and member.audit_role == 'lvl1' %}
+                                <div class="d-flex justify-content-end mt-5">
+                                    <button type="submit" class="btn btn-primary mb-2 btn-pill"
+                                            id="notice_info_sumbit">提 交
+                                    </button>
+                                </div>
+                                                                {% endif %}
+                            </div>
+                            <div class="card-header card-header-border-bottom">
+
+                            </div>
+                        {% if switch == 'open' and member.audit_role == 'lvl1' %}
+                            <button type="button"
+                                    class="mb-1 btn btn-pill btn-block  btn-outline-danger"
+                                    data-toggle="modal"
+                                    data-target="#exampleModalForm">
+                                上传附件
+                            </button>
+
+                            <div class="card-body">
+                                <div class="modal fade" id="exampleModalForm" tabindex="-1" role="dialog"
+                                     aria-labelledby="exampleModalFormTitle" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalFormTitle">问题附件</h5>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                {#                                                        <form id="jsAvatarForm" enctype="multipart/form-data"#}
+                                                {#                                                          method="post"#}
+                                                {#                                                          action="{% url 'plans:notice_file' %}"#}
+                                                {#                                                          enctype="multipart/form-data">#}
+                                                {#                                                        {% csrf_token %}#}
+                                                <label class="text-dark mb-2 mt-4 font-weight-medium d-inline-block mr-3"
+                                                       for="">类型</label>
+                                                <ul class="list-unstyled list-inline">
+                                                    <li class="d-inline-block mr-3">
+                                                        <label class="control control-radio">报告过程稿
+                                                            <input type="radio" name="report_type" checked="checked" value="pr"/>
+                                                            <div class="control-indicator"></div>
+                                                        </label>
+                                                    </li>
+                                                    <li class="d-inline-block mr-3">
+                                                        <label class="control control-radio">过程稿附件
+                                                            <input type="radio" name="report_type" value="prfi"/>
+                                                            <div class="control-indicator"></div>
+                                                        </label>
+                                                    </li>
+                                                     <li class="d-inline-block mr-3">
+                                                        <label class="control control-radio">报告终稿
+                                                            <input type="radio" name="report_type"  value="fi"/>
+                                                            <div class="control-indicator"></div>
+                                                        </label>
+                                                    </li>
+                                                    <li class="d-inline-block mr-3">
+                                                        <label class="control control-radio">终稿附件
+                                                            <input type="radio" name="report_type" value="fifi"/>
+                                                            <div class="control-indicator"></div>
+                                                        </label>
+                                                    </li>
+                                                </ul>
+                                                <input type="file"
+                                                       id="report_file1"
+                                                       name="report_file1">
+                                                <input type="submit" class="mb-1 btn  disabled btn-primary"
+                                                       id="report_file_up">
+                                                {#                                                        </form>#}
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-danger btn-pill"
+                                                        data-dismiss="modal">关闭
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                            <table class="table table-hover ">
+                                <p class="text-primary"><font size="4">审计报告终稿及附件</font></p>
+                                <thead>
+                                <tr>
+                                    <th scope="col">序号</th>
+                                    <th scope="col">文件名称</th>
+                                    <th scope="col">类型</th>
+                                    <th scope="col">上传时间</th>
+                                    <th scope="col">上传人</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for file in report_fi_file %}
+                                    <tr class="report_fi_list">
+                                        <td scope="row">{{ forloop.counter }}</td>
+                                        <td><a href="
+                                                {{ MEDIA_URL }}{{ file.report_file }}">{{ file.report_file.name|slice:"21:" }}</a>
+                                        </td>
+                                    <th{% if file.report_type == 'fi' %} class="text-danger"{% endif %}>{{ file.get_report_type_display }}</th>
+                                    <td>{{ file.add_time|date:'Y-m-d' }}</td>
+                                    <td>{{ file.username.first_name }}</td>
+                                        {% if switch == 'open' and member.audit_role == 'lvl1' %}
+                                            <td>
+                                                <button type="button"
+                                                        class="mb-1 btn btn-pill btn-sm btn-outline-secondary report_fi_del"
+                                                        report_fi_1="{{ file.id }}">
+                                                    删除
+                                                </button>
+                                            </td>
+                                        {% endif %}
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                         <table class="table table-hover ">
+                                <p class="text-info"><font size="4">审计报告过程稿及附件</font></p>
+                                <thead>
+                                <tr>
+                                    <th scope="col">序号</th>
+                                    <th scope="col">文件名称</th>
+                                    <th scope="col">类型</th>
+                                    <th scope="col">上传时间</th>
+                                    <th scope="col">上传人</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for file in report_pr_file %}
+                                    <tr class="report_pr_list">
+                                        <td scope="row">{{ forloop.counter }}</td>
+                                        <td><a href="
+                                                {{ MEDIA_URL }}{{ file.report_file }}">{{ file.report_file.name|slice:"21:" }}</a>
+                                        </td>
+                                    <th{% if file.report_type == 'pr' %} class="text-danger"{% endif %}>{{ file.get_report_type_display }}</th>
+                                    <td>{{ file.add_time|date:'Y-m-d' }}</td>
+                                    <td>{% if file.username.first_name %}{{ file.username.first_name }}{% else %}{{ file.project_name.project_exauditname }}{% endif %}</td>
+                                        {% if switch == 'open' and member.audit_role == 'lvl1' %}
+                                            <td>
+                                                <button type="button"
+                                                        class="mb-1 btn btn-pill btn-sm btn-outline-secondary report_pr_del"
+                                                        report_pr_1="{{ file.id }}">
+                                                    删除
+                                                </button>
+                                            </td>
+                                        {% endif %}
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+{% endblock %}
+
+{% block myjs %}
+<script>
+        $(function () {
+            $('#feedback_file_up').click(function () {
+                if (window.confirm('你确定新增吗？')) {
+                    //alert("确定"); return true; }
+                    {# 如果拿的是非表单类元素的值,用text(),如果是表单类元素用val() #}
+                    var formdata = new FormData();
+                    var feedback_file = $('#feedback_file1')[0].files[0];
+                    var feedback_type = $('input[name=\'feedback_type\']:checked').val()
+                    formdata.append('feedback_file', feedback_file);
+                    formdata.append('project_id', '{{ project_id }}');
+                    formdata.append('feedback_type', feedback_type);
+                    formdata.append('csrfmiddlewaretoken', '{{ csrf_token }}'),
+                        $.ajax({
+                            type: 'POST',
+                            url: '{% url 'ex:add_feedback_file' %}',
+                            {#dataType: 'json',#}
+                            data: formdata,
+                            contentType: false,
+                            {#不设置内容类型    #}
+                            processData: false,
+                            success: function (callback) {
+                                if (callback.status == 'ok') {
+                                    {#alert(callback.msg);#}
+                                    {#window.location.href = '{% url 'plans:plans_list' %}';#}
+                                    {#window.location.reload()#}
+                                    {# 拿到点击对象的祖先节点 当中有类名是des的祖先节点 #}
+                                    {#obj.parents('.module1_5').remove()#}
+                                    {#$('#notice_info_box').remove(),#}
+                                    window.location.reload();
+                                    toastr.success(callback.msg);
+                                } else {
+                                    toastr.success(callback.msg);
+                                    {#alert(callback.msg);#}
+                                }
+                            }
+                        });
+
+                    {# 如果你不想让submit有提交的动作,那么就需要在事件函数的最后返回false,阻止提交动作的发生 #}
+                    {#return false;#}
+                } else {
+                    {#//alert("取消"); return false; }#}
+                    alert("取消")
+                }
+
+            })
+            $('.feedback_file_del').click(function () {
+                if (window.confirm('你确定删除吗？')) {
+                    //alert("确定"); return true; }
+                    {# 如果拿的是非表单类元素的值,用text(),如果是表单类元素用val() #}
+                    var feedback_file = $(this).attr('feedback_file_1');
+                    var obj = $(this);
+                    $.ajax({
+                        type: 'GET',
+                        url: '{% url 'ex:del_feedback_file' %}',
+                        data: {
+                            "feedback_file": feedback_file,
+
+                        },
+                        success: function (callback) {
+                            if (callback.status == 'ok') {
+                                toastr.success(callback.msg);
+                                {#alert(callback.msg);#}
+                                {#window.location.href = '{% url 'plans:plans_list' %}';#}
+                                {#window.location.reload()#}
+                                {# 拿到点击对象的祖先节点 当中有类名是des的祖先节点 #}
+                                {#obj.parents('.module1_5').remove()#}
+                                {#$('#notice_info_box').remove()#}
+                                obj.parents('.feedback_file_list').remove()
+                                {#obj.parents('.notice_del_body').reload()#}
+                            } else {
+                                {#toastr.success(callback.msg);#}
+
+                                alert(callback.msg);
+                            }
+                        }
+                    });
+
+                    {# 如果你不想让submit有提交的动作,那么就需要在事件函数的最后返回false,阻止提交动作的发生 #}
+                    {#return false;#}
+                } else {
+                    {#//alert("取消"); return false; }#}
+                    alert("取消")
+                }
+
+            })
+            $('#notice_info_sumbit').click(function () {
+                if (window.confirm('你确定提交吗？')) {
+                    //alert("确定"); return true; }
+                    {# 如果拿的是非表单类元素的值,用text(),如果是表单类元素用val() #}
+                    var notice_name = $('#notice_name').val();
+                    var notice_NO = $('#notice_NO').val();
+                    $.ajax({
+                        type: 'POST',
+                        url: '{% url 'ex:notice_info' %}',
+                        data: {
+                            "notice_name": notice_name,
+                            "notice_NO": notice_NO,
+                            'project_id': '{{ project_id }}',
+                            "csrfmiddlewaretoken": '{{ csrf_token }}'
+                        },
+                        success: function (callback) {
+                            if (callback.status == 'ok') {
+                                toastr.success(callback.msg);
+                                {#alert(callback.msg);#}
+                                {#window.location.href = '{% url 'plans:plans_list' %}';#}
+                                {#window.location.reload()#}
+                                {# 拿到点击对象的祖先节点 当中有类名是des的祖先节点 #}
+                                {#obj.parents('.module1_5').remove()#}
+                                {#$('#notice_info_box').remove()#}
+                                windows.location.reload()
+                            } else {
+                                toastr.success(callback.msg);
+                                {#alert(callback.msg);#}
+                            }
+                        }
+                    });
+
+                    {# 如果你不想让submit有提交的动作,那么就需要在事件函数的最后返回false,阻止提交动作的发生 #}
+                    {#return false;#}
+                } else {
+                    {#//alert("取消"); return false; }#}
+                    alert("取消")
+                }
+
+            })
+            $('#report_file_up').click(function () {
+                if (window.confirm('你确定新增吗？')) {
+                    //alert("确定"); return true; }
+                    {# 如果拿的是非表单类元素的值,用text(),如果是表单类元素用val() #}
+                    var formdata = new FormData();
+                    var report_file = $('#report_file1')[0].files[0];
+                    var report_type = $('input[name=\'report_type\']:checked').val()
+                    formdata.append('report_file', report_file);
+                    formdata.append('project_id', '{{ project_id }}');
+                    formdata.append('report_type', report_type);
+                    formdata.append('csrfmiddlewaretoken', '{{ csrf_token }}'),
+                        $.ajax({
+                            type: 'POST',
+                            url: '{% url 'ex:add_report_file' %}',
+                            {#dataType: 'json',#}
+                            data: formdata,
+                            contentType: false,
+                            {#不设置内容类型    #}
+                            processData: false,
+                            success: function (callback) {
+                                if (callback.status == 'ok') {
+                                    {#alert(callback.msg);#}
+                                    {#window.location.href = '{% url 'plans:plans_list' %}';#}
+                                    {#window.location.reload()#}
+                                    {# 拿到点击对象的祖先节点 当中有类名是des的祖先节点 #}
+                                    {#obj.parents('.module1_5').remove()#}
+                                    {#$('#notice_info_box').remove(),#}
+                                    window.location.reload();
+                                    toastr.success(callback.msg);
+                                } else {
+                                    toastr.success(callback.msg);
+                                    {#alert(callback.msg);#}
+                                }
+                            }
+                        });
+
+                    {# 如果你不想让submit有提交的动作,那么就需要在事件函数的最后返回false,阻止提交动作的发生 #}
+                    {#return false;#}
+                } else {
+                    {#//alert("取消"); return false; }#}
+                    alert("取消")
+                }
+
+            })
+            $('.report_fi_del').click(function () {
+                if (window.confirm('你确定删除吗？')) {
+                    //alert("确定"); return true; }
+                    {# 如果拿的是非表单类元素的值,用text(),如果是表单类元素用val() #}
+                    var report_file = $(this).attr('report_fi_1');
+                    var obj = $(this);
+                    $.ajax({
+                        type: 'GET',
+                        url: '{% url 'ex:del_report_file' %}',
+                        data: {
+                            "report_file": report_file,
+
+                        },
+                        success: function (callback) {
+                            if (callback.status == 'ok') {
+                                toastr.success(callback.msg);
+                                {#alert(callback.msg);#}
+                                {#window.location.href = '{% url 'plans:plans_list' %}';#}
+                                {#window.location.reload()#}
+                                {# 拿到点击对象的祖先节点 当中有类名是des的祖先节点 #}
+                                {#obj.parents('.module1_5').remove()#}
+                                {#$('#notice_info_box').remove()#}
+                                obj.parents('.report_fi_list').remove()
+                                {#obj.parents('.notice_del_body').reload()#}
+                            } else {
+                                {#toastr.success(callback.msg);#}
+
+                                alert(callback.msg);
+                            }
+                        }
+                    });
+
+                    {# 如果你不想让submit有提交的动作,那么就需要在事件函数的最后返回false,阻止提交动作的发生 #}
+                    {#return false;#}
+                } else {
+                    {#//alert("取消"); return false; }#}
+                    alert("取消")
+                }
+
+            })
+            $('.report_pr_del').click(function () {
+                if (window.confirm('你确定删除吗？')) {
+                    //alert("确定"); return true; }
+                    {# 如果拿的是非表单类元素的值,用text(),如果是表单类元素用val() #}
+                    var report_file = $(this).attr('report_pr_1');
+                    var obj = $(this);
+                    $.ajax({
+                        type: 'GET',
+                        url: '{% url 'ex:del_report_file' %}',
+                        data: {
+                            "report_file": report_file,
+
+                        },
+                        success: function (callback) {
+                            if (callback.status == 'ok') {
+                                toastr.success(callback.msg);
+                                {#alert(callback.msg);#}
+                                {#window.location.href = '{% url 'plans:plans_list' %}';#}
+                                {#window.location.reload()#}
+                                {# 拿到点击对象的祖先节点 当中有类名是des的祖先节点 #}
+                                {#obj.parents('.module1_5').remove()#}
+                                {#$('#notice_info_box').remove()#}
+                                obj.parents('.report_pr_list').remove()
+                                {#obj.parents('.notice_del_body').reload()#}
+                            } else {
+                                {#toastr.success(callback.msg);#}
+
+                                alert(callback.msg);
+                            }
+                        }
+                    });
+
+                    {# 如果你不想让submit有提交的动作,那么就需要在事件函数的最后返回false,阻止提交动作的发生 #}
+                    {#return false;#}
+                } else {
+                    {#//alert("取消"); return false; }#}
+                    alert("取消")
+                }
+
+            })
+            $('#clean_doubts').click(function () {
+                if (window.confirm('你确定提交吗？')) {
+                    //alert("确定"); return true; }
+                    {# 如果拿的是非表单类元素的值,用text(),如果是表单类元素用val() #}
+                    {#var notice_name = $('#notice_name').val();#}
+                    {#var notice_NO = $('#notice_NO').val();#}
+                    $.ajax({
+                        type: 'POST',
+                        url: '{% url 'ex:clean_doubts' %}',
+                        data: {
+                            'project_id': '{{ project_id }}',
+                            "csrfmiddlewaretoken": '{{ csrf_token }}'
+                        },
+                        success: function (callback) {
+                            if (callback.status == 'ok') {
+                                toastr.success(callback.msg);
+                                {#alert(callback.msg);#}
+                                {#window.location.href = '{% url 'plans:plans_list' %}';#}
+                                {#window.location.reload()#}
+                                {# 拿到点击对象的祖先节点 当中有类名是des的祖先节点 #}
+                                {#obj.parents('.module1_5').remove()#}
+                                {#$('#notice_info_box').remove()#}
+                                windows.location.reload()
+                            } else {
+                                toastr.success(callback.msg);
+                                {#alert(callback.msg);#}
+                            }
+                        }
+                    });
+
+                    {# 如果你不想让submit有提交的动作,那么就需要在事件函数的最后返回false,阻止提交动作的发生 #}
+                    {#return false;#}
+                } else {
+                    {#//alert("取消"); return false; }#}
+                    alert("取消")
+                }
+
+            })
+            $('#off_project').click(function () {
+                if (window.confirm('你确定提交吗？')) {
+                    //alert("确定"); return true; }
+                    {# 如果拿的是非表单类元素的值,用text(),如果是表单类元素用val() #}
+                    {#var notice_name = $('#notice_name').val();#}
+                    {#var notice_NO = $('#notice_NO').val();#}
+                    $.ajax({
+                        type: 'POST',
+                        url: '{% url 'ex:off_project' %}',
+                        data: {
+                            'project_id': '{{ project_id }}',
+                            "csrfmiddlewaretoken": '{{ csrf_token }}'
+                        },
+                        success: function (callback) {
+                            if (callback.status == 'ok') {
+                                toastr.success(callback.msg);
+                                {#alert(callback.msg);#}
+                                window.location.href = '{% url 'ex:re_project' %}';
+                                {#window.location.reload()#}
+                                {# 拿到点击对象的祖先节点 当中有类名是des的祖先节点 #}
+                                {#obj.parents('.module1_5').remove()#}
+                                {#$('#notice_info_box').remove()#}
+                                {#windows.location.reload()#}
+                            } else {
+                                toastr.success(callback.msg);
+                                {#alert(callback.msg);#}
+                            }
+                        }
+                    });
+
+                    {# 如果你不想让submit有提交的动作,那么就需要在事件函数的最后返回false,阻止提交动作的发生 #}
+                    {#return false;#}
+                } else {
+                    {#//alert("取消"); return false; }#}
+                    alert("取消")
+                }
+
+            })
+
+        })
+
+    </script>
+{% endblock %}

@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="description"
+          content="Sleek Dashboard - Free Bootstrap 4 Admin Dashboard Template and UI Kit. It is very powerful bootstrap admin dashboard, which allows you to build products like admin panels, content management systems and CRMs etc.">
+
+    <title>{% block title %}内部审计项目管理系统{% endblock %}</title>
+    <base href="{% static '' %}"/>
+    <link href="{% static 'assets/css/local.google.fonts.css' %}" rel="stylesheet"/>
+    <link href="{% static 'assets/css/materialdesignicons.min.css' %}" rel="stylesheet"/>
+    <link href="{% static 'assets/plugins/nprogress/nprogress.css' %}" rel="stylesheet"/>
+    <link href="{% static 'assets/plugins/jvectormap/jquery-jvectormap-2.0.3.css' %}" rel="stylesheet"/>
+    <link href="{% static 'assets/plugins/daterangepicker/daterangepicker.css' %}" rel="stylesheet"/>
+    <link href="{% static 'assets/plugins/toastr/toastr.min.css' %}" rel="stylesheet"/>
+    <link href="{% static 'assets/css/sleek.css' %}" rel="stylesheet" id="sleek-css"/>
+    <link href="{% static 'assets/img/favicon.png' %}" rel="shortcut icon"/>
+    <script src="{% static 'assets/plugins/nprogress/nprogress.js' %}"></script>
+</head>
+
+<body class="header-fixed sidebar-fixed sidebar-dark header-light" id="body">
+
+<script>
+    NProgress.configure({
+        showSpinner: true
+    });
+    NProgress.start();
+</script>
+
+<div id="toaster"></div>
+<div class="wrapper">
+    {#			<!-- Github Link -->#}
+    {% block head-right-href %}
+        <a href="{% url 'index' %}" target="_blank" class="github-link">
+    {% endblock %}
+    <svg width="70" height="70" viewBox="0 0 250 250" aria-hidden="true">
+        <defs>
+            <linearGradient id="grad1" x1="0%" y1="75%" x2="100%" y2="0%">
+                <stop offset="0%" style="stop-color:#896def;stop-opacity:1"/>
+                <stop offset="100%" style="stop-color:#482271;stop-opacity:1"/>
+            </linearGradient>
+        </defs>
+        <path d="M 0,0 L115,115 L115,115 L142,142 L250,250 L250,0 Z" fill="url(#grad1)"></path>
+    </svg>
+    {% block head-right-logo %}
+        <i class="mdi mdi-earth"></i>
+    {% endblock %}
+    </a>
+
+
+
+    <aside class="left-sidebar bg-sidebar">
+        <div id="sidebar" class="sidebar sidebar-with-footer">
+            <!-- Aplication Brand -->
+            <div class="app-brand">
+                <a href="/" title="Sleek Dashboard">
+                    <svg class="brand-icon" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid" width="30"
+                         height="33" viewBox="0 0 30 33">
+                        <g fill="none" fill-rule="evenodd">
+                            <path class="logo-fill-blue" fill="#7DBCFF" d="M0 4v25l8 4V0zM22 4v25l8 4V0z"/>
+                            <path class="logo-fill-white" fill="#FFF" d="M11 4v25l8 4V0z"/>
+                        </g>
+                    </svg>
+                    <span class="brand-name text-truncate">IAPM</span>
+                </a>
+            </div>
+            <!-- begin sidebar scrollbar -->
+            <div class="sidebar-scrollbar">
+
+                <!-- sidebar menu -->
+                <ul class="nav sidebar-inner" id="sidebar-menu">
+                    {% block left-sidebar %}
+                        <li class="has-sub {% if request.path == '/' %}active {% elif request.path|slice:':11' == '/plans/plan' %} active {% endif %} expand">
+                            <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
+                               data-target="#dashboard"
+                               aria-expanded="false" aria-controls="dashboard">
+                                <i class="mdi mdi-view-dashboard-outline"></i>
+                                <span class="nav-text">开始阶段</span> <b class="caret"></b>
+                            </a>
+                            <ul class="collapse {% if request.path == '/' or request.path|slice:':11' == '/plans/plan' %} show {% endif %}"
+                                id="dashboard" data-parent="#sidebar-menu">
+                                <div class="sub-menu">
+
+                                    <li {% if request.path == '/' %} class="active" {% endif %}>
+                                        <a class="sidenav-item-link" href="{% url 'index' %}">
+                                            <span class="nav-text">首页</span>
+                                            {#                         <span class="badge badge-success">ヾ(ｏ･ω･)ﾉ</span>#}
+
+                                        </a>
+                                    </li>
+
+                                    <li{% if request.path|slice:':11' == '/plans/plan' %} class="active" {% endif %}>
+                                        <a class="sidenav-item-link" href="{% url 'plans:plans_list' %}">
+                                            <span class="nav-text">项目计划列表</span>
+
+
+                                        </a>
+                                    </li>
+
+                                </div>
+                            </ul>
+                        </li>
+                        <li class="has-sub {% if request.path|slice:':10' == '/plans/ex_' %}active  {% endif %} expand">
+                            <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
+                               data-target="#dashboard1"
+                               aria-expanded="false" aria-controls="dashboard">
+                                <i class="mdi mdi-dribbble"></i>
+                                <span class="nav-text">执行阶段</span> <b class="caret"></b>
+                            </a>
+                            <ul class="collapse {% if request.path|slice:':10' == '/plans/ex_' %}show  {% endif %}"
+                                id="dashboard1" data-parent="#sidebar-menu">
+                                <div class="sub-menu">
+
+                                    <li {% if request.path|slice:':14' == '/plans/ex_list' %}
+                                        class="active" {% endif %}>
+                                        <a class="sidenav-item-link" href="{% url 'plans:ex_list' %}">
+                                            <span class="nav-text">项目列表</span>
+                                        </a>
+                                    </li>
+
+                                </div>
+                            </ul>
+                        </li>
+                        <li class="has-sub {% if request.path|slice:':7' == '/ex/re_' %}active  {% endif %} expand">
+                            <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
+                               data-target="#dashboard2"
+                               aria-expanded="false" aria-controls="dashboard">
+                                <i class="mdi mdi-pig-variant"></i>
+                                <span class="nav-text">整改跟踪</span> <b class="caret"></b>
+                            </a>
+                            <ul class="collapse {% if request.path|slice:':7' == '/ex/re_' %}show  {% endif %}"
+                                id="dashboard2" data-parent="#sidebar-menu">
+                                <div class="sub-menu">
+
+                                    <li {% if request.path|slice:':14' == '/ex/re_project' %}
+                                        class="active" {% endif %}>
+                                        <a class="sidenav-item-link" href="{% url 'ex:re_project' %}">
+                                            <span class="nav-text">整改项目列表</span>
+                                        </a>
+                                    </li>
+                                    {% block left-siderbar-re %} {% endblock %}
+                                </div>
+                            </ul>
+                        </li>
+                        <li class="has-sub {% if request.path|slice:':17' == '/plans/all_notice' %}active  {% endif %} expand">
+                            <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
+                               data-target="#dashboard3"
+                               aria-expanded="false" aria-controls="dashboard">
+                                <i class="mdi mdi-note-text"></i>
+                                <span class="nav-text">通知模块</span> <b class="caret"></b>
+                            </a>
+                            <ul class="collapse {% if request.path|slice:':17' == '/plans/all_notice' %}show  {% endif %}"
+                                id="dashboard3" data-parent="#sidebar-menu">
+                                <div class="sub-menu">
+
+                                    <li {% if request.path|slice:':17' == '/plans/all_notice' %}
+                                        class="active" {% endif %}>
+                                        <a class="sidenav-item-link" href="{% url 'plans:all_notice_list' %}">
+                                            <span class="nav-text">通知列表</span>
+                                        </a>
+                                    </li>
+
+                                </div>
+                            </ul>
+                        </li>
+                        {% block left-sidebar2 %} {% endblock %}
+
+                    {% endblock %}
+                </ul>
+
+            </div>
+
+            <div class="sidebar-footer">
+                <hr class="separator mb-0"/>
+                <div class="sidebar-footer-content">
+                    <h6 class="text-uppercase">
+                                <p class="text-center">&copy; 2020 内审项目管理系统
+
+        </p>
+                    </h6>
+
+                    <h6 class="text-uppercase">
+                         redgysun_iapm@163.com
+                    </h6>
+
+                </div>
+            </div>
+        </div>
+    </aside>
+
+
+    <div class="page-wrapper">
+        <!-- Header -->
+        <header class="main-header " id="header">
+            <nav class="navbar navbar-static-top navbar-expand-lg">
+                <!-- Sidebar toggle button -->
+                <button id="sidebar-toggler" class="sidebar-toggle">
+                    <span class="sr-only">Toggle navigation</span>
+                </button>
+
+                <div class="navbar-right ">
+                    <ul class="nav navbar-nav">
+
+                        <li class="right-sidebar-in right-sidebar-2-menu" hidden>
+                            <i class="mdi mdi-settings mdi-spin"></i>
+                        </li>
+                        <!-- User Account -->
+                        {% block user-menu %}
+                            <li class="dropdown user-menu">
+                                {% csrf_token %}
+                                <button href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+                                    <img src="{{ MEDIA_URL }}{{ request.user.user_image }}" class="user-image"
+                                         alt="User Image"/>
+                                    <span class="d-none d-lg-inline-block">{{ request.user.first_name }}</span>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-right">
+                                    <!-- User image -->
+                                    <li class="dropdown-header">
+                                        <img src="{{ MEDIA_URL }}{{ request.user.user_image }}" class="img-circle"
+                                             alt="User Image"/>
+                                        <div class="d-inline-block">
+                                            {{ request.user.first_name }}
+                                            <small class="pt-1">{{ request.user.email }}</small>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <a href="{% url 'users:user_setting' %}">
+                                            <i class="mdi mdi-account"></i> 个人信息设置
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{% url 'users:users_list' %}">
+                                            <i class="mdi mdi-account-multiple"></i> 成员列表
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{% url 'users:user_changepassword' %}"> <i
+                                                class="mdi mdi-account-key"></i>
+                                            设置密码 </a>
+                                    </li>
+
+                                    <li class="right-sidebar-in">
+                                        <a href="javascript:0"> <i class="mdi mdi-settings"></i> 页面设置 </a>
+                                    </li>
+
+                                    <li class="dropdown-footer">
+                                        <a href="{% url 'users:user_logout' %}"> <i class="mdi mdi-logout"></i> 注销 </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        {% endblock %}
+                        {#                        <li class="dropdown notifications-menu">#}
+                        {#                            <button class="dropdown-toggle" data-toggle="dropdown">#}
+                        {#                                <i class="mdi mdi-bell-outline"></i>#}
+                        {#                            </button>#}
+                        {#                            <ul class="dropdown-menu dropdown-menu-right">#}
+                        {#                                <li class="dropdown-header">You have 5 notifications</li>#}
+                        {#                                <li>#}
+                        {#                                    <a href="#">#}
+                        {#                                        <i class="mdi mdi-account-plus"></i> New user registered#}
+                        {#                                        <span class=" font-size-12 d-inline-block float-right"><i#}
+                        {#                                                class="mdi mdi-clock-outline"></i> 10 AM</span>#}
+                        {#                                    </a>#}
+                        {#                                </li>#}
+                        {#                                <li>#}
+                        {#                                    <a href="#">#}
+                        {#                                        <i class="mdi mdi-account-remove"></i> User deleted#}
+                        {#                                        <span class=" font-size-12 d-inline-block float-right"><i#}
+                        {#                                                class="mdi mdi-clock-outline"></i> 07 AM</span>#}
+                        {#                                    </a>#}
+                        {#                                </li>#}
+                        {#                                <li>#}
+                        {#                                    <a href="#">#}
+                        {#                                        <i class="mdi mdi-chart-areaspline"></i> Sales report is ready#}
+                        {#                                        <span class=" font-size-12 d-inline-block float-right"><i#}
+                        {#                                                class="mdi mdi-clock-outline"></i> 12 PM</span>#}
+                        {#                                    </a>#}
+                        {#                                </li>#}
+                        {#                                <li>#}
+                        {#                                    <a href="#">#}
+                        {#                                        <i class="mdi mdi-account-supervisor"></i> New client#}
+                        {#                                        <span class=" font-size-12 d-inline-block float-right"><i#}
+                        {#                                                class="mdi mdi-clock-outline"></i> 10 AM</span>#}
+                        {#                                    </a>#}
+                        {#                                </li>#}
+                        {#                                <li>#}
+                        {#                                    <a href="#">#}
+                        {#                                        <i class="mdi mdi-server-network-off"></i> Server overloaded#}
+                        {#                                        <span class=" font-size-12 d-inline-block float-right"><i#}
+                        {#                                                class="mdi mdi-clock-outline"></i> 05 AM</span>#}
+                        {#                                    </a>#}
+                        {#                                </li>#}
+                        {#                                <li class="dropdown-footer">#}
+                        {#                                    <a class="text-center" href="#"> View All </a>#}
+                        {#                                </li>#}
+                        {#                            </ul>#}
+                        {#                        </li>#}
+                        {% block search_form %}
+
+                        {% endblock %}
+                    </ul>
+                </div>
+            </nav>
+
+        </header>
+        {% block content-wrapper %}
+
+        {% endblock %}
+        <div class="right-sidebar-2">
+            <div class="right-sidebar-container-2">
+                <div class="slim-scroll-right-sidebar-2">
+
+                    <div class="right-sidebar-2-header">
+                        <h2>页面设置</h2>
+                        <p>用户页面个性化设置</p>
+                        <div class="btn-close-right-sidebar-2">
+                            <i class="mdi mdi-window-close"></i>
+                        </div>
+                    </div>
+
+                    <div class="right-sidebar-2-body">
+                        {#                        <span class="right-sidebar-2-subtitle">标题布局</span>#}
+                        {#                        <div class="no-col-space">#}
+                        {#                            <a href="javascript:void(0);"#}
+                        {#                               class="btn-right-sidebar-2 header-fixed-to btn-right-sidebar-2-active" id="HeaderL_Fix"#}
+                        {#                               name="HeaderL_Fix" value="HeaderL_Fix">固定</a>#}
+                        {#                            <a href="javascript:void(0);" class="btn-right-sidebar-2 header-static-to"#}
+                        {#                               id="HeaderL_Static" name="HeaderL_Static" value="HeaderL_Static">标准</a>#}
+                        {#                        </div>#}
+
+                        {#                        <span class="right-sidebar-2-subtitle">边栏布局</span>#}
+                        {#                        <div class="no-col-space">#}
+                        {#                            <select class="right-sidebar-2-select" id="sidebar2_option">#}
+                        {#                                <option value="sidebar-fixed" id="sidebar-fixed">固定预设</option>#}
+                        {#                                <option value="sidebar-fixed-minified" id="sidebar-fixed-minified">固定最小化</option>#}
+                        {#                                <option value="sidebar-fixed-offcanvas" id="sidebar-fixed-offcanvas">固定滑动导航</option>#}
+                        {#                                <option value="sidebar-static" id="sidebar-static">标准预设</option>#}
+                        {#                                <option value="sidebar-static-minified" id="sidebar-static-minified">标准最小化</option>#}
+                        {#                                <option value="sidebar-static-offcanvas" id="sidebar-static-offcanvas">标准滑动导航</option>#}
+                        {#                            </select>#}
+                        {#                        </div>#}
+
+                        <span class="right-sidebar-2-subtitle">标题背景</span>
+                        <div class="no-col-space" hidden>
+                            <a href="javascript:void(0);"
+                               class="btn-right-sidebar-2 btn-right-sidebar-2-active header-light-to" id="HeaderB_Light"
+                               name="HeaderB_Light" value="HeaderB_Light">白</a>
+                            <a href="javascript:void(0);" class="btn-right-sidebar-2 header-dark-to" id="HeaderB_Dark"
+                               name="HeaderB_Dark" value="HeaderB_Dark">黑</a>
+                        </div>
+                        {#                        <div class="card-header card-header-border-bottom">#}
+                        {#                            <h4> 标题背景</h4>#}
+                        {#                        </div>#}
+                        <div class="card-body text-center">
+                            <div class="dropdown d-inline-block mb-1">
+                                <button class="btn btn-outline-primary dropdown-toggle" type="button"
+                                        id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                        aria-expanded="false" data-display="static">
+                                    白|黑
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item" href="{% url 'users:user_changeitems' '1' %}">白</a>
+                                    <a class="dropdown-item" href="{% url 'users:user_changeitems' '2' %}">黑</a>
+
+                                </div>
+                            </div>
+                        </div>
+                        <span class="right-sidebar-2-subtitle">导航背景</span>
+                        <div class="no-col-space" hidden>
+                            <a href="javascript:void(0);" class="btn-right-sidebar-2 sidebar-light-to"
+                               id="Sidebar2_Light"
+                               name="Sidebar2_Light">白</a>
+                            <a href="javascript:void(0);"
+                               class="btn-right-sidebar-2 btn-right-sidebar-2-active sidebar-dark-to" id="Sidebar2_Dark"
+                               name="Sidebar2_Dark" value="Sidebar2_Dark">黑</a>
+                        </div>
+                        {#                       <div class="card-header card-header-border-bottom">#}
+                        {#                            <h4> 导航背景</h4>#}
+                    </div>
+                    <div class="card-body text-center">
+                        <div class="dropdown d-inline-block mb-1">
+                            <button class="btn btn-outline-success dropdown-toggle" type="button"
+                                    id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false" data-display="static">
+                                白|黑
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="{% url 'users:user_changeitems' '3' %}">白</a>
+                                <a class="dropdown-item" href="{% url 'users:user_changeitems' '4' %}">黑</a>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="right-sidebar-2-subtitle">导航栏位置（翻车( • ̀ω•́ )✧）</span>
+                    <div class="no-col-space" hidden>
+                        <a href="javascript:void(0);" class="btn-right-sidebar-2 btn-right-sidebar-2-active ltr-to"
+                           id="Siderbar2_Left"
+                           name="Siderbar2_Left" value="Siderbar2_Left">左侧</a>
+                        <a href="javascript:void(0);" class="btn-right-sidebar-2 rtl-to" id="Siderbar2_Right"
+                           name="Siderbar2_Right" value="Siderbar2_Right">右侧</a>
+                    </div>
+                    {#                       <div class="card-header card-header-border-bottom">#}
+                    {#                            <h4> 导航位置</h4>#}
+                    {#                        </div>#}
+                    <div class="card-body text-center">
+                        <div class="dropdown d-inline-block mb-1">
+                            <button class="btn btn-outline-info dropdown-toggle" type="button"
+                                    id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false" data-display="static">
+                                左|右
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="{% url 'users:user_changeitems' '5' %}">左</a>
+                                <a class="dropdown-item" href="{% url 'users:user_changeitems' '6' %}">右</a>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <label for="warning">警告</label>
+                        <div class="alert alert-warning" role="alert">
+                            <i class="mdi mdi-alert mr-1"></i> 设置保存的同时将刷新页面，并返回首页。
+                        </div>
+                    </div>
+
+
+                    {#									<div class="d-flex justify-content-center" style="padding-top: 30px">#}
+                    {#										<div id="reset-options" style="width: auto; cursor: pointer" class="btn-right-sidebar-2 btn-reset">Reset Settings#}
+                    {#										</div>#}
+                    {#									</div>#}
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+</div>
+</div>
+
+<script src="{% static 'assets/plugins/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'assets/plugins/slimscrollbar/jquery.slimscroll.min.js' %}"></script>
+<script src="{% static 'assets/plugins/jekyll-search.min.js' %}"></script>
+
+<script src="{% static 'assets/plugins/charts/Chart.min.js' %}"></script>
+
+<script src="{% static 'assets/plugins/jvectormap/jquery-jvectormap-2.0.3.min.js' %}"></script>
+<script src="{% static 'assets/plugins/jvectormap/jquery-jvectormap-world-mill.js' %}"></script>
+
+<script src="{% static 'assets/plugins/daterangepicker/moment.min.js' %}"></script>
+<script src="{% static 'assets/plugins/daterangepicker/daterangepicker.js' %}"></script>
+<script>
+    jQuery(document).ready(function () {
+        jQuery('input[name="dateRange"]').daterangepicker({
+            autoUpdateInput: false,
+            singleDatePicker: true,
+            locale: {
+                cancelLabel: 'Clear'
+            }
+        });
+        jQuery('input[name="dateRange"]').on('apply.daterangepicker', function (ev, picker) {
+            jQuery(this).val(picker.startDate.format('MM/DD/YYYY'));
+        });
+        jQuery('input[name="dateRange"]').on('cancel.daterangepicker', function (ev, picker) {
+            jQuery(this).val('');
+        });
+    });
+</script>
+
+<script src="{% static 'assets/plugins/toastr/toastr.min.js' %}"></script>
+<script src="{% static 'assets/data/search.json' %}"></script>
+<script src="{% static 'assets/js/sleek.bundle.js' %}"></script>
+{#        <script type="text/javascript">#}
+{#			$(function(){#}
+{#				var select2="#"+"HeaderB_Dark1"#}
+{#				$(select2).trigger("click");#}
+{#			    $("#HeaderL_Static1").trigger("click");#}
+{#			    var select1="sidebar-fixed-minified";#}
+{#			    $("#sidebar-option-select").val(select1);#}
+{#			    $("#sidebar-option-select").trigger("change");#}
+{#			    toastr.success('I don\'t need a title to live');#}
+{#				toastr.success('欢迎登陆', '欢迎使用').refreshTimer(toast, 100);#}
+{#				toastr.refreshTimer(toast, 500);#}
+{##}
+{#			});#}
+{#		</script>#}
+<script type="text/javascript">
+    $(function () {
+        var leftbar_titlecolor = "#" + "{{ request.user.leftbar_titlecolor }}";
+        $(leftbar_titlecolor).trigger("click");
+        {#var leftbar_title = "#" + "{{ request.user.leftbar_title }}";#}
+        {#$(leftbar_title).trigger("click");#}
+        {#$('#sidebar2_option').val("标准最小化").trigger("change");#}
+        var leftbar_navposition = "#" + "{{ request.user.leftbar_navposition }}";
+        $(leftbar_navposition).trigger("click");
+        var leftbar_navcolor = "#" + "{{ request.user.leftbar_navcolor }}";
+        $(leftbar_navcolor).trigger("click");
+    })
+</script>
+{#<script>#}
+{#    $(function () {#}
+{#        $('#HeaderB_Light').click(function () {#}
+{#            var leftbar_titlecolor = document.getElementById("HeaderB_Dark")[0].value;#}
+{##}
+{#            $.ajax({#}
+{#                type: 'POST',#}
+{#                url: '{% url 'users:user_changeitems' %}',#}
+{#                data: {#}
+{#                    "leftbar_titlecolor": leftbar_titlecolor,#}
+{#                    "username": '{{ request.user.username }}',#}
+{#                    "csrfmiddlewaretoken": '{{csrf_token}}'#}
+{#                },#}
+{#                success: function (callback) {#}
+{#                    alert(callback.msg);#}
+{#                    window.location.reload()#}
+{#                }#}
+{##}
+{#            })#}
+{#        })#}
+{#    });#}
+{#</script>#}
+{% block myjs %} {% endblock %}
+</body>
+
+</html>

@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %} 个人信息设置{% endblock %}
+{% block search_form %} {% endblock %}
+{% block content-wrapper %}
+    <div class="content-wrapper">
+        <div class="content">
+            <div class="bg-white border rounded">
+                <div class="row no-gutters">
+                    <div class="col-lg-4 col-xl-3">
+                        <div class="profile-content-left pt-5 pb-3 px-3 px-xl-5">
+                            <div class="card text-center widget-profile px-0 border-0">
+                                <div class="card-img mx-auto rounded-circle">
+                                    <img src="{{ MEDIA_URL }}{{ request.user.user_image }}" alt="user image">#}
+                                </div>
+                                <div class="card-body">
+                                    <h4 class="py-2 text-dark">{{ request.user.first_name }}</h4>
+                                    <p>{{ request.user.email }}</p>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between ">
+                                <div class="text-center pb-4">
+                                    <h6 class="text-dark pb-2">坑1</h6>
+                                    <p>总项目数</p>
+                                </div>
+                                <div class="text-center pb-4">
+                                    <h6 class="text-dark pb-2">{{ usedays }}</h6>
+                                    <p>已用天数</p>
+                                </div>
+                                <div class="text-center pb-4">
+                                    <h6 class="text-dark pb-2">{{ request.user.last_login|date:"Y-m-d" }}</h6>
+                                    <p>最近登录时间</p>
+                                </div>
+                            </div>
+                            <hr class="w-100">
+                            <div class="contact-info pt-4">
+                                <h5 class="text-dark mb-1">相关信息</h5>
+                                <p class="text-dark font-weight-medium pt-4 mb-2" hidden>性别</p>
+                                <p hidden>{% if request.user.user_gender == 'male' %}男{% else %}女{% endif %}</p>
+                                <p class="text-dark font-weight-medium pt-4 mb-2">电话</p>
+                                <p>{{ request.user.user_phone }}</p>
+                                <p class="text-dark font-weight-medium pt-4 mb-2">公司</p>
+                                <p>{{ request.user.company_name.company_name }}</p>
+                                <p class="text-dark font-weight-medium pt-4 mb-2">部门</p>
+                                <p>{{ request.user.company_name.company_department }}</p>
+                                <p class="text-dark font-weight-medium pt-4 mb-2">邮箱</p>
+                                <p>{{ request.user.email }}</p>
+                                <p class="text-dark font-weight-medium pt-4 mb-2">职称</p>
+                                <p>{{ request.user.user_PQ }}</p>
+                                <p class="text-dark font-weight-medium pt-4 mb-2" hidden>联系</p>
+                                <p class="pb-3 social-button" hidden>
+                                    <a href="#" class="mb-1 btn btn-outline btn-twitter rounded-circle">
+                                        <i class="mdi mdi-twitter"></i>
+                                    </a>
+                                    <a href="#" class="mb-1 btn btn-outline btn-linkedin rounded-circle">
+                                        <i class="mdi mdi-linkedin"></i>
+                                    </a>
+                                    <a href="#" class="mb-1 btn btn-outline btn-facebook rounded-circle">
+                                        <i class="mdi mdi-facebook"></i>
+                                    </a>
+                                    <a href="#" class="mb-1 btn btn-outline btn-skype rounded-circle">
+                                        <i class="mdi mdi-skype"></i>
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-8 col-xl-9">
+                        <div class="profile-content-right py-5">
+                            <ul class="nav nav-tabs px-3 px-xl-5 nav-style-border" id="myTab" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="settings-tab" data-toggle="tab" href="#settings"
+                                       role="tab" aria-controls="settings" aria-selected="false">成员列表({{ users_list.count }})</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content px-3 px-xl-5" id="myTabContent">
+                                <div class="tab-pane fade show active" id="settings" role="tabpanel"
+                                     aria-labelledby="settings-tab">
+                                    <div class="mt-5">
+{#                                        <div class="card card-default">#}
+{#										<div class="card-header card-header-border-bottom">#}
+{#											<h2>Striped Table</h2>#}
+{#										</div>#}
+										<div class="card-body">
+											<table class="table table-striped">
+												<thead>
+													<tr>
+														<th scope="col">序号</th>
+														<th scope="col">姓名</th>
+														<th scope="col">性别</th>
+														<th scope="col">电话</th>
+                                                        <th scope="col">邮箱</th>
+                                                        <th scope="col">职称</th>
+													</tr>
+												</thead>
+												<tbody>
+                                                {% for user1 in users_list %}
+													<tr>
+														<td scope="row">{{ forloop.counter }}</td>
+														<td>{{ user1.first_name }}</td>
+														<td>{{ user1.get_user_gender_display }}</td>
+														<td>{{ user1.user_phone }}</td>
+                                                        <td>{{ user1.email }}</td>
+                                                        <td>{{ user1.user_PQ }}</td>
+													</tr>
+                                                {% endfor %}
+												</tbody>
+											</table>
+										</div>
+                                        <div class="card-body ">
+											<nav aria-label="Page navigation example">
+												<ul class="pagination pagination-flat pagination-flat-rounded">
+													{% if pages.has_previous %}
+                                                    <li class="page-item">
+														<a class="page-link" href="{% url 'users:users_list' %}?pagenum={{ pages.previous_page_number }}" aria-label="Previous">
+															<span aria-hidden="true" class="mdi mdi-chevron-left"></span>
+															<span class="sr-only">前一页</span>
+														</a>
+													</li>
+                                                    {% endif %}
+                                                    {% for num in pages.paginator.page_range %}
+													<li class="page-item {% if num == pages.number %}active {% endif %} ">
+														<a class="page-link" href="{% url 'users:users_list' %}?pagenum={{ num }}">{{ num }}</a>
+													</li>
+                                                    {% endfor %}
+                                                    {% if pages.has_next %}
+													<li class="page-item">
+														<a class="page-link" href="{% url 'users:users_list' %}?pagenum={{ pages.next_page_number }}" aria-label="Next">
+															<span aria-hidden="true" class="mdi mdi-chevron-right"></span>
+															<span class="sr-only">下一页</span>
+														</a>
+													</li>
+                                                    {% endif %}
+												</ul>
+											</nav>
+										</div>
+									</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+
+{% block myjs %}
+
+
+
+
+
+{% endblock %}

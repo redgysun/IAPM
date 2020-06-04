@@ -1,0 +1,376 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}项目问题列表{% endblock %}
+{% block search_form %} {% endblock %}
+{% block left-sidebar %}
+    <li class="has-sub {% if request.path|slice:':10' == '/plans/ex_' %}active  {% endif %} expand">
+                            <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
+                               data-target="#dashboard"
+                               aria-expanded="false" aria-controls="dashboard">
+                                <i class="mdi mdi-dribbble"></i>
+                                <span class="nav-text">返回上一级</span> <b class="caret"></b>
+                            </a>
+                            <ul class="collapse {% if request.path|slice:':14' == '/plans/ex_list' %} show {% endif %}" id="dashboard" data-parent="#sidebar-menu">
+                                <div class="sub-menu">
+
+                                    <li {% if request.path|slice:':14' == '/plans/ex_list' %}
+                                        class="active" {% endif %}>
+                                        <a class="sidenav-item-link" href="{% url 'plans:ex_list' %}">
+                                            <span class="nav-text">项目列表</span>
+                                        </a>
+                                    </li>
+
+                                </div>
+                            </ul>
+                        </li>
+    <li class="has-sub {% if request.path|slice:':9' == '/plans/st' %}active  {% endif %} expand">
+                            <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
+                               data-target="#dashboard1"
+                               aria-expanded="false" aria-controls="dashboard">
+                                <i class="mdi mdi-docker"></i>
+                                <span class="nav-text">前期准备</span> <b class="caret"></b>
+                            </a>
+                            <ul class="collapse {% if request.path|slice:':9' == '/plans/st' %}show  {% endif %}" id="dashboard1" data-parent="#sidebar-menu">
+                                <div class="sub-menu">
+
+                                    <li {% if request.path|slice:':19' == '/plans/start_detail' %}
+                                        class="active" {% endif %}>
+                                        <a class="sidenav-item-link" href="{% url 'plans:start_detail' project_id %}">
+                                            <span class="nav-text">通知及方案</span>
+                                        </a>
+                                    </li>
+
+                                </div>
+                            </ul>
+                        </li>
+    <li class="has-sub {% if request.path|slice:':6' == '/ex/sc' or request.path|slice:':6' == '/ex/pr' %}active  {% endif %} expand">
+                            <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
+                               data-target="#dashboard2"
+                               aria-expanded="false" aria-controls="dashboard">
+                                <i class="mdi mdi-pinwheel-outline"></i>
+                                <span class="nav-text">实施阶段</span> <b class="caret"></b>
+                            </a>
+                            <ul class="collapse {% if request.path|slice:':6' == '/ex/sc' or request.path|slice:':6' == '/ex/pr' %}show  {% endif %}" id="dashboard2" data-parent="#sidebar-menu">
+                                <div class="sub-menu">
+
+                                    <li {% if request.path|slice:':17' == '/ex/schedule_list' %}
+                                        class="active" {% endif %}>
+                                        <a class="sidenav-item-link" href="{% url 'ex:schedule_list' project_id %}">
+                                            <span class="nav-text">项目记录</span>
+                                        </a>
+                                    </li>
+                                    <li {% if request.path|slice:':16' == '/ex/problem_list' %}
+                                        class="active" {% endif %}>
+                                        <a class="sidenav-item-link" href="{% url 'ex:problem_list' project_id %}">
+                                            <span class="nav-text">问题列表</span>
+                                        </a>
+                                    </li>
+
+                                </div>
+                            </ul>
+                        </li>
+    <li class="has-sub {% if request.path|slice:':6' == '/ex/re'  %}active  {% endif %} expand">
+                            <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
+                               data-target="#dashboard3"
+                               aria-expanded="false" aria-controls="dashboard">
+                                <i class="mdi mdi-barley"></i>
+                                <span class="nav-text">报告阶段</span> <b class="caret"></b>
+                            </a>
+                            <ul class="collapse{% if request.path|slice:':6' == '/ex/re'  %} show  {% endif %}" id="dashboard3" data-parent="#sidebar-menu">
+                                <div class="sub-menu">
+
+                                    <li {% if request.path|slice:':17' == '/ex/report_detail' %}
+                                        class="active" {% endif %}>
+                                        <a class="sidenav-item-link" href="{% url 'ex:report_detail' project_id %}">
+                                            <span class="nav-text">项目记录</span>
+                                        </a>
+                                    </li>
+
+
+                                </div>
+                            </ul>
+                        </li>
+
+{% endblock %}
+{% block content-wrapper %}
+    <div class="content-wrapper">
+        <div class="content">
+
+            <!-- First Row  -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card card-default">
+                        <div class="card-header card-header-border-bottom d-flex justify-content-between">
+                            <h2>问题列表</h2>
+                            {% if switch == 'open' %}
+                            <a href="{% url 'ex:problem_add' project_id %}"
+                               class="btn btn-outline-primary btn-lg text-uppercase">
+                                <i class=" mdi mdi-briefcase-plus mr-2"></i> 新增
+                            </a>
+                            {% endif %}
+                        </div>
+
+                        <div class="card-body">
+                            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#doubts" role="tab"
+                                       aria-controls="home" aria-selected="true">疑点（{{ do_problem_list.count }}）</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#co_suggestions"
+                                       role="tab"
+                                       aria-controls="co_suggestions" aria-selected="false">建议（{{ co_sg_problem_list.count }}）</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="contact-tab" data-toggle="tab" href="#co_rectification"
+                                       role="tab"
+                                       aria-controls="co_rectification" aria-selected="false">整改（{{ co_re_problem_list.count }}）</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="contact-tab" data-toggle="tab" href="#cancel" role="tab"
+                                       aria-controls="cancel" aria-selected="false">消除（{{ el_problem_list.count }}）</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content" id="myTabContent1">
+                                <div class="tab-pane pt-3 fade show active" id="doubts" role="tabpanel"
+                                     aria-labelledby="Doubts-tab">
+                                    <table id="doubts-data-table" class="table dt-responsive nowrap" style="width:100%">
+                                        <thead>
+                                        <tr>
+                                            <th>序号</th>
+                                            <th>问题名称</th>
+                                            <th>被审计单位</th>
+                                            <th>被审计人</th>
+                                            <th>问题内容</th>
+                                            <th>问题反馈</th>
+                                            <th>问题分类</th>
+                                            <th>问题类型</th>
+                                            <th>问题状态</th>
+                                            <th>审计人</th>
+                                            <th>附件</th>
+                                        </tr>
+                                        </thead>
+
+                                        <tbody>
+                                        {% for do_problem in do_problem_list %}
+                                            <tr>
+                                                <td>{{ forloop.counter }}</td>
+                                                <th><a href="{% url 'ex:problem_detail' do_problem.id%}" target="_blank">{{ do_problem.problem_title }}</a></th>
+                                                <td>{{ do_problem.audit_company.audit_company }}</td>
+                                                <td>{{ do_problem.audit_company.audit_person }}</td>
+                                                <td>{{ do_problem.problem_content|slice:":20" }}...</td>
+                                                <td>{{ do_problem.problem_feedback|slice:":20" }}...</td>
+                                                <td>{{ do_problem.problem_class }}</td>
+                                                <th>{{ do_problem.get_problem_type_display }}</th>
+                                                <td>{{ do_problem.get_problem_status_display }}</td>
+                                                <td>{% if do_problem.username.first_name %}{{ do_problem.username.first_name }}{% else %}{{ do_problem.project_name.project_exauditname }}{% endif %}</td>
+                                                <td>
+                                                    {% for problem_file5 in problem_file_list %}
+                                                        {% if do_problem.id == problem_file5.problem_id_id %}
+                                                            <a href="{{ MEDIA_URL }}{{ problem_file5.problem_file }}">{{ problem_file5.problem_file.name|slice:"22:" }}</a> </br>
+                                                         {% endif %}
+                                                        {% endfor %}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane pt-3 fade" id="co_suggestions" role="tabpanel"
+                                     aria-labelledby="co_suggestions-tab">
+                                    <table id="co_suggestions-data-table" class="table dt-responsive nowrap"
+                                           style="width:100%">
+                                        <thead>
+                                        <tr>
+                                            <th>序号</th>
+                                            <th>问题名称</th>
+                                            <th>被审计单位</th>
+                                            <th>被审计人</th>
+                                            <th>问题内容</th>
+                                            <th>问题反馈</th>
+                                            <th>问题分类</th>
+                                            <th>问题类型</th>
+                                            <th>问题状态</th>
+                                            <th>审计人</th>
+                                            <th>附件</th>
+                                        </tr>
+                                        </thead>
+
+                                        <tbody>
+
+
+                                        {% for sg_problem in co_sg_problem_list %}
+                                            <tr>
+                                                <td>{{ forloop.counter }}</td>
+                                                <th><a href="{% url 'ex:problem_detail' sg_problem.id%}" target="_blank">{{ sg_problem.problem_title }}</a></th>
+                                                <td>{{ sg_problem.audit_company.audit_company }}</td>
+                                                <td>{{ sg_problem.audit_company.audit_person }}</td>
+                                                <td>{{ sg_problem.problem_content|slice:":20" }}...</td>
+                                                <td>{{ sg_problem.problem_feedback|slice:":20" }}...</td>
+                                                <td>{{ sg_problem.problem_class }}</td>
+                                                <th>{{ sg_problem.get_problem_type_display }}</th>
+                                                <td>{{ sg_problem.get_problem_status_display }}</td>
+                                                <td>{% if sg_problem.username.first_name %}{{ sg_problem.username.first_name }}{% else %}{{ sg_problem.project_name.project_exauditname }}{% endif %}</td>
+                                                <td>
+                                                    {% for problem_file4 in problem_file_list %}
+                                                        {% if sg_problem.id == problem_file4.problem_id_id %}
+                                                            <a href="{{ MEDIA_URL }}{{ problem_file4.problem_file }}">{{ problem_file4.problem_file.name|slice:"22:" }}</a> </br>
+                                                         {% endif %}
+                                                        {% endfor %}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane pt-3 fade" id="co_rectification" role="tabpanel"
+                                     aria-labelledby="co_rectification-tab">
+                                    <table id="co_rectification-data-table" class="table dt-responsive nowrap"
+                                           style="width:100%">
+                                        <thead>
+                                        <tr>
+                                        <tr>
+                                            <th>序号</th>
+                                            <th>问题名称</th>
+                                            <th>被审计单位</th>
+                                            <th>被审计人</th>
+                                            <th>问题内容</th>
+                                            <th>问题反馈</th>
+                                            <th>问题分类</th>
+                                            <th>问题类型</th>
+                                            <th>问题状态</th>
+                                            <th>审计人</th>
+                                            <th>附件</th>
+                                        </tr>
+                                        </tr>
+                                        </thead>
+
+                                        <tbody>
+
+                                        {% for re_problem in co_re_problem_list %}
+                                            <tr>
+                                                <td>{{ forloop.counter }}</td>
+                                                <th><a href="{% url 'ex:problem_detail' re_problem.id%}" target="_blank">{{ re_problem.problem_title }}</a></th>
+                                                <td>{{ re_problem.audit_company.audit_company }}</td>
+                                                <td>{{ re_problem.audit_company.audit_person }}</td>
+                                                <td>{{ re_problem.problem_content|slice:":20" }}...</td>
+                                                <td>{{ re_problem.problem_feedback|slice:":20" }}...</td>
+                                                <td>{{ re_problem.problem_class }}</td>
+                                                <th>{{ re_problem.get_problem_type_display }}</th>
+                                                <td>{{ re_problem.get_problem_status_display }}</td>
+                                                <td>{% if re_problem.username.first_name %}{{ re_problem.username.first_name }}{% else %}{{ re_problem.project_name.project_exauditname }}{% endif %}</td>
+                                                <td>
+                                                    {% for problem_file3 in problem_file_list %}
+                                                        {% if re_problem.id == problem_file3.problem_id_id %}
+                                                            <a href="{{ MEDIA_URL }}{{ problem_file3.problem_file }}">{{ problem_file3.problem_file.name|slice:"22:" }}</a> </br>
+                                                         {% endif %}
+                                                        {% endfor %}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane pt-3 fade" id="cancel" role="tabpanel"
+                                     aria-labelledby="cancel-tab">
+                                    <table id="cancel-data-table" class="table dt-responsive nowrap" style="width:100%">
+                                        <thead>
+                                        <tr>
+                                            <th>序号</th>
+                                            <th>问题名称</th>
+                                            <th>被审计单位</th>
+                                            <th>被审计人</th>
+                                            <th>问题内容</th>
+                                            <th>问题反馈</th>
+                                            <th>问题分类</th>
+                                            <th>问题类型</th>
+                                            <th>问题状态</th>
+                                            <th>审计人</th>
+                                            <th>附件</th>
+                                        </tr>
+                                        </thead>
+
+                                        <tbody>
+                                        {% for el_problem in el_problem_list %}
+                                            <tr>
+                                                <td>{{ forloop.counter }}</td>
+                                                <th><a href="{% url 'ex:problem_detail' el_problem.id%}" target="_blank">{{ el_problem.problem_title }}</a></th>
+                                                <td>{{ el_problem.audit_company.audit_company }}</td>
+                                                <td>{{ el_problem.audit_company.audit_person }}</td>
+                                                <td>{{ el_problem.problem_content|slice:":20" }}...</td>
+                                                <td>{{ el_problem.problem_feedback|slice:":20" }}...</td>
+                                                <td>{{ el_problem.problem_class }}</td>
+                                                <th>{{ el_problem.get_problem_type_display }}</th>
+                                                <td>{{ el_problem.get_problem_status_display }}</td>
+                                                <td>{% if el_problem.username.first_name %}{{ el_problem.username.first_name }}{% else %}{{ el_problem.project_name.project_exauditname }}{% endif %}</td>
+                                                <td>
+                                                    {% for problem_file2 in problem_file_list %}
+                                                        {% if el_problem.id == problem_file2.problem_id_id %}
+                                                            <a href="{{ MEDIA_URL }}{{ problem_file2.problem_file }}">{{ problem_file2.problem_file.name|slice:"22:" }}</a> </br>
+                                                         {% endif %}
+                                                        {% endfor %}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+
+
+
+
+{% endblock %}
+
+{% block myjs %}
+    <pre class="mt-4">
+    <script src="{% static 'assets/plugins/data-tables/jquery.datatables.min.js' %}"></script>
+    <script src="{% static 'assets/plugins/data-tables/datatables.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'assets/plugins/data-tables/jquery.datatables.min.css' %}"></script>
+    <link href="{% static 'assets/plugins/data-tables/datatables.bootstrap4.min.css' %}" rel="stylesheet">
+{#    <link href="https://unpkg.com/sleek-dashboard/dist/assets/css/sleek.min.css">#}
+    </pre>
+
+    <script>
+        jQuery(document).ready(function () {
+            jQuery('#doubts-data-table').DataTable({
+                "aLengthMenu": [[20, 30, 50, 75, -1], [20, 30, 50, 75, "All"]],
+                "pageLength": 20,
+                "dom": '<"row justify-content-between top-information"lf>rt<"row justify-content-between bottom-information"ip><"clear">'
+            });
+        });
+        jQuery(document).ready(function () {
+            jQuery('#co_suggestions-data-table').DataTable({
+                "aLengthMenu": [[20, 30, 50, 75, -1], [20, 30, 50, 75, "All"]],
+                "pageLength": 20,
+                "dom": '<"row justify-content-between top-information"lf>rt<"row justify-content-between bottom-information"ip><"clear">'
+            });
+        });
+        jQuery(document).ready(function () {
+            jQuery('#co_rectification-data-table').DataTable({
+                "aLengthMenu": [[20, 30, 50, 75, -1], [20, 30, 50, 75, "All"]],
+                "pageLength": 20,
+                "dom": '<"row justify-content-between top-information"lf>rt<"row justify-content-between bottom-information"ip><"clear">'
+            });
+        });
+        jQuery(document).ready(function () {
+            jQuery('#cancel-data-table').DataTable({
+                "aLengthMenu": [[20, 30, 50, 75, -1], [20, 30, 50, 75, "All"]],
+                "pageLength": 20,
+                "dom": '<"row justify-content-between top-information"lf>rt<"row justify-content-between bottom-information"ip><"clear">'
+            });
+        });
+    </script>
+
+{% endblock %}

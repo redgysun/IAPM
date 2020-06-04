@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %} 个人信息设置{% endblock %}
+{% block search_form %} {% endblock %}
+{% block content-wrapper %}
+    <div class="content-wrapper">
+        <div class="content">
+            <div class="bg-white border rounded">
+                <div class="row no-gutters">
+                    <div class="col-lg-4 col-xl-3">
+                        <div class="profile-content-left pt-5 pb-3 px-3 px-xl-5">
+                            <div class="card text-center widget-profile px-0 border-0">
+                                <div class="card-img mx-auto rounded-circle">
+                                    <img src="{{ MEDIA_URL }}{{ request.user.user_image }}" alt="user image">#}
+                                </div>
+                                <div class="card-body">
+                                    <h4 class="py-2 text-dark">{{ request.user.first_name }}</h4>
+                                    <p>{{ request.user.email }}</p>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between ">
+                                <div class="text-center pb-4">
+                                    <h6 class="text-dark pb-2">{{ project_num.count }}</h6>
+                                    <p>总项目数</p>
+                                </div>
+                                <div class="text-center pb-4">
+                                    <h6 class="text-dark pb-2">{{ usedays }}</h6>
+                                    <p>已用天数</p>
+                                </div>
+                                <div class="text-center pb-4">
+                                    <h6 class="text-dark pb-2">{{ request.user.add_time|date:"Y-m-d" }}</h6>
+                                    <p>注册时间</p>
+                                </div>
+                            </div>
+                            <hr class="w-100">
+                            <div class="contact-info pt-4">
+                                <h5 class="text-dark mb-1">相关信息</h5>
+                                <p class="text-dark font-weight-medium pt-4 mb-2" hidden>性别</p>
+                                <p hidden>{% if request.user.user_gender == 'male' %}男{% else %}女{% endif %}</p>
+                                <p class="text-dark font-weight-medium pt-4 mb-2">电话</p>
+                                <p>{{ request.user.user_phone }}</p>
+                                <p class="text-dark font-weight-medium pt-4 mb-2">公司</p>
+                                <p>{{ request.user.company_name.company_name }}</p>
+                                <p class="text-dark font-weight-medium pt-4 mb-2">部门</p>
+                                <p>{{ request.user.company_name.company_department }}</p>
+                                <p class="text-dark font-weight-medium pt-4 mb-2">邮箱</p>
+                                <p>{{ request.user.email }}</p>
+                                <p class="text-dark font-weight-medium pt-4 mb-2">职称</p>
+                                <p>{{ request.user.user_PQ }}</p>
+                                <p class="text-dark font-weight-medium pt-4 mb-2" hidden>联系</p>
+                                <p class="pb-3 social-button" hidden>
+                                    <a href="#" class="mb-1 btn btn-outline btn-twitter rounded-circle">
+                                        <i class="mdi mdi-twitter"></i>
+                                    </a>
+                                    <a href="#" class="mb-1 btn btn-outline btn-linkedin rounded-circle">
+                                        <i class="mdi mdi-linkedin"></i>
+                                    </a>
+                                    <a href="#" class="mb-1 btn btn-outline btn-facebook rounded-circle">
+                                        <i class="mdi mdi-facebook"></i>
+                                    </a>
+                                    <a href="#" class="mb-1 btn btn-outline btn-skype rounded-circle">
+                                        <i class="mdi mdi-skype"></i>
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-8 col-xl-9">
+                        <div class="profile-content-right py-5">
+                            <ul class="nav nav-tabs px-3 px-xl-5 nav-style-border" id="myTab" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="settings-tab" data-toggle="tab" href="#settings"
+                                       role="tab" aria-controls="settings" aria-selected="false">个人信息设置</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content px-3 px-xl-5" id="myTabContent">
+                                <div class="tab-pane fade show active" id="settings" role="tabpanel"
+                                     aria-labelledby="settings-tab">
+                                    <div class="mt-5">
+                                        <div class="form-group row mb-6">
+
+                                            <label for="coverImage"#}
+                                                   class="col-sm-4 col-lg-2 col-form-label">用户头像</label>
+                                            <div class="col-sm-8 col-lg-10">
+                                                <div class="custom-file mb-1">
+                                                    <form id="jsAvatarForm" enctype="multipart/form-data"
+                                                          method="post"
+                                                          action="{% url 'users:user_changeimage' %}"
+                                                          enctype="multipart/form-data">
+                                                        {% csrf_token %}
+                                                        <input type="file" class="mb-1 btn btn-outline-secondary" id="coverImage"
+                                                               name="image">
+                                                        <input type="submit" class="mb-1 btn  disabled btn-primary">
+                                                        </form>
+                                                </div>
+                                            </div>
+                                            </div>
+                                        </div>
+                                        <form method="post" action="{% url 'users:user_fixinfo' %}" enctype="multipart/form-data" onSubmit="javascript:return window.confirm('确认提交吗？')">
+                                        {% csrf_token %}
+                                        <div class="row mb-2">
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label for="firstName">姓名</label>
+                                                    <input type="text" class="form-control" id="first_name"
+                                                          name="first_name" value="{{ request.user.first_name }}">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label class="text-dark mb-2 mt-4 font-weight-medium d-inline-block mr-3"
+                                                           for="">性别</label>
+                                                    <ul class="list-unstyled list-inline">
+                                                        <li class="d-inline-block mr-3">
+                                                            <label class="control control-radio">男
+                                                                <input type="radio" name="user_gender" id="user_gender"
+                                                                      value="male" {% if request.user.user_gender == 'male' %} checked="checked" {% endif %}/>
+                                                                <div class="control-indicator"></div>
+                                                            </label>
+                                                        </li>
+                                                        <li class="d-inline-block mr-3">
+                                                            <label class="control control-radio">女
+                                                                <input type="radio" {% if request.user.user_gender == 'female' %} checked="checked" {% endif %} name="user_gender" id="user_gender" value="female"/>
+                                                                <div class="control-indicator"></div>
+                                                            </label>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group mb-4">
+                                            <label for="userName">电话（小于11位）</label>
+                                            <input type="text" class="form-control" id="user_phone"  name="user_phone"
+                                                   value="{{ request.user.user_phone }}">
+
+                                        </div>
+
+                                        <div class="form-group mb-4">
+                                            <label for="date">生日</label>
+                                            <input type="date" class="form-control" id="user_birthday" name="user_birthday"
+                                                   value="{{ request.user.user_birthday|date:"Y-m-d" }}">
+                                        </div>
+
+                                        <div class="form-group mb-4">
+                                            <label for="user_pq">职称(100字以内）</label>
+                                            <input type="text" class="form-control" id="user_PQ" name="user_PQ"
+                                                   value="{{ request.user.user_PQ }}">
+                                        </div>
+
+                                        <div class="d-flex justify-content-end mt-5">
+                                            <button type="submit" class="btn btn-primary mb-2 btn-pill">提 交
+                                            </button>
+                                        </div>
+
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+
+{% block myjs %}
+
+{% endblock %}

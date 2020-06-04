@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <head>
+        <meta charset="utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <meta name="description"
+              content="Sleek Dashboard - Free Bootstrap 4 Admin Dashboard Template and UI Kit. It is very powerful bootstrap admin dashboard, which allows you to build products like admin panels, content management systems and CRMs etc.">
+
+
+        <title>Register</title>
+
+        <base href="{% static '' %}"/>
+        <link href="{% static 'assets/css/local.google.fonts.css' %}" rel="stylesheet"/>
+        <link href="{% static 'assets/css/materialdesignicons.min.css' %}" rel="stylesheet"/>
+        <link href="{% static 'assets/plugins/nprogress/nprogress.css' %}" rel="stylesheet"/>
+        <link href="{% static 'assets/css/sleek.css' %}" rel="stylesheet" id="sleek-css"/>
+        <link href="{% static 'assets/img/favicon.png' %}" rel="shortcut icon"/>
+        <script src="{% static 'assets/plugins/nprogress/nprogress.js' %}"></script>
+    </head>
+
+</head>
+<body class="" id="body">
+<div class="container d-flex flex-column justify-content-between vh-100">
+    <div class="row justify-content-center mt-5">
+        <div class="col-xl-5 col-lg-6 col-md-10">
+            <div class="card">
+                <div class="card-header bg-primary">
+                    <div class="app-brand">
+                        <a href="#">
+                            <svg class="brand-icon" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid"
+                                 width="30"
+                                 height="33" viewBox="0 0 30 33">
+                                <g fill="none" fill-rule="evenodd">
+                                    <path class="logo-fill-blue" fill="#7DBCFF" d="M0 4v25l8 4V0zM22 4v25l8 4V0z"/>
+                                    <path class="logo-fill-white" fill="#FFF" d="M11 4v25l8 4V0z"/>
+                                </g>
+                            </svg>
+                            <span class="brand-name">内审项管系统注册</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body p-5">
+                    <h4 class="text-dark mb-5">请输入姓名、邮箱、密码</h4>
+                    <form action="{% url 'users:user_register' %}" method="post" autocomplete="off">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="form-group col-md-12 mb-4">
+                                <input type="text" class="form-control input-lg" id="name" aria-describedby="nameHelp"
+                                       placeholder="姓名" name = "first_name">
+                            </div>
+                            <div class="form-group col-md-12 mb-4">
+                                <input type="email" class="form-control input-lg" id="email"
+                                       aria-describedby="emailHelp" placeholder="邮箱" name="username">
+                            </div>
+                            <div class="form-group col-md-12 ">
+                                <input type="password" class="form-control input-lg" id="password"
+                                       placeholder="密码" name = "password">
+                            </div>
+                            <div class="form-group col-md-12 ">
+                                <input type="password" class="form-control input-lg" id="cpassword"
+                                       placeholder="再次确认密码" name="password1">
+                            </div>
+                            <div class="col-md-12">
+                                <div class="d-inline-block mr-3">
+                                    <label class="control control-checkbox">
+                                        <input type="checkbox" name="check" value="ok"/>
+                                        <div class="control-indicator"></div>
+                                        后续请尽快联系管理员确认账户所属单位。
+                                    </label>
+
+                                </div>
+                                <button type="submit" class="btn btn-lg btn-primary btn-block mb-4">注册</button>
+                                <div class="text-dark mb-5 text-center" id="jsLoginTips">
+                                <span class="text-center badge badge-warning">{{ msg }}</span>
+                            </div>
+                                <p>您已经有账号的话请点击
+                                    <a class="text-blue" href="{% url 'users:user_login' %}">这里</a>登陆
+                                </p>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="copyright pl-0">
+        <p class="text-center">&copy; 2020 内审项目管理系统
+            <a class="text-primary" href="#" target="_blank">Redgysun</a>.
+        </p>
+    </div>
+</div>
+
+</body>
+</html>

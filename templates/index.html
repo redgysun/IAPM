@@ -1,0 +1,271 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}首页{% endblock %}
+
+{% block search_form %}
+
+{% endblock %}
+{% block content-wrapper %}
+    <div class="content-wrapper">
+        <div class="content">
+            <div class="breadcrumb-wrapper d-flex align-items-center justify-content-between">
+
+             </div>
+
+            <div class="row">
+                <div class="col-xl-2">
+                    <div class="card card-default mb-4 mb-lg-5">
+                        <div class="card-header card-header-border-bottom">
+                            <h2><font size="3">日期</font></h2>
+                        </div>
+
+                        <div class="card-body p-4 py-xl-6 px-xl-2">
+                            <div class="circle circle-lg"
+                                 data-size="200"
+                                 data-value="0.83"
+                                 data-thickness="20"
+                                 data-fill="{
+														&quot;color&quot;: &quot;#35D00E&quot;
+													}"
+                            >
+                                <div class="circle-content justify-content-start">
+                                    <h6 class="text-uppercase text-dark font-weight-bold"><font size="4"> {{ now_date|date:'Y-m-d' }}  星期{% if now_date.isoweekday == 1 %}一{% elif now_date.isoweekday == 2 %}二
+                                    {% elif now_date.isoweekday == 3 %}三{% elif now_date.isoweekday == 4 %}四{% elif now_date.isoweekday == 5 %}五{% elif now_date.isoweekday == 6 %}六{% elif now_date.isoweekday == 7 %}日{% endif %}</font></h6>
+
+                                    <strong></strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-2">
+                    <div class="card card-default mb-4 mb-lg-5">
+                        <div class="card-header card-header-border-bottom">
+                            <h2><font size="3">本年项目总数</font></h2>
+                        </div>
+
+                        <div class="card-body p-4 py-xl-6 px-xl-2">
+                            <div class="circle circle-lg"
+                                 data-size="200"
+                                 data-value="0.83"
+                                 data-thickness="20"
+                                 data-fill="{
+														&quot;color&quot;: &quot;#35D00E&quot;
+													}"
+                            >
+                                <div class="circle-content">
+                                    <h6 class="text-uppercase text-dark font-weight-bold"><font size="6">{{ project_total_num.count }}</font></h6>
+
+                                    <strong></strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-2">
+                    <div class="card card-default mb-4 mb-lg-5">
+                        <div class="card-header card-header-border-bottom">
+                            <h2><font size="3">执行中项目数</font></h2>
+                        </div>
+
+                        <div class="card-body p-4 py-xl-6 px-xl-2">
+                            <div class="circle circle-lg"
+                                 data-size="200"
+                                 data-value="0.83"
+                                 data-thickness="20"
+                                 data-fill="{
+														&quot;color&quot;: &quot;#35D00E&quot;
+													}"
+                            >
+                                <div class="circle-content">
+                                    <h6 class="text-uppercase text-dark font-weight-bold"><font size="6">{{ project_ex_num.count }}</font></h6>
+
+                                    <strong></strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-2">
+                    <div class="card card-default mb-4 mb-lg-5">
+                        <div class="card-header card-header-border-bottom">
+                            <h2><font size="3">总未执行计划数</font></h2>
+                        </div>
+
+                        <div class="card-body p-4 py-xl-6 px-xl-2">
+                            <div class="circle circle-lg"
+                                 data-size="200"
+                                 data-value="0.83"
+                                 data-thickness="20"
+                                 data-fill="{
+														&quot;color&quot;: &quot;#35D00E&quot;
+													}"
+                            >
+                                <div class="circle-content">
+                                    <h6 class="text-uppercase text-dark font-weight-bold"><font size="6">{{ project_un_num.count }}</font></h6>
+
+                                    <strong></strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-2">
+                    <div class="card card-default mb-4 mb-lg-5">
+                        <div class="card-header card-header-border-bottom">
+                            <h2><font size="3">持续整改项目</font></h2>
+                        </div>
+
+                        <div class="card-body p-4 py-xl-6 px-xl-2">
+                            <div class="circle circle-lg"
+                                 data-size="200"
+                                 data-value="0.83"
+                                 data-thickness="20"
+                                 data-fill="{
+														&quot;color&quot;: &quot;#35D00E&quot;
+													}"
+                            >
+                                <div class="circle-content">
+                                    <h6 class="text-uppercase text-dark font-weight-bold"><font size="6">{{ re_project_num.count }}</font></h6>
+
+                                    <strong></strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-2">
+                    <div class="card card-default mb-4 mb-lg-5">
+                        <div class="card-header card-header-border-bottom">
+                            <h2><font size="2">日常通知数--{{ now_date.year }}年</font></h2>
+                        </div>
+
+                        <div class="card-body p-4 py-xl-6 px-xl-2">
+                            <div class="circle circle-lg"
+                                 data-size="200"
+                                 data-value="0.83"
+                                 data-thickness="20"
+                                 data-fill="{
+														&quot;color&quot;: &quot;#35D00E&quot;
+													}"
+                            >
+                                <div class="circle-content">
+                                    <h6 class="text-uppercase text-dark font-weight-bold"><font size="6">{{ normal_notice_num.count }}</font></h6>
+
+                                    <strong></strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+
+            <div class="row">
+                {% for user in user_list %}
+                <div class="col-lg-6 col-xl-4 col-xxl-3">
+                    <div class="card card-default mt-6 mb-4">
+                        <div class="card-body text-center p-4">
+                                <div class="image mb-3 mt-n9">
+                                    <img src="{{ MEDIA_URL }}{{ user.user_image }}" class="img-fluid rounded-circle"
+                                         alt="Avatar Image">
+                                </div>
+
+                                <h5 class="card-title text-dark">{{ user.first_name }}</h5>
+
+                                <ul class="list-unstyled">
+                                    <li class="d-flex mb-1">
+                                        <i class="mdi mdi-map mr-1"></i>
+                                        <span>{{ user.get_user_gender_display }}</span>
+                                    </li>
+                                    <li class="d-flex mb-1">
+                                        <i class="mdi mdi-email mr-1"></i>
+                                        <span>{{ user.email }}</span>
+                                    </li>
+                                    <li class="d-flex mb-1">
+                                        <i class="mdi mdi-phone mr-1"></i>
+                                        <span>{% if user.user_phone %}{{ user.user_phone }}{% endif %}</span>
+                                    </li>
+                                </ul>
+                            </a>
+
+                            <p  class="card-text text-left mb-3"><font size="2">最近一次登陆时间：{{ user.last_login|date:'Y-m-d H:i:s' }}</font>  </p>
+
+                            <div class="row justify-content-center">
+                                <div class="col-4 px-1">
+                                    <div class=" circle"
+                                         data-size="120"
+                                         data-value="0.95"
+                                         data-thickness="4"
+                                         data-fill="{
+														&quot;color&quot;: &quot;#35D00E&quot;
+													}"
+                                    >
+                                        <div class="circle-content">
+                                            <h6 class="text-uppercase">本年项目数</h6>
+                                            <h6>{{ user.project_num.count }}</h6>
+                                            <strong></strong>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-4 px-1">
+                                    <div class=" circle"
+                                         data-size="120"
+                                         data-value="0.65"
+                                         data-thickness="4"
+                                         data-fill="{
+														&quot;color&quot;: &quot;#fec400&quot;
+													}"
+                                    >
+                                        <div class="circle-content">
+                                            <h6 class="text-uppercase">本年主审项目</h6>
+                                            <h6>{{ user.lvl1_num.count }}</h6>
+                                            <strong></strong>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-4 px-1">
+                                    <div class=" circle"
+                                         data-size="120"
+                                         data-value="0.35"
+                                         data-thickness="4"
+                                         data-fill="{
+														&quot;color&quot;: &quot;#fe5461&quot;
+													}"
+                                    >
+                                        <div class="circle-content">
+                                            <h6 class="text-uppercase">进行中项目</h6>
+                                            <h6>{{ user.going_num.count }}</h6>
+                                            <strong></strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {% endfor %}
+
+
+            </div>
+
+
+
+        </div>
+
+
+    </div>
+{% endblock %}
+{% block myjs %}
+
+
+
+    <script>
+
+    </script>
+{% endblock %}

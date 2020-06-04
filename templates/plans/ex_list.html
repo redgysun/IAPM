@@ -1,0 +1,243 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content-wrapper %}
+    <div class="content-wrapper">
+        <div class="content">
+            <div class="bg-white border rounded">
+                <div class="row  ">
+                    <div class="col-lg-6 col-xl-6">
+                        <div class="profile-content-left py-5">
+                            <div class="card card-default">
+                                <div class="card-header card-header-border-bottom d-flex justify-content-between">
+                                    <h2>执行项目</h2>
+
+                                </div>
+
+
+                                <div class="card-body">
+                                    <div class="hoverable-data-table">
+                                        <table id="hoverable-data-table" class="table table-hover nowrap"
+                                               style="width:100%">
+                                            <thead>
+                                            <tr>
+                                                <th class="text-center" cope="col">序号</th>
+                                                <th class="text-center" cope="col">年度</th>
+                                                <th class="text-center" cope="col">项目名称</th>
+                                                <th class="text-center" cope="col">计划类型</th>
+                                                <th class="text-center" cope="col">项目类别</th>
+                                                <th class="text-center" cope="col">项目阶段</th>
+                                                <th class="text-center" cope="col">项目依据</th>
+                                                <th class="text-center" cope="col">外审编码</th>
+                                            </tr>
+                                            </thead>
+
+                                            <tbody>
+                                            {% for plan in ex_plans %}
+                                                <tr>
+
+                                                    <td class="text-center" scope="row">{{ forloop.counter }}</td>
+                                                    <td class="text-center">{{ plan.project_year }}</td>
+                                                    <td class="text-center"><a
+                                                            href="{% url 'plans:start_detail' plan.id %}">{{ plan.project_name }}</a>
+                                                    </td>
+                                                    <td class="text-center">{{ plan.plan_type }}</td>
+                                                    <td class="text-center">{{ plan.project_type }}</td>
+                                                    <td class="text-center">{{ plan.get_project_status_display }}</td>
+                                                    <td class="text-center">{{ plan.project_basis|slice:":8" }}...</td>
+
+                                                    <td class="text-center">
+                                                        {% if plan.project_exaudit == True %}
+                                                        <button type="button" class="btn btn-warning btn-pill btn-sm "
+                                                                data-toggle="modal"
+                                                                data-target="#exampleModalLong{{ plan.id }}">
+                                                            查询
+                                                        </button>
+                                                        <!-- Long Modal -->
+                                                        <div class="modal fade" id="exampleModalLong{{ plan.id }}"
+                                                             tabindex="-1" role="dialog"
+                                                             aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                                                            <div class="modal-dialog" role="document">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title"
+                                                                            id="exampleModalLongTitle">编码查询</h5>
+                                                                        <button type="button" class="close"
+                                                                                data-dismiss="modal"
+                                                                                aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+
+                                                                        <p class="text-primary"><font
+                                                                                size="3">{{ plan.coding }}</font>
+                                                                        </p>
+
+                                                                    </div>
+                                                                    <div class="modal-footer">
+
+
+                                                                        <button type="button"
+                                                                                class="btn btn-danger btn-pill "
+                                                                                data-dismiss="modal">关闭
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                         {% endif %}
+                                                    </td>
+
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-xl-6">
+                        <div class="profile-content-left py-5">
+                            <div class="card card-default">
+                                <div class="card-header card-header-border-bottom d-flex justify-content-between">
+                                    <h2>已完成项目列表</h2>
+
+                                    <div class="dropdown d-inline-block mb-1">
+                                        <button class="btn btn-outline-success dropdown-toggle" type="button"
+                                                id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                                aria-expanded="false" data-display="static">
+                                            计划年度
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+
+                                            {% for year in all_years %}
+                                                <a class="dropdown-item"
+                                                   href="{% url 'plans:ex_list' %}?year={{ year }}">{{ year }}</a>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+
+                                </div>
+
+                                <div class="card-body">
+                                    <div class="hoverable-data-table">
+                                        <table id="hoverable-data-table" class="table table-hover nowrap"
+                                               style="width:100%">
+                                            <thead>
+                                            <tr>
+                                                <th class="text-center" cope="col">序号</th>
+                                                <th class="text-center" cope="col">年度</th>
+                                                <th class="text-center" cope="col">项目名称</th>
+                                                <th class="text-center" cope="col">计划类型</th>
+                                                <th class="text-center" cope="col">项目类别</th>
+                                                <th class="text-center" cope="col">项目阶段</th>
+                                                <th class="text-center" cope="col">项目依据</th>
+                                                <th class="text-center" cope="col">外审</th>
+                                            </tr>
+                                            </thead>
+
+                                            <tbody>
+                                            {% for plan in finish_plans %}
+                                                <tr>
+
+                                                    <td class="text-center" scope="row">{{ forloop.counter }}</td>
+                                                    <td class="text-center">{{ plan.project_year }}</td>
+                                                    <td class="text-center"><a
+                                                            href="{% url 'plans:start_detail' plan.id %}">{{ plan.project_name }}</a>
+                                                    </td>
+                                                    <td class="text-center">{{ plan.plan_type }}</td>
+                                                    <td class="text-center">{{ plan.project_type }}</td>
+                                                    <td class="text-center">{{ plan.get_project_status_display }}</td>
+                                                    <td class="text-center">{{ plan.project_basis|slice:":8" }}...</td>
+                                                    <td class="text-center">{% if plan.project_exaudit == True  %}{{ plan.project_exauditname|slice:":3" }}...{% endif %}</td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div>
+                                <nav aria-label="Page navigation example">
+                                    <ul class="pagination pagination-seperated pagination-seperated-rounded justify-content-center">
+                                        {% if pages.has_previous %}
+                                            <li class="page-item">
+                                                <a class="page-link"
+                                                   href="{% url 'plans:ex_list' %}?pagenum={{ pages.previous_page_number }}&year={{ year }}&keyword={{ keyword }}"
+                                                   aria-label="Previous">
+                                                    <span aria-hidden="true" class="mdi mdi-chevron-left mr-1"></span>
+                                                    Prev
+                                                    <span class="sr-only">前一页</span>
+                                                </a>
+                                            </li>
+                                        {% endif %}
+
+                                        {% for num in pages.paginator.page_range %}
+                                            <li class="page-item {% if num == pages.number %} active {% endif %}">
+                                                <a class="page-link"
+                                                   href="{% url 'plans:ex_list' %}?pagenum={{ num }}&year={{ year }}&keyword={{ keyword }}">1</a>
+                                            </li>
+                                        {% endfor %}
+
+                                        {% if pages.has_next %}
+                                            <li class="page-item">
+                                                <a class="page-link"
+                                                   href="{% url 'plans:ex_list' %}?pagenum={{ pages.next_page_number }}&year={{ year }}&keyword={{ keyword }}"
+                                                   aria-label="Next">
+                                                    NEXT
+                                                    <span aria-hidden="true" class="mdi mdi-chevron-right ml-1"></span>
+                                                    <span class="sr-only">下一页</span>
+                                                </a>
+                                            </li>
+                                        {% endif %}
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block search_form %}
+    <div class="search-form d-none d-lg-inline-block">
+        <form method="get" action="{% url 'plans:ex_list' %}">
+            <div class="input-group">
+                <button type="submit" id="search-btn11" class="btn btn-flat">
+                    <i class="mdi mdi-magnify"></i>
+                </button>
+                <input type="text" id="search-input11" class="form-control" placeholder="请输入项目名称"
+                       autofocus autocomplete="off" name="keyword"/>
+                <input hidden type="text" id="search-input11" class="form-control" placeholder="请输入项目名称"
+                       autofocus autocomplete="off" name="switch" value="1"/>
+            </div>
+        </form>
+        <div id="search-results-container">
+            <ul id="search-results"></ul>
+        </div>
+    </div>
+{% endblock %}
+
+{% block myjs %}
+    <script>
+        $(function () {
+            $('#search-btn11').click(function () {
+                var key_word = $('#search-input11').val();
+                var url = '';
+
+                url = +"?keyword=" + key_word
+
+                window.location.href = url
+
+            })
+        })
+    </script>
+{% endblock %}
