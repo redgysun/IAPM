@@ -2,94 +2,78 @@
 {% load static %}
 {% block title %}项目问题列表{% endblock %}
 {% block search_form %} {% endblock %}
+{% block user-menu %}{% endblock %}
 {% block left-sidebar %}
-    <li class="has-sub {% if request.path|slice:':10' == '/plans/ex_' %}active  {% endif %} expand">
-                            <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
-                               data-target="#dashboard"
-                               aria-expanded="false" aria-controls="dashboard">
-                                <i class="mdi mdi-dribbble"></i>
-                                <span class="nav-text">返回上一级</span> <b class="caret"></b>
-                            </a>
-                            <ul class="collapse {% if request.path|slice:':14' == '/plans/ex_list' %} show {% endif %}" id="dashboard" data-parent="#sidebar-menu">
-                                <div class="sub-menu">
+<li class="has-sub {% if request.path|slice:':11' == '/exaudit/st' %}active  {% endif %} expand">
+        <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
+           data-target="#dashboard1"
+           aria-expanded="false" aria-controls="dashboard">
+            <i class="mdi mdi-docker"></i>
+            <span class="nav-text">前期准备</span> <b class="caret"></b>
+        </a>
+        <ul class="collapse {% if request.path|slice:':11' == '/exaudit/st' %}show  {% endif %}" id="dashboard1"
+            data-parent="#sidebar-menu">
+            <div class="sub-menu">
 
-                                    <li {% if request.path|slice:':14' == '/plans/ex_list' %}
-                                        class="active" {% endif %}>
-                                        <a class="sidenav-item-link" href="{% url 'plans:ex_list' %}">
-                                            <span class="nav-text">项目列表</span>
-                                        </a>
-                                    </li>
+                <li {% if request.path|slice:':21' == '/exaudit/start_detail' %}
+                    class="active" {% endif %}>
+                    <a class="sidenav-item-link" href="{% url 'exaudit:start_detail1' project_id %}">
+                        <span class="nav-text">通知及方案</span>
+                    </a>
+                </li>
 
-                                </div>
-                            </ul>
-                        </li>
-    <li class="has-sub {% if request.path|slice:':9' == '/plans/st' %}active  {% endif %} expand">
-                            <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
-                               data-target="#dashboard1"
-                               aria-expanded="false" aria-controls="dashboard">
-                                <i class="mdi mdi-docker"></i>
-                                <span class="nav-text">前期准备</span> <b class="caret"></b>
-                            </a>
-                            <ul class="collapse {% if request.path|slice:':9' == '/plans/st' %}show  {% endif %}" id="dashboard1" data-parent="#sidebar-menu">
-                                <div class="sub-menu">
+            </div>
+        </ul>
+    </li>
+    <li class="has-sub {% if request.path|slice:':11' == '/exaudit/sc' or request.path|slice:':11' == '/exaudit/pr' %}active  {% endif %} expand">
+        <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
+           data-target="#dashboard2"
+           aria-expanded="false" aria-controls="dashboard">
+            <i class="mdi mdi-pinwheel-outline"></i>
+            <span class="nav-text">实施阶段</span> <b class="caret"></b>
+        </a>
+        <ul class="collapse {% if request.path|slice:':11' == '/exaudit/sc' or request.path|slice:':11' == '/exaudit/pr' %}show  {% endif %}"
+            id="dashboard2" data-parent="#sidebar-menu">
+            <div class="sub-menu">
 
-                                    <li {% if request.path|slice:':19' == '/plans/start_detail' %}
-                                        class="active" {% endif %}>
-                                        <a class="sidenav-item-link" href="{% url 'plans:start_detail' project_id %}">
-                                            <span class="nav-text">通知及方案</span>
-                                        </a>
-                                    </li>
+                <li {% if request.path|slice:':17' == '/exaudit/schedule' %}
+                    class="active" {% endif %}>
+                    <a class="sidenav-item-link" href="{% url 'exaudit:schedule_list' project_id %}">
+                        <span class="nav-text">项目记录</span>
+                    </a>
+                </li>
+                <li {% if request.path|slice:':16' == '/exaudit/problem' %}
+                    class="active" {% endif %}>
+                    <a class="sidenav-item-link" href="{% url 'exaudit:problem_list' project_id %}">
+                        <span class="nav-text">问题列表</span>
+                    </a>
+                </li>
 
-                                </div>
-                            </ul>
-                        </li>
-    <li class="has-sub {% if request.path|slice:':6' == '/ex/sc' or request.path|slice:':6' == '/ex/pr' %}active  {% endif %} expand">
-                            <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
-                               data-target="#dashboard2"
-                               aria-expanded="false" aria-controls="dashboard">
-                                <i class="mdi mdi-pinwheel-outline"></i>
-                                <span class="nav-text">实施阶段</span> <b class="caret"></b>
-                            </a>
-                            <ul class="collapse {% if request.path|slice:':6' == '/ex/sc' or request.path|slice:':6' == '/ex/pr' %}show  {% endif %}" id="dashboard2" data-parent="#sidebar-menu">
-                                <div class="sub-menu">
+            </div>
+        </ul>
+    </li>
+    <li class="has-sub {% if request.path|slice:':11' == '/exaudit/re' %}active  {% endif %} expand">
+        <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
+           data-target="#dashboard3"
+           aria-expanded="false" aria-controls="dashboard">
+            <i class="mdi mdi-barley"></i>
+            <span class="nav-text">报告阶段</span> <b class="caret"></b>
+        </a>
+        <ul class="collapse{% if request.path|slice:':11' == '/exaudit/re' %} show  {% endif %}" id="dashboard3"
+            data-parent="#sidebar-menu">
+            <div class="sub-menu">
 
-                                    <li {% if request.path|slice:':17' == '/ex/schedule_list' %}
-                                        class="active" {% endif %}>
-                                        <a class="sidenav-item-link" href="{% url 'ex:schedule_list' project_id %}">
-                                            <span class="nav-text">项目记录</span>
-                                        </a>
-                                    </li>
-                                    <li {% if request.path|slice:':16' == '/ex/problem_list' %}
-                                        class="active" {% endif %}>
-                                        <a class="sidenav-item-link" href="{% url 'ex:problem_list' project_id %}">
-                                            <span class="nav-text">问题列表</span>
-                                        </a>
-                                    </li>
-
-                                </div>
-                            </ul>
-                        </li>
-    <li class="has-sub {% if request.path|slice:':6' == '/ex/re'  %}active  {% endif %} expand">
-                            <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
-                               data-target="#dashboard3"
-                               aria-expanded="false" aria-controls="dashboard">
-                                <i class="mdi mdi-barley"></i>
-                                <span class="nav-text">报告阶段</span> <b class="caret"></b>
-                            </a>
-                            <ul class="collapse{% if request.path|slice:':6' == '/ex/re'  %} show  {% endif %}" id="dashboard3" data-parent="#sidebar-menu">
-                                <div class="sub-menu">
-
-                                    <li {% if request.path|slice:':17' == '/ex/report_detail' %}
-                                        class="active" {% endif %}>
-                                        <a class="sidenav-item-link" href="{% url 'ex:report_detail' project_id %}">
-                                            <span class="nav-text">征求意见及报告</span>
-                                        </a>
-                                    </li>
+                <li {% if request.path|slice:':22' == '/exaudit/report_detail' %}
+                    class="active" {% endif %}>
+                    <a class="sidenav-item-link" href="{% url 'exaudit:report_detail' project_id %}">
+                        <span class="nav-text">征求意见及报告</span>
+                    </a>
+                </li>
 
 
-                                </div>
-                            </ul>
-                        </li>
+            </div>
+        </ul>
+    </li>
 
 {% endblock %}
 {% block content-wrapper %}
@@ -103,7 +87,7 @@
                         <div class="card-header card-header-border-bottom d-flex justify-content-between">
                             <h2>问题列表</h2>
                             {% if switch == 'open' %}
-                            <a href="{% url 'ex:problem_add' project_id %}"
+                            <a href="{% url 'exaudit:problem_add' project_id %}"
                                class="btn btn-outline-primary btn-lg text-uppercase">
                                 <i class=" mdi mdi-briefcase-plus mr-2"></i> 新增
                             </a>
@@ -155,7 +139,7 @@
                                         {% for do_problem in do_problem_list %}
                                             <tr>
                                                 <td>{{ forloop.counter }}</td>
-                                                <th><a href="{% url 'ex:problem_detail' do_problem.id%}" target="_blank">{{ do_problem.problem_title }}</a></th>
+                                                <th><a href="{% url 'exaudit:problem_detail' do_problem.coding%}" target="_blank">{{ do_problem.problem_title }}</a></th>
                                                 <td>{{ do_problem.audit_company.audit_company }}</td>
                                                 <td>{{ do_problem.audit_company.audit_person }}</td>
                                                 <td>{{ do_problem.problem_content|slice:":20" }}...</td>
@@ -163,7 +147,7 @@
                                                 <td>{{ do_problem.problem_class }}</td>
                                                 <th>{{ do_problem.get_problem_type_display }}</th>
                                                 <td>{{ do_problem.get_problem_status_display }}</td>
-                                                <td>{% if do_problem.username.first_name %}{{ do_problem.username.first_name }}{% else %}{{ do_problem.project_name.project_exauditname }}{% endif %}</td>
+                                                <td>{{ project.project_exauditname }}</td>
                                                 <td>
                                                     {% for problem_file5 in problem_file_list %}
                                                         {% if do_problem.id == problem_file5.problem_id_id %}
@@ -202,7 +186,7 @@
                                         {% for sg_problem in co_sg_problem_list %}
                                             <tr>
                                                 <td>{{ forloop.counter }}</td>
-                                                <th><a href="{% url 'ex:problem_detail' sg_problem.id%}" target="_blank">{{ sg_problem.problem_title }}</a></th>
+                                                <th><a href="{% url 'exaudit:problem_detail' sg_problem.coding%}" target="_blank">{{ sg_problem.problem_title }}</a></th>
                                                 <td>{{ sg_problem.audit_company.audit_company }}</td>
                                                 <td>{{ sg_problem.audit_company.audit_person }}</td>
                                                 <td>{{ sg_problem.problem_content|slice:":20" }}...</td>
@@ -210,7 +194,7 @@
                                                 <td>{{ sg_problem.problem_class }}</td>
                                                 <th>{{ sg_problem.get_problem_type_display }}</th>
                                                 <td>{{ sg_problem.get_problem_status_display }}</td>
-                                                <td>{% if sg_problem.username.first_name %}{{ sg_problem.username.first_name }}{% else %}{{ sg_problem.project_name.project_exauditname }}{% endif %}</td>
+                                                <td>{{ project.project_exauditname }}</td>
                                                 <td>
                                                     {% for problem_file4 in problem_file_list %}
                                                         {% if sg_problem.id == problem_file4.problem_id_id %}
@@ -251,7 +235,7 @@
                                         {% for re_problem in co_re_problem_list %}
                                             <tr>
                                                 <td>{{ forloop.counter }}</td>
-                                                <th><a href="{% url 'ex:problem_detail' re_problem.id%}" target="_blank">{{ re_problem.problem_title }}</a></th>
+                                                <th><a href="{% url 'exaudit:problem_detail' re_problem.coding%}" target="_blank">{{ re_problem.problem_title }}</a></th>
                                                 <td>{{ re_problem.audit_company.audit_company }}</td>
                                                 <td>{{ re_problem.audit_company.audit_person }}</td>
                                                 <td>{{ re_problem.problem_content|slice:":20" }}...</td>
@@ -259,7 +243,7 @@
                                                 <td>{{ re_problem.problem_class }}</td>
                                                 <th>{{ re_problem.get_problem_type_display }}</th>
                                                 <td>{{ re_problem.get_problem_status_display }}</td>
-                                                <td>{% if re_problem.username.first_name %}{{ re_problem.username.first_name }}{% else %}{{ re_problem.project_name.project_exauditname }}{% endif %}</td>
+                                                <td>{{ project.project_exauditname }}</td>
                                                 <td>
                                                     {% for problem_file3 in problem_file_list %}
                                                         {% if re_problem.id == problem_file3.problem_id_id %}
@@ -296,7 +280,7 @@
                                         {% for el_problem in el_problem_list %}
                                             <tr>
                                                 <td>{{ forloop.counter }}</td>
-                                                <th><a href="{% url 'ex:problem_detail' el_problem.id%}" target="_blank">{{ el_problem.problem_title }}</a></th>
+                                                <th><a href="{% url 'exaudit:problem_detail' el_problem.coding%}" target="_blank">{{ el_problem.problem_title }}</a></th>
                                                 <td>{{ el_problem.audit_company.audit_company }}</td>
                                                 <td>{{ el_problem.audit_company.audit_person }}</td>
                                                 <td>{{ el_problem.problem_content|slice:":20" }}...</td>
@@ -304,7 +288,7 @@
                                                 <td>{{ el_problem.problem_class }}</td>
                                                 <th>{{ el_problem.get_problem_type_display }}</th>
                                                 <td>{{ el_problem.get_problem_status_display }}</td>
-                                                <td>{% if el_problem.username.first_name %}{{ el_problem.username.first_name }}{% else %}{{ el_problem.project_name.project_exauditname }}{% endif %}</td>
+                                                <td>{{ project.project_exauditname }}</td>
                                                 <td>
                                                     {% for problem_file2 in problem_file_list %}
                                                         {% if el_problem.id == problem_file2.problem_id_id %}

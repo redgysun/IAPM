@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block title %} 项目记录列表{% endblock %}
+{% block user-menu %} {% endblock %}
 {% block search_form %}
     <div class="search-form d-none d-lg-inline-block">
-        <form method="get" action="{% url 'ex:schedule_list' project_id %} ">
+        <form method="get" action="{% url 'exaudit:schedule_list' project_id %} ">
             <div class="input-group">
                 <button type="submit" id="search-btn11" class="btn btn-flat">
                     <i class="mdi mdi-magnify"></i>
@@ -19,95 +20,79 @@
 
 {% endblock %}
 {% block left-sidebar %}
-    <li class="has-sub {% if request.path|slice:':10' == '/plans/ex_' %}active  {% endif %} expand">
-                            <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
-                               data-target="#dashboard"
-                               aria-expanded="false" aria-controls="dashboard">
-                                <i class="mdi mdi-dribbble"></i>
-                                <span class="nav-text">返回上一级</span> <b class="caret"></b>
-                            </a>
-                            <ul class="collapse {% if request.path|slice:':14' == '/plans/ex_list' %} show {% endif %}" id="dashboard" data-parent="#sidebar-menu">
-                                <div class="sub-menu">
+<li class="has-sub {% if request.path|slice:':11' == '/exaudit/st' %}active  {% endif %} expand">
+        <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
+           data-target="#dashboard1"
+           aria-expanded="false" aria-controls="dashboard">
+            <i class="mdi mdi-docker"></i>
+            <span class="nav-text">前期准备</span> <b class="caret"></b>
+        </a>
+        <ul class="collapse {% if request.path|slice:':11' == '/exaudit/st' %}show  {% endif %}" id="dashboard1"
+            data-parent="#sidebar-menu">
+            <div class="sub-menu">
 
-                                    <li {% if request.path|slice:':14' == '/plans/ex_list' %}
-                                        class="active" {% endif %}>
-                                        <a class="sidenav-item-link" href="{% url 'plans:ex_list' %}">
-                                            <span class="nav-text">项目列表</span>
-                                        </a>
-                                    </li>
+                <li {% if request.path|slice:':21' == '/exaudit/start_detail' %}
+                    class="active" {% endif %}>
+                    <a class="sidenav-item-link" href="{% url 'exaudit:start_detail1' project_id %}">
+                        <span class="nav-text">通知及方案</span>
+                    </a>
+                </li>
 
-                                </div>
-                            </ul>
-                        </li>
-    <li class="has-sub {% if request.path|slice:':9' == '/plans/st' %}active  {% endif %} expand">
-                            <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
-                               data-target="#dashboard1"
-                               aria-expanded="false" aria-controls="dashboard">
-                                <i class="mdi mdi-docker"></i>
-                                <span class="nav-text">前期准备</span> <b class="caret"></b>
-                            </a>
-                            <ul class="collapse {% if request.path|slice:':9' == '/plans/st' %}show  {% endif %}" id="dashboard1" data-parent="#sidebar-menu">
-                                <div class="sub-menu">
+            </div>
+        </ul>
+    </li>
+    <li class="has-sub {% if request.path|slice:':11' == '/exaudit/sc' or request.path|slice:':11' == '/exaudit/pr' %}active  {% endif %} expand">
+        <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
+           data-target="#dashboard2"
+           aria-expanded="false" aria-controls="dashboard">
+            <i class="mdi mdi-pinwheel-outline"></i>
+            <span class="nav-text">实施阶段</span> <b class="caret"></b>
+        </a>
+        <ul class="collapse {% if request.path|slice:':11' == '/exaudit/sc' or request.path|slice:':11' == '/exaudit/pr' %}show  {% endif %}"
+            id="dashboard2" data-parent="#sidebar-menu">
+            <div class="sub-menu">
 
-                                    <li {% if request.path|slice:':19' == '/plans/start_detail' %}
-                                        class="active" {% endif %}>
-                                        <a class="sidenav-item-link" href="{% url 'plans:start_detail' project_id %}">
-                                            <span class="nav-text">通知及方案</span>
-                                        </a>
-                                    </li>
+                <li {% if request.path|slice:':17' == '/exaudit/schedule' %}
+                    class="active" {% endif %}>
+                    <a class="sidenav-item-link" href="{% url 'exaudit:schedule_list' project_id %}">
+                        <span class="nav-text">项目记录</span>
+                    </a>
+                </li>
+                <li {% if request.path|slice:':16' == '/exaudit/problem' %}
+                    class="active" {% endif %}>
+                    <a class="sidenav-item-link" href="{% url 'exaudit:problem_list' project_id %}">
+                        <span class="nav-text">问题列表</span>
+                    </a>
+                </li>
 
-                                </div>
-                            </ul>
-                        </li>
-    <li class="has-sub {% if request.path|slice:':6' == '/ex/sc' or request.path|slice:':6' == '/ex/pr' %}active  {% endif %} expand">
-                            <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
-                               data-target="#dashboard2"
-                               aria-expanded="false" aria-controls="dashboard">
-                                <i class="mdi mdi-pinwheel-outline"></i>
-                                <span class="nav-text">实施阶段</span> <b class="caret"></b>
-                            </a>
-                            <ul class="collapse {% if request.path|slice:':6' == '/ex/sc' or request.path|slice:':6' == '/ex/pr' %}show  {% endif %}" id="dashboard2" data-parent="#sidebar-menu">
-                                <div class="sub-menu">
+            </div>
+        </ul>
+    </li>
+    <li class="has-sub {% if request.path|slice:':11' == '/exaudit/re' %}active  {% endif %} expand">
+        <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
+           data-target="#dashboard3"
+           aria-expanded="false" aria-controls="dashboard">
+            <i class="mdi mdi-barley"></i>
+            <span class="nav-text">报告阶段</span> <b class="caret"></b>
+        </a>
+        <ul class="collapse{% if request.path|slice:':11' == '/exaudit/re' %} show  {% endif %}" id="dashboard3"
+            data-parent="#sidebar-menu">
+            <div class="sub-menu">
 
-                                    <li {% if request.path|slice:':17' == '/ex/schedule_list' %}
-                                        class="active" {% endif %}>
-                                        <a class="sidenav-item-link" href="{% url 'ex:schedule_list' project_id %}">
-                                            <span class="nav-text">项目记录</span>
-                                        </a>
-                                    </li>
-                                    <li {% if request.path|slice:':16' == '/ex/problem_list' %}
-                                        class="active" {% endif %}>
-                                        <a class="sidenav-item-link" href="{% url 'ex:problem_list' project_id %}">
-                                            <span class="nav-text">问题列表</span>
-                                        </a>
-                                    </li>
-
-                                </div>
-                            </ul>
-                        </li>
-    <li class="has-sub {% if request.path|slice:':6' == '/ex/re'  %}active  {% endif %} expand">
-                            <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
-                               data-target="#dashboard3"
-                               aria-expanded="false" aria-controls="dashboard">
-                                <i class="mdi mdi-barley"></i>
-                                <span class="nav-text">报告阶段</span> <b class="caret"></b>
-                            </a>
-                            <ul class="collapse{% if request.path|slice:':6' == '/ex/re'  %} show  {% endif %}" id="dashboard3" data-parent="#sidebar-menu">
-                                <div class="sub-menu">
-
-                                    <li {% if request.path|slice:':17' == '/ex/report_detail' %}
-                                        class="active" {% endif %}>
-                                        <a class="sidenav-item-link" href="{% url 'ex:report_detail' project_id %}">
-                                            <span class="nav-text">征求意见及报告</span>
-                                        </a>
-                                    </li>
+                <li {% if request.path|slice:':22' == '/exaudit/report_detail' %}
+                    class="active" {% endif %}>
+                    <a class="sidenav-item-link" href="{% url 'exaudit:report_detail' project_id %}">
+                        <span class="nav-text">征求意见及报告</span>
+                    </a>
+                </li>
 
 
-                                </div>
-                            </ul>
-                        </li>
+            </div>
+        </ul>
+    </li>
 
 {% endblock %}
+
 
 {% block content-wrapper %}
     <div class="content-wrapper">
@@ -115,16 +100,6 @@
             <div class="breadcrumb-wrapper">
                 <h1>{{ title.project_name }}{% if title.project_exaudit == True %}--外审：{{ title.project_exauditname }}{% endif %}</h1>
 
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb p-0">
-                        <li class="breadcrumb-item">
-                            <a href="{% url 'plans:ex_list' %}">
-                                <span class="mdi mdi-home"></span>
-                            </a>
-                        </li>
-
-                    </ol>
-                </nav>
 
             </div>
             <div class="row">
@@ -140,14 +115,14 @@
 {#                                        target="_blank">#}
 {#                                    more details.</a></p>#}
                             <div id="accordion" class="accordion">
-                                <p class="mb-5" > {{ request.user.first_name }} </p>
+                                <p hidden class="mb-5" > 项目记录 </p>
                                 {% for user in user_list %}
                                 <div class="card schedule_list">
 
                                     <div class="card-header" id="heading{{ user.id }}">
                                         <button {% if user.schedule_feedback %} class="btn btn-link mdi mdi-drupal" {% else %} class="btn btn-link" {% endif %} data-toggle="collapse" data-target="#collapse{{ user.id }}"
                                                 aria-expanded="false" aria-controls="collapseOne">
-                                          {% if user.schedule_feedback %}|{% endif %} {{ user.schedule_title }}   |  {{ user.start_time|date:'Y/m/d' }}{% if user.start_time != user.end_time %}-{{ user.end_time|date:'Y/m/d' }}{% endif %}
+                                         {% if user.schedule_feedback %} | {% endif %}{{ user.schedule_title }}   |  {{ user.start_time|date:'Y/m/d' }}{% if user.start_time != user.end_time %}-{{ user.end_time|date:'Y/m/d' }} {% endif %}
                                         </button>
                                     </div>
 
@@ -156,7 +131,7 @@
 
                                         <div class="card-body">
                                             <p class="text-info">被审计单位</p>
-                                            {{ user.audit_company.audit_company }} {% if user.audit_company.audit_person %} | {{ user.audit_company.audit_person }}{% endif %}
+                                            {{ user.audit_company.audit_company }} {% if user.audit_company.audit_person  %} | {{ user.audit_company.audit_person }}{% endif %}
                                             <p class="text-info">记录内容</p>
                                             {{ user.schedule_content }}
                                             <p class="text-info">记录反馈</p>
@@ -165,51 +140,15 @@
                                             {{ user.start_time|date:"Y-m-d" }}
                                             <p class="text-info">记录结束时间</p>
                                             {{ user.end_time|date:"Y-m-d" }}
-                                            {% if switch == 'open' %}
-                                            <p class="text-warning"><a href="{% url 'ex:schedule_detail' user.id %}" class="justify-content-md-center">修改</a></p>
-                                            {% endif %}
-                                        </div>
-                                        {% if switch == 'open' %}
-                                        <button type="submit" class="mb-1 btn btn-square btn-sm btn-outline-secondary justify-content-center schedule_del"
-                                                    id="schedule_del" schedule_id="{{ user.id }}">删除
-                                            </button>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                                {% endfor %}
-                                <hr class="w-100">
-                                <p class="mb-5" > 其他项目组成员</p>
-                                {% for member in member_list %}
-                                <div class="card ">
-                                    <div class="card-header" id="heading{{ member.id }}">
-                                        <button {% if member.schedule_feedback %}class="btn btn-link collapsed mdi mdi-drupal" {% else %}class="btn btn-link collapsed" {% endif %} data-toggle="collapse"
-                                                data-target="#collapse{{ member.id }}" aria-expanded="false"
-                                                aria-controls="collapse{{ member.id }}">
-                                            {% if member.schedule_feedback %}| {% endif %}{{ member.schedule_title }}   |  {{ member.start_time|date:'Y/m/d' }}{% if member.start_time != member.end_time%}-{{ member.end_time|date:'Y/m/d' }}{% endif %}
-                                        </button>
-                                    </div>
-                                    <div id="collapse{{ member.id }}" class="collapse" aria-labelledby="heading{{ member.id }}"
-                                         data-parent="#accordion">
-                                        <div class="card-body">
-                                            <p class="text-info">被审计单位</p>
-                                            {{ member.audit_company.audit_company }} {% if member.audit_company.audit_person  %} | {{ member.audit_company.audit_person }}{% endif %}
-                                            <p class="text-info">记录内容</p>
-                                            {{ member.schedule_content }}
-                                            <p class="text-info">记录反馈</p>
-                                            {{ member.schedule_feedback }}
-                                            <p class="text-info">记录人</p>
-                                            {% if member.username.first_name  %}{{ member.username.first_name }}{% else %}{{ title.project_exauditname }}{% endif %}
-                                            <p class="text-info">记录开始时间</p>
-                                            {{ member.start_time|date:"Y-m-d" }}
-{#                                            {% if member.start_time  %}--星期{{ member.start_time.isoweekday }}{% endif %}#}
-                                            <p class="text-info">记录结束时间</p>
-                                            {{ member.end_time|date:"Y-m-d" }}
-{#                                            {% if member.end_time  %}--星期{{ member.end_time.isoweekday }}{% endif %}#}
-                                            {% if switch == 'open' and member_user.audit_role == 'lvl1' %}
-                                            <p class="text-warning"><a href="{% url 'ex:schedule_detail' member.id %}" class="text-center">反馈</a></p>
-                                            {% endif %}
+
+                                            <p class="text-warning"><a href="{% url 'exaudit:schedule_detail' user.coding %}" class="text-center">修改</a></p>
 
                                         </div>
+
+                                        <button type="submit" class="mb-1 btn btn-square btn-sm btn-outline-secondary justify-content-end schedule_del"
+                                                    id="schedule_del" schedule_id="{{ user.id }}">删除
+                                            </button>
+
                                     </div>
                                 </div>
                                 {% endfor %}
@@ -225,7 +164,7 @@
                         <div class="card-body">
                             <p class="mb-5" hidden> For accordion shadow add class <code> .accordion-shadow </code> to <code>
                                 &lt;div id="accordion2" class="accordion"&gt; </code></p>
-                            {% if switch == 'open' %}
+
                             <div id="accordion2" class="accordion accordion-shadow">
                                 <div class="card">
                                     <div class="card-header" id="headingFour">
@@ -245,7 +184,7 @@
 													<select class="form-control" id="add_audit_company" name="add_audit_company">
 
                                                         {% for company in audit_company %}
-                                                            <option value="{{ company.id }}" >{{ company.audit_company }}  {% if company.audit_person %}|  {{ company.audit_person }}{% endif %}</option>
+                                                            <option value="{{ company.id }}" >{{ company.audit_company }} {% if company.audit_person %} |  {{ company.audit_person }} {% endif %}</option>
                                                         {% endfor %}
                                                         <option value="0"></option>
 													</select>
@@ -282,7 +221,7 @@
                                     </div>
 
                                 </div>
-                            {% endif %}
+
                              <div id="accordion2" class="accordion accordion-shadow">
                                 <div class="card">
                                     <div class="card-header" id="headingFive">
@@ -295,14 +234,14 @@
                                          data-parent="#accordion2">
                                         <div class="card-body">
 
-                                      {% if switch == 'open' %}
+
                                                 <button type="button"
                                                         class="mb-1 btn btn-pill btn-block  btn-outline-danger"
                                                         data-toggle="modal"
                                                         data-target="#exampleModalForm1">
                                                     上传记录附件
                                                 </button>
-                                        {% endif %}
+
                                         <div class="modal fade" id="exampleModalForm1" tabindex="-1" role="dialog"
                                          aria-labelledby="exampleModalFormTitle" aria-hidden="true">
                                         <div class="modal-dialog" role="document">
@@ -345,42 +284,6 @@
                                         </div>
                                     </div>
 {#                                            {% endif %}#}
-                                        {% for mem in member_name %}
-                                        <p class="text-warning">{{ mem.username.first_name }}</p>
-                                        <table class="table table-hover ">
-                                            <thead>
-                                            <tr>
-                                                <th scope="col">序号</th>
-                                                <th scope="col">文件名称</th>
-                                                <th scope="col">被审计公司</th>
-                                                <th scope="col"></th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            {% for sc_file in sc_file_list %}
-                                                {% if sc_file.username.id == mem.username.id %}
-                                                <tr class="schedule_file_list1">
-                                                    <td scope="row">{{ forloop.counter }}</td>
-                                                    <td><a href="
-                                                            {{ MEDIA_URL }}{{ sc_file.schedule_file }}">{{ sc_file.schedule_file.name|slice:"23:" }}</a>
-                                                    </td>
-                                                    <td>{{ sc_file.audit_company.audit_company }} {% if sc_file.audit_company.audit_person %} |  {{ sc_file.audit_company.audit_person }}{% endif %}</td>
-                                                    <td>
-                                                        {% if sc_file.username.id == request.user.id and switch == 'open' %}
-                                                        <button type="button"
-                                                                class="mb-1 btn btn-pill btn-sm btn-outline-secondary schedule_file_del"
-                                                                schedule_file_1="{{ sc_file.id }}">
-                                                            删除
-                                                        </button>
-                                                            {% endif %}
-                                                    </td>
-
-                                                </tr>
-                                                {% endif %}
-                                            {% endfor %}
-                                            </tbody>
-                                        </table>
-                                        {% endfor %}
                                         {% if title.project_exaudit == True %}
                                         <p class="text-warning">外审文件</p>
                                         <table class="table table-hover ">
@@ -400,15 +303,13 @@
                                                     <td><a href="
                                                             {{ MEDIA_URL }}{{ sc_file.schedule_file }}">{{ sc_file.schedule_file.name|slice:"23:" }}</a>
                                                     </td>
-                                                    <td>{{ sc_file.audit_company.audit_company }} {% if sc_file.audit_company.audit_person %} |  {{ sc_file.audit_company.audit_person }}{% endif %}</td>
+                                                    <td>{{ sc_file.audit_company.audit_company }} {% if sc_file.audit_company.audit_person %} |  {{ sc_file.audit_company.audit_person }} {% endif %}</td>
                                                     <td>
-                                                        {% if  switch == 'open' and member_user.audit_role == 'lvl1' %}
                                                         <button type="button"
                                                                 class="mb-1 btn btn-pill btn-sm btn-outline-secondary schedule_file_del"
                                                                 schedule_file_1="{{ sc_file.id }}">
                                                             删除
                                                         </button>
-                                                            {% endif %}
                                                     </td>
 
                                                 </tr>
@@ -451,7 +352,7 @@
 
                     $.ajax({
                         type: 'POST',
-                        url: '{% url 'ex:add_schedule' %}',
+                        url: '{% url 'exaudit:add_schedule' %}',
                         {#mimeType: "multipart/form-data",#}
                         {#告诉jQuery不要去处理发送的数据, 发送对象。#}
                         {#processData : false,#}
@@ -503,7 +404,7 @@
                     var obj = $(this);
                     $.ajax({
                         type: 'GET',
-                        url: '{% url 'ex:schedule_del' %}',
+                        url: '{% url 'exaudit:schedule_del' %}',
                         dataType: 'json',
                         data: {
                             "schedule_id": schedule_id,
@@ -552,7 +453,7 @@
                     formdata.append('csrfmiddlewaretoken', '{{ csrf_token }}'),
                         $.ajax({
                             type: 'POST',
-                            url: '{% url 'ex:schedule_file' %}',
+                            url: '{% url 'exaudit:schedule_file' %}',
                             {#dataType: 'json',#}
                             data: formdata,
                             {#cache: false,#}
@@ -601,7 +502,7 @@
                     var obj = $(this);
                     $.ajax({
                         type: 'GET',
-                        url: '{% url 'ex:schedule_file_del' %}',
+                        url: '{% url 'exaudit:schedule_file_del' %}',
                         dataType: 'json',
                         data: {
                             "schedule_file_id": schedule_file_id,

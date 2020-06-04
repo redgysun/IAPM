@@ -1,94 +1,78 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block title %}审计报告阶段{% endblock %}
+{% block user-menu %}{% endblock %}
 {% block left-sidebar %}
-    <li class="has-sub {% if request.path|slice:':10' == '/plans/ex_' %}active  {% endif %} expand">
-                            <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
-                               data-target="#dashboard"
-                               aria-expanded="false" aria-controls="dashboard">
-                                <i class="mdi mdi-dribbble"></i>
-                                <span class="nav-text">返回上一级</span> <b class="caret"></b>
-                            </a>
-                            <ul class="collapse {% if request.path|slice:':14' == '/plans/ex_list' %} show {% endif %}" id="dashboard" data-parent="#sidebar-menu">
-                                <div class="sub-menu">
+<li class="has-sub {% if request.path|slice:':11' == '/exaudit/st' %}active  {% endif %} expand">
+        <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
+           data-target="#dashboard1"
+           aria-expanded="false" aria-controls="dashboard">
+            <i class="mdi mdi-docker"></i>
+            <span class="nav-text">前期准备</span> <b class="caret"></b>
+        </a>
+        <ul class="collapse {% if request.path|slice:':11' == '/exaudit/st' %}show  {% endif %}" id="dashboard1"
+            data-parent="#sidebar-menu">
+            <div class="sub-menu">
 
-                                    <li {% if request.path|slice:':14' == '/plans/ex_list' %}
-                                        class="active" {% endif %}>
-                                        <a class="sidenav-item-link" href="{% url 'plans:ex_list' %}">
-                                            <span class="nav-text">项目列表</span>
-                                        </a>
-                                    </li>
+                <li {% if request.path|slice:':21' == '/exaudit/start_detail' %}
+                    class="active" {% endif %}>
+                    <a class="sidenav-item-link" href="{% url 'exaudit:start_detail1' project_id %}">
+                        <span class="nav-text">通知及方案</span>
+                    </a>
+                </li>
 
-                                </div>
-                            </ul>
-                        </li>
-    <li class="has-sub {% if request.path|slice:':9' == '/plans/st' %}active  {% endif %} expand">
-                            <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
-                               data-target="#dashboard1"
-                               aria-expanded="false" aria-controls="dashboard">
-                                <i class="mdi mdi-docker"></i>
-                                <span class="nav-text">前期准备</span> <b class="caret"></b>
-                            </a>
-                            <ul class="collapse {% if request.path|slice:':9' == '/plans/st' %}show  {% endif %}" id="dashboard1" data-parent="#sidebar-menu">
-                                <div class="sub-menu">
+            </div>
+        </ul>
+    </li>
+    <li class="has-sub {% if request.path|slice:':11' == '/exaudit/sc' or request.path|slice:':11' == '/exaudit/pr' %}active  {% endif %} expand">
+        <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
+           data-target="#dashboard2"
+           aria-expanded="false" aria-controls="dashboard">
+            <i class="mdi mdi-pinwheel-outline"></i>
+            <span class="nav-text">实施阶段</span> <b class="caret"></b>
+        </a>
+        <ul class="collapse {% if request.path|slice:':11' == '/exaudit/sc' or request.path|slice:':11' == '/exaudit/pr' %}show  {% endif %}"
+            id="dashboard2" data-parent="#sidebar-menu">
+            <div class="sub-menu">
 
-                                    <li {% if request.path|slice:':19' == '/plans/start_detail' %}
-                                        class="active" {% endif %}>
-                                        <a class="sidenav-item-link" href="{% url 'plans:start_detail' project_id %}">
-                                            <span class="nav-text">通知及方案</span>
-                                        </a>
-                                    </li>
+                <li {% if request.path|slice:':17' == '/exaudit/schedule' %}
+                    class="active" {% endif %}>
+                    <a class="sidenav-item-link" href="{% url 'exaudit:schedule_list' project_id %}">
+                        <span class="nav-text">项目记录</span>
+                    </a>
+                </li>
+                <li {% if request.path|slice:':16' == '/exaudit/problem' %}
+                    class="active" {% endif %}>
+                    <a class="sidenav-item-link" href="{% url 'exaudit:problem_list' project_id %}">
+                        <span class="nav-text">问题列表</span>
+                    </a>
+                </li>
 
-                                </div>
-                            </ul>
-                        </li>
-    <li class="has-sub {% if request.path|slice:':6' == '/ex/sc' or request.path|slice:':6' == '/ex/pr' %}active  {% endif %} expand">
-                            <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
-                               data-target="#dashboard2"
-                               aria-expanded="false" aria-controls="dashboard">
-                                <i class="mdi mdi-pinwheel-outline"></i>
-                                <span class="nav-text">实施阶段</span> <b class="caret"></b>
-                            </a>
-                            <ul class="collapse {% if request.path|slice:':6' == '/ex/sc' or request.path|slice:':6' == '/ex/pr' %}show  {% endif %}" id="dashboard2" data-parent="#sidebar-menu">
-                                <div class="sub-menu">
+            </div>
+        </ul>
+    </li>
+    <li class="has-sub {% if request.path|slice:':11' == '/exaudit/re' %}active  {% endif %} expand">
+        <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
+           data-target="#dashboard3"
+           aria-expanded="false" aria-controls="dashboard">
+            <i class="mdi mdi-barley"></i>
+            <span class="nav-text">报告阶段</span> <b class="caret"></b>
+        </a>
+        <ul class="collapse{% if request.path|slice:':11' == '/exaudit/re' %} show  {% endif %}" id="dashboard3"
+            data-parent="#sidebar-menu">
+            <div class="sub-menu">
 
-                                    <li {% if request.path|slice:':17' == '/ex/schedule_list' %}
-                                        class="active" {% endif %}>
-                                        <a class="sidenav-item-link" href="{% url 'ex:schedule_list' project_id %}">
-                                            <span class="nav-text">项目记录</span>
-                                        </a>
-                                    </li>
-                                    <li {% if request.path|slice:':16' == '/ex/problem_list' %}
-                                        class="active" {% endif %}>
-                                        <a class="sidenav-item-link" href="{% url 'ex:problem_list' project_id %}">
-                                            <span class="nav-text">问题列表</span>
-                                        </a>
-                                    </li>
-
-                                </div>
-                            </ul>
-                        </li>
-    <li class="has-sub {% if request.path|slice:':6' == '/ex/re'  %}active  {% endif %} expand">
-                            <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
-                               data-target="#dashboard3"
-                               aria-expanded="false" aria-controls="dashboard">
-                                <i class="mdi mdi-barley"></i>
-                                <span class="nav-text">报告阶段</span> <b class="caret"></b>
-                            </a>
-                            <ul class="collapse{% if request.path|slice:':6' == '/ex/re'  %} show  {% endif %}" id="dashboard3" data-parent="#sidebar-menu">
-                                <div class="sub-menu">
-
-                                    <li {% if request.path|slice:':17' == '/ex/report_detail' %}
-                                        class="active" {% endif %}>
-                                        <a class="sidenav-item-link" href="{% url 'ex:report_detail' project_id %}">
-                                            <span class="nav-text">征求意见及报告</span>
-                                        </a>
-                                    </li>
+                <li {% if request.path|slice:':22' == '/exaudit/report_detail' %}
+                    class="active" {% endif %}>
+                    <a class="sidenav-item-link" href="{% url 'exaudit:report_detail' project_id %}">
+                        <span class="nav-text">征求意见及报告</span>
+                    </a>
+                </li>
 
 
-                                </div>
-                            </ul>
-                        </li>
+            </div>
+        </ul>
+    </li>
 
 {% endblock %}
 {% block content-wrapper %}
@@ -98,18 +82,14 @@
                 <div class="col-lg-6">
                     <div class="card card-default">
                     <div class="card-body">
-                    {% if switch == 'open' and member.audit_role == 'lvl1' %}
                         <div class="card-header card-header-border-bottom d-flex justify-content-lg-end">
                             <button type="button" class="mb-1 btn btn-pill btn-warning" id="clean_doubts">
                                 <i class="mr-1 fa fa-warning mdi mdi-eraser-variant"></i> 一键确认疑点</button>
-                            <button type="button" class="mb-1 btn btn-pill btn-danger " id="off_project">
-                                <i class="mr-1 fa fa-ban mdi mdi-power"></i> 项目结束</button>
+
                         </div>
-                    {% endif %}
                         <div class="card-header card-header-border-bottom">
                             <h2>征求意见</h2>
                         </div>
-                    {% if switch == 'open' and member.audit_role == 'lvl1' %}
                         <button type="button"
                                 class="mb-1 btn btn-pill btn-block  btn-outline-danger"
                                 data-toggle="modal"
@@ -167,7 +147,6 @@
                                 </div>
                             </div>
                         </div>
-                    {% endif %}
                         <table class="table table-hover ">
                             <thead>
                             <tr>
@@ -190,12 +169,12 @@
                                     </td>
                                     <th>{{ file.get_feedback_type_display }}</th>
                                     <td>{{ file.add_time|date:'Y-m-d' }}</td>
-                                    <td>{% if file.username.first_name  %}{{ file.username.first_name }}{% else %}{{ file.project_name.project_exauditname }}{% endif %}</td>
-                                    {% if switch == 'open' and member.audit_role == 'lvl1' %}
+                                    <td>{% if file.username.first_name %}{{ file.username.first_name }}{% else %}{{ file.project_name.project_exauditname }}{% endif %}</td>
+                                    {% if switch == 'open' and file.username_id == None %}
                                         <td>
                                             <button type="button"
                                                     class="mb-1 btn btn-pill btn-sm btn-outline-secondary feedback_file_del"
-                                                    feedback_file_1="{{ file.id }}">
+                                                    feedback_file_1="{{ file.coding }}">
                                                 删除
                                             </button>
                                         </td>
@@ -218,21 +197,18 @@
                                 <label for="firstName">审计报告名称</label>
                                 <input type="text" class="form-control" id="notice_name"
                                        name="notice_name" value="{{ notice_info.notice_name }}">
-                                <label for="firstName">审计报告编号</label>
-                                <input type="text" class="form-control" id="notice_NO"
+                                <label hidden for="firstName">审计报告编号</label>
+                                <input hidden type="text" class="form-control" id="notice_NO"
                                        name="notice_NO" value="{{ notice_info.notice_NO }}">
-                                {% if switch == 'open' and member.audit_role == 'lvl1' %}
                                 <div class="d-flex justify-content-end mt-5">
                                     <button type="submit" class="btn btn-primary mb-2 btn-pill"
                                             id="notice_info_sumbit">提 交
                                     </button>
                                 </div>
-                                                                {% endif %}
                             </div>
                             <div class="card-header card-header-border-bottom">
 
                             </div>
-                        {% if switch == 'open' and member.audit_role == 'lvl1' %}
                             <button type="button"
                                     class="mb-1 btn btn-pill btn-block  btn-outline-danger"
                                     data-toggle="modal"
@@ -273,18 +249,6 @@
                                                             <div class="control-indicator"></div>
                                                         </label>
                                                     </li>
-                                                     <li class="d-inline-block mr-3">
-                                                        <label class="control control-radio">报告终稿
-                                                            <input type="radio" name="report_type"  value="fi"/>
-                                                            <div class="control-indicator"></div>
-                                                        </label>
-                                                    </li>
-                                                    <li class="d-inline-block mr-3">
-                                                        <label class="control control-radio">终稿附件
-                                                            <input type="radio" name="report_type" value="fifi"/>
-                                                            <div class="control-indicator"></div>
-                                                        </label>
-                                                    </li>
                                                 </ul>
                                                 <input type="file"
                                                        id="report_file1"
@@ -302,42 +266,6 @@
                                     </div>
                                 </div>
                             </div>
-                        {% endif %}
-                            <table class="table table-hover ">
-                                <p class="text-primary"><font size="4">审计报告终稿及附件</font></p>
-                                <thead>
-                                <tr>
-                                    <th scope="col">序号</th>
-                                    <th scope="col">文件名称</th>
-                                    <th scope="col">类型</th>
-                                    <th scope="col">上传时间</th>
-                                    <th scope="col">上传人</th>
-                                    <th></th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {% for file in report_fi_file %}
-                                    <tr class="report_fi_list">
-                                        <td scope="row">{{ forloop.counter }}</td>
-                                        <td><a href="
-                                                {{ MEDIA_URL }}{{ file.report_file }}">{{ file.report_file.name|slice:"21:" }}</a>
-                                        </td>
-                                    <th{% if file.report_type == 'fi' %} class="text-danger"{% endif %}>{{ file.get_report_type_display }}</th>
-                                    <td>{{ file.add_time|date:'Y-m-d' }}</td>
-                                    <td>{{ file.username.first_name }}</td>
-                                        {% if switch == 'open' and member.audit_role == 'lvl1' %}
-                                            <td>
-                                                <button type="button"
-                                                        class="mb-1 btn btn-pill btn-sm btn-outline-secondary report_fi_del"
-                                                        report_fi_1="{{ file.id }}">
-                                                    删除
-                                                </button>
-                                            </td>
-                                        {% endif %}
-                                    </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
                          <table class="table table-hover ">
                                 <p class="text-info"><font size="4">审计报告过程稿及附件</font></p>
                                 <thead>
@@ -360,11 +288,11 @@
                                     <th{% if file.report_type == 'pr' %} class="text-danger"{% endif %}>{{ file.get_report_type_display }}</th>
                                     <td>{{ file.add_time|date:'Y-m-d' }}</td>
                                     <td>{% if file.username.first_name %}{{ file.username.first_name }}{% else %}{{ file.project_name.project_exauditname }}{% endif %}</td>
-                                        {% if switch == 'open' and member.audit_role == 'lvl1' %}
+                                        {% if switch == 'open' and file.username_id == None %}
                                             <td>
                                                 <button type="button"
                                                         class="mb-1 btn btn-pill btn-sm btn-outline-secondary report_pr_del"
-                                                        report_pr_1="{{ file.id }}">
+                                                        report_pr_1="{{ file.coding }}">
                                                     删除
                                                 </button>
                                             </td>
@@ -399,7 +327,7 @@
                     formdata.append('csrfmiddlewaretoken', '{{ csrf_token }}'),
                         $.ajax({
                             type: 'POST',
-                            url: '{% url 'ex:add_feedback_file' %}',
+                            url: '{% url 'exaudit:add_feedback_file' %}',
                             {#dataType: 'json',#}
                             data: formdata,
                             contentType: false,
@@ -438,7 +366,7 @@
                     var obj = $(this);
                     $.ajax({
                         type: 'GET',
-                        url: '{% url 'ex:del_feedback_file' %}',
+                        url: '{% url 'exaudit:del_feedback_file' %}',
                         data: {
                             "feedback_file": feedback_file,
 
@@ -478,7 +406,7 @@
                     var notice_NO = $('#notice_NO').val();
                     $.ajax({
                         type: 'POST',
-                        url: '{% url 'ex:notice_info' %}',
+                        url: '{% url 'exaudit:notice_info1' %}',
                         data: {
                             "notice_name": notice_name,
                             "notice_NO": notice_NO,
@@ -523,7 +451,7 @@
                     formdata.append('csrfmiddlewaretoken', '{{ csrf_token }}'),
                         $.ajax({
                             type: 'POST',
-                            url: '{% url 'ex:add_report_file' %}',
+                            url: '{% url 'exaudit:add_report_file' %}',
                             {#dataType: 'json',#}
                             data: formdata,
                             contentType: false,
@@ -562,7 +490,7 @@
                     var obj = $(this);
                     $.ajax({
                         type: 'GET',
-                        url: '{% url 'ex:del_report_file' %}',
+                        url: '{% url 'exaudit:del_report_file' %}',
                         data: {
                             "report_file": report_file,
 
@@ -602,7 +530,7 @@
                     var obj = $(this);
                     $.ajax({
                         type: 'GET',
-                        url: '{% url 'ex:del_report_file' %}',
+                        url: '{% url 'exaudit:del_report_file' %}',
                         data: {
                             "report_file": report_file,
 
@@ -642,7 +570,7 @@
                     {#var notice_NO = $('#notice_NO').val();#}
                     $.ajax({
                         type: 'POST',
-                        url: '{% url 'ex:clean_doubts' %}',
+                        url: '{% url 'exaudit:clean_doubts' %}',
                         data: {
                             'project_id': '{{ project_id }}',
                             "csrfmiddlewaretoken": '{{ csrf_token }}'

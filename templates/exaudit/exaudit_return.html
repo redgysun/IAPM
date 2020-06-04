@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <head>
+        <meta charset="utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <meta name="description"
+              content="Sleek Dashboard - Free Bootstrap 4 Admin Dashboard Template and UI Kit. It is very powerful bootstrap admin dashboard, which allows you to build products like admin panels, content management systems and CRMs etc.">
+
+
+        <title>Return</title>
+
+        <!-- PLUGINS CSS STYLE -->
+        <link href="{% static 'assets/plugins/nprogress/nprogress.css' %}" rel="stylesheet"/>
+
+
+        <!-- SLEEK CSS -->
+        <link id="sleek-css" rel="stylesheet" href="{% static 'assets/css/sleek.css' %}"/>
+
+        <!-- FAVICON -->
+        <link href="{% static 'assets/img/favicon.png' %}" rel="shortcut icon"/>
+
+
+        <script src="{% static 'assets/plugins/nprogress/nprogress.js' %}"></script>
+    </head>
+
+</head>
+<body class="" id="body">
+<div class="container d-flex flex-column justify-content-between vh-100">
+    <div class="row justify-content-center mt-5">
+        <div class="col-xl-5 col-lg-6 col-md-10">
+            <div class="card">
+                <div class="card-header bg-primary">
+                    <div class="app-brand">
+                        <a href="#">
+                            <svg class="brand-icon" xmlns="#" preserveAspectRatio="xMidYMid"
+                                 width="30" height="33"
+                                 viewBox="0 0 30 33">
+                                <g fill="none" fill-rule="evenodd">
+                                    <path class="logo-fill-blue" fill="#7DBCFF" d="M0 4v25l8 4V0zM22 4v25l8 4V0z"/>
+                                    <path class="logo-fill-white" fill="#FFF" d="M11 4v25l8 4V0z"/>
+                                </g>
+                            </svg>
+                            <span class="brand-name">编码跳转</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body p-5">
+
+                    <h4 class="text-dark mb-5">请输入整改问题编码</h4>
+                    <form action="{% url 'exaudit:exaudit_feedback' %}" method="post" autocomplete="off">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="form-group col-md-12 mb-4">
+                                <input type="txt" class="form-control input-lg" id="email"
+                                       aria-describedby="emailHelp" placeholder="问题加密数字编码" name="re_problem_id">
+                            </div>
+                            <button type="submit" class="btn btn-lg btn-success btn-block mb-4">提交</button>
+                            <span class="text-center badge badge-warning">{{ re_problem_msg }}</span>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="card-body p-5">
+
+                    <h4 class="text-dark mb-5">请输入项目编码</h4>
+                    <form action="{% url 'exaudit:start_detail' %}" method="post" autocomplete="off">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="form-group col-md-12 mb-4">
+                                <input type="txt" class="form-control input-lg" id="email"
+                                       aria-describedby="emailHelp" placeholder="项目加密数字编码" name="project_id">
+                            </div>
+                            <button type="submit" class="btn btn-lg btn-info btn-block mb-4">提交</button>
+                            <span class="text-center badge badge-warning">{{ project_msg }}</span>
+
+                        </div>
+                    </form>
+
+                </div>
+
+                <div class="card-body pl-5">
+                        <div class="row">
+                            <p><font size="4" color="white"> </font></p>
+                            <p class="justify-content-center" ><font size="4" color="#dc143c"><a  href="/">
+                                返回首页</a></font>
+                            </p>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+    <div class="copyright pl-0">
+        <p class="text-center">&copy; 2020 内审项目管理系统
+            <a class="text-primary" href="mailto:redgysun_impa@163.com" target="_blank">Redgysun</a>.
+        </p>
+    </div>
+</div>
+
+</body>
+</html>

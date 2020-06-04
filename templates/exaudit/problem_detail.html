@@ -2,41 +2,20 @@
 {% load static %}
 {% block title %}问题详情{% endblock %}
 {% block left-sidebar %}
-    <li class="has-sub {% if request.path|slice:':10' == '/plans/ex_' %}active  {% endif %} expand">
-        <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
-           data-target="#dashboard"
-           aria-expanded="false" aria-controls="dashboard">
-            <i class="mdi mdi-dribbble"></i>
-            <span class="nav-text">返回上一级</span> <b class="caret"></b>
-        </a>
-        <ul class="collapse {% if request.path|slice:':14' == '/plans/ex_list' %} show {% endif %}" id="dashboard"
-            data-parent="#sidebar-menu">
-            <div class="sub-menu">
-
-                <li {% if request.path|slice:':14' == '/plans/ex_list' %}
-                    class="active" {% endif %}>
-                    <a class="sidenav-item-link" href="{% url 'plans:ex_list' %}">
-                        <span class="nav-text">项目列表</span>
-                    </a>
-                </li>
-
-            </div>
-        </ul>
-    </li>
-    <li class="has-sub {% if request.path|slice:':9' == '/plans/st' %}active  {% endif %} expand">
+<li class="has-sub {% if request.path|slice:':11' == '/exaudit/st' %}active  {% endif %} expand">
         <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
            data-target="#dashboard1"
            aria-expanded="false" aria-controls="dashboard">
             <i class="mdi mdi-docker"></i>
             <span class="nav-text">前期准备</span> <b class="caret"></b>
         </a>
-        <ul class="collapse {% if request.path|slice:':9' == '/plans/st' %}show  {% endif %}" id="dashboard1"
+        <ul class="collapse {% if request.path|slice:':11' == '/exaudit/st' %}show  {% endif %}" id="dashboard1"
             data-parent="#sidebar-menu">
             <div class="sub-menu">
 
-                <li {% if request.path|slice:':19' == '/plans/start_detail' %}
+                <li {% if request.path|slice:':21' == '/exaudit/start_detail' %}
                     class="active" {% endif %}>
-                    <a class="sidenav-item-link" href="{% url 'plans:start_detail' project_id %}">
+                    <a class="sidenav-item-link" href="{% url 'exaudit:start_detail1' project_id %}">
                         <span class="nav-text">通知及方案</span>
                     </a>
                 </li>
@@ -44,26 +23,26 @@
             </div>
         </ul>
     </li>
-    <li class="has-sub {% if request.path|slice:':6' == '/ex/sc' or request.path|slice:':6' == '/ex/pr' %}active  {% endif %} expand">
+    <li class="has-sub {% if request.path|slice:':11' == '/exaudit/sc' or request.path|slice:':11' == '/exaudit/pr' %}active  {% endif %} expand">
         <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
            data-target="#dashboard2"
            aria-expanded="false" aria-controls="dashboard">
             <i class="mdi mdi-pinwheel-outline"></i>
             <span class="nav-text">实施阶段</span> <b class="caret"></b>
         </a>
-        <ul class="collapse {% if request.path|slice:':6' == '/ex/sc' or request.path|slice:':6' == '/ex/pr' %}show  {% endif %}"
+        <ul class="collapse {% if request.path|slice:':11' == '/exaudit/sc' or request.path|slice:':11' == '/exaudit/pr' %}show  {% endif %}"
             id="dashboard2" data-parent="#sidebar-menu">
             <div class="sub-menu">
 
-                <li {% if request.path|slice:':17' == '/ex/schedule_list' %}
+                <li {% if request.path|slice:':17' == '/exaudit/schedule' %}
                     class="active" {% endif %}>
-                    <a class="sidenav-item-link" href="{% url 'ex:schedule_list' project_id %}">
+                    <a class="sidenav-item-link" href="{% url 'exaudit:schedule_list' project_id %}">
                         <span class="nav-text">项目记录</span>
                     </a>
                 </li>
-                <li {% if request.path|slice:':18' == '/ex/problem_detail' %}
+                <li {% if request.path|slice:':16' == '/exaudit/problem' %}
                     class="active" {% endif %}>
-                    <a class="sidenav-item-link" href="{% url 'ex:problem_list' project_id %}">
+                    <a class="sidenav-item-link" href="{% url 'exaudit:problem_list' project_id %}">
                         <span class="nav-text">问题列表</span>
                     </a>
                 </li>
@@ -71,20 +50,20 @@
             </div>
         </ul>
     </li>
-    <li class="has-sub {% if request.path|slice:':6' == '/ex/re' %}active  {% endif %} expand">
+    <li class="has-sub {% if request.path|slice:':11' == '/exaudit/re' %}active  {% endif %} expand">
         <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
            data-target="#dashboard3"
            aria-expanded="false" aria-controls="dashboard">
             <i class="mdi mdi-barley"></i>
             <span class="nav-text">报告阶段</span> <b class="caret"></b>
         </a>
-        <ul class="collapse{% if request.path|slice:':6' == '/ex/re' %} show  {% endif %}" id="dashboard3"
+        <ul class="collapse{% if request.path|slice:':11' == '/exaudit/re' %} show  {% endif %}" id="dashboard3"
             data-parent="#sidebar-menu">
             <div class="sub-menu">
 
-                <li {% if request.path|slice:':17' == '/ex/report_detail' %}
+                <li {% if request.path|slice:':22' == '/exaudit/report_detail' %}
                     class="active" {% endif %}>
-                    <a class="sidenav-item-link" href="{% url 'ex:report_detail' project_id %}">
+                    <a class="sidenav-item-link" href="{% url 'exaudit:report_detail' project_id %}">
                         <span class="nav-text">征求意见及报告</span>
                     </a>
                 </li>
@@ -95,6 +74,7 @@
     </li>
 
 {% endblock %}
+{% block user-menu %} {% endblock %}
 {% block content-wrapper %}
     <div class="content-wrapper" xmlns="http://www.w3.org/1999/html">
         <div class="content">
@@ -103,7 +83,7 @@
                     <div class="card card-default">
                         <div class="card-header card-header-border-bottom d-flex justify-content-between">
                             <h2>{{ problem_info.project_name.project_name }}-问题详情</h2>
-                            <a hidden href="{% url 'ex:problem_list' project_id %}" target="_blank"
+                            <a hidden href="{% url 'exaudit:problem_list' project_id %}" target="_blank"
                                class="btn btn-outline-primary btn-sm text-uppercase">
                                 <i class=" mdi mdi-arrow-left-bold-outline mr-2"></i> 返回
                             </a>
@@ -142,7 +122,6 @@
 
                         <div class="card-body">
                         <form>
-                        {% if problem_info.username.id == request.user.id  or user.audit_role == 'lvl1' %}
                             <div class="form-group">
                                 <label for="add_audit_company">被审计公司</label>
                                 <select class="form-control" id="add_audit_company" name="add_audit_company">
@@ -155,47 +134,43 @@
                                     <option value="0"></option>
                                 </select>
                             </div>
-                            {% endif %}
-                            {% if problem_info.username.id == request.user.id  or user.audit_role == 'lvl1' %}
+
                             <div class="form-group">
                                 <label for="exampleFormControlInput1">问题名称</label>
                                 <input type="text" class="form-control" id="add_problem_title"
                                        name="add_problem_title" placeholder="问题名称"
                                        value="{{ problem_info.problem_title }}">
                             </div>
-                                {% endif %}
-                        {% if problem_info.username.id == request.user.id  or user.audit_role == 'lvl1' %}
+
                             <div class="form-group">
                                 <label for="exampleFormControlTextarea1">问题内容</label>
                                 <textarea class="form-control" id="add_problem_content"
                                           name="add_problem_content"
                                           rows="5" >{{ problem_info.problem_content }}</textarea>
                             </div>
-                            {% endif %}
-                            {% if user.audit_role == 'lvl1' %}
-                            <div class="form-group">
+
+                            <div hidden class="form-group">
                                 <label for="exampleFormControlTextarea1">主审反馈</label>
                                 <textarea class="form-control" id="add_problem_feedback"
                                           name="add_problem_feedback"
                                           rows="3">{{ problem_info.problem_feedback }}</textarea>
                             </div>
-                                {% endif %}
-                            {% if problem_info.username.id == request.user.id  or user.audit_role == 'lvl1' %}
+
+
                             <div class="form-group">
                                 <label for="exampleFormControlInput1">问题分类（自动填充后，<font color="#dc143c">请全选后再删除</font> ）</label>
-                                <div class="input-group">
+                            <div class="input-group">
                                 <input type="text" class="form-control" id="problem_class"
                                        name="problem_class" placeholder="如：内控制度、内控执行、未及时入账等"
                                        value="{{ problem_info.problem_class }}">
-                                    <div class="input-group-append">
+                                <div class="input-group-append">
                                     <button type="submit" class="btn btn-outline-warning"
                                             id="problem_class_clean" name="problem_class_clean">清空
                                     </button>
                                 </div>
-                                </div>
                             </div>
-                                {% endif %}
-                            {% if problem_info.username.id == request.user.id or user.audit_role == 'lvl1' %}
+                            </div>
+
                                 <div class="form-group">
                                     <label class="text-dark mb-2 mt-4 font-weight-medium d-inline-block mr-3"
                                            for="">问题类型</label>
@@ -220,8 +195,7 @@
                                         </li>
                                     </ul>
                                 </div>
-                            {% endif %}
-                            {% if problem_info.username.id == request.user.id or user.audit_role == 'lvl1'%}
+
                                 <div class="form-group">
                                     <label class="text-dark mb-2 mt-4 font-weight-medium d-inline-block mr-3"
                                            for="">问题状态</label>
@@ -255,14 +229,13 @@
                                         </li>
                                     </ul>
                                 </div>
-                            {% endif %}
-                            {% if problem_info.username.id == request.user.id or user.audit_role == 'lvl1' %}
+
                                 <div class="form-footer pt-4 pt-5 mt-4 border-top">
                                     <button type="submit" class="btn btn-primary btn-default"
                                             id="add_problem_submit">提交
                                     </button>
                                 </div>
-                            {% endif %}
+
 
                         </form>
 
@@ -276,7 +249,6 @@
                         <div class="card-body">
 
                             {% if switch == 'open' %}
-                                {% if  user.audit_role == 'lvl1' or problem_info.username.id == request.user.id %}
                                 <button type="button"
                                         class="mb-1 btn btn-pill btn-block  btn-outline-danger"
                                         data-toggle="modal"
@@ -318,7 +290,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                    {% endif %}
                             {% endif %}
                             <table class="table table-hover ">
                                 <thead>
@@ -338,7 +309,6 @@
                                                 {{ MEDIA_URL }}{{ file.problem_file }}">{{ file.problem_file.name|slice:"22:" }}</a>
                                         </td>
                                         {% if switch == 'open'  %}
-                                            {% if user.audit_role == 'lvl1' or problem_info.username_id == request.user.id %}
                                             <td>
                                                 <button type="button"
                                                         class="mb-1 btn btn-pill btn-sm btn-outline-secondary problem_file_del"
@@ -346,7 +316,6 @@
                                                     删除
                                                 </button>
                                             </td>
-                                                {% endif %}
                                         {% endif %}
                                     </tr>
                                 {% endfor %}
@@ -517,7 +486,7 @@
                     var problem_status = $('input[name=\'add_problem_status\']:checked').val();
                     $.ajax({
                         type: 'POST',
-                        url: '{% url 'ex:fix_problem' %}',
+                        url: '{% url 'exaudit:fix_problem' %}',
                         dataType: 'json',
                         data: {
                             "audit_company": audit_company,
@@ -527,7 +496,7 @@
                             "problem_class": problem_class,
                             "problem_type": problem_type,
                             "problem_status": problem_status,
-                            "problem_id":{{ problem_info.id }},
+                            "problem_id":{{ problem_info.coding }},
                             'project_id': '{{ project_id }}',
                             "csrfmiddlewaretoken": '{{ csrf_token }}',
                         },
@@ -565,12 +534,12 @@
                     var problem_file = $('#problem_file1')[0].files[0];
                     formdata.append('problem_file', problem_file);
                     formdata.append('project_id', '{{ project_id }}');
-                    formdata.append('problem_id', '{{ problem_info.id }}');
+                    formdata.append('problem_id', '{{ problem_info.coding }}');
                     formdata.append('audit_company', '{{ problem_info.audit_company_id }}');
                     formdata.append('csrfmiddlewaretoken', '{{ csrf_token }}'),
                         $.ajax({
                             type: 'POST',
-                            url: '{% url 'ex:add_problem_file' %}',
+                            url: '{% url 'exaudit:add_problem_file' %}',
                             {#dataType: 'json',#}
                             data: formdata,
                             contentType: false,
@@ -609,10 +578,10 @@
                     var obj = $(this);
                     $.ajax({
                         type: 'GET',
-                        url: '{% url 'ex:del_problem_file' %}',
+                        url: '{% url 'exaudit:del_problem_file' %}',
                         data: {
                             "problem_file": problem_file,
-                            "problem_id": '{{ problem_info.id }}',
+                            "problem_id": '{{ problem_info.coding }}',
                         },
                         success: function (callback) {
                             if (callback.status == 'ok') {
