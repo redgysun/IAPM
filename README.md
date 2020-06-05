@@ -92,4 +92,4 @@ Github: [https://github.com/redgysun/IAPM](https://github.com/redgysun/IAPM)
 
 开源协议：GPL-3.0
 
-系统作者简介：Redgysun，本名孙栋，MBA、CIA、CISA。从事审计工作十年，自2015年起作为审计系统负责人，深耕大数据分析及审计系统建设，多次获得北京市内审协会、西城区内审协会奖项。
+系统作者简介：Redgysun，MBA、CIA、CISA。从事审计工作十年，自2015年起作为审计系统负责人，深耕大数据分析及审计系统建设，多次获得北京市内审协会、西城区内审协会奖项。
